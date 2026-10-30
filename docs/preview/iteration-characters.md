@@ -16,3 +16,5 @@ Plano: criar a decoração de menu/seleção; implementar estados e ponteiro; ge
 Orientação aplicada: UI UX Designer (componentes e microinterações). Não foi utilizado serviço externo de geração de interface; toda a demonstração roda offline.
 
 Resultado verificado: 38 variantes em quatro larguras, 15 escolhas com alvos mínimos de 44px, menu recolhível por teclado, seleção sincronizada entre perfil/IA, olhar e retorno ao centro, sorriso/cor, expressão brava/recuperação, toque e movimento reduzido. Ambos os verificadores passaram sem erros JavaScript ou requisições de rede. Lint e tipos passaram. HTML e ZIP conferidos; 20 capturas atualizadas. A aplicação, dependências e `docs/design/` permaneceram intactos.
+
+Refinamento dos olhos solicitado depois: ovais alongados, inclinados e com alturas diferentes, no estilo do recorte enviado pelo usuário. A mesma geometria aparece nos quinze personagens, no perfil e no Estúdio IA. Os olhos permanecem visíveis na expressão feliz; sobrancelhas sobem na expressão brava para não sobrepor as novas formas. Acompanhamento do cursor e estados de interação são preservados.

@@ -22,9 +22,10 @@ Revisão de 30/10/2026, na branch `feat/members-wireframe`. Escopo: documento of
 - [x] Personalização → Editar abre opções claro/escuro e oliva/vinho/bege. Modo muda a aparência geral; acentos mudam menu e detalhes. Estado em memória preservado na navegação, sem persistência.
 - [x] Estúdio IA acessível pelo sidebar/Mais e seletor, aviso “Em breve”, personagem no lugar da esfera e botão de geração de PDFs inativo.
 - [x] Quinze personagens vetoriais originais no estilo da imagem enviada, selecionáveis em Minha conta. A seleção atualiza os avatares e o personagem da IA durante a prévia.
+- [x] Olhos ovais alongados, inclinados e assimétricos conforme a nova referência; continuam visíveis no sorriso e acompanham o cursor. Captura de detalhe em `docs/screenshots/mascot-eyes.png`.
 - [x] Olhos seguem o ponteiro com movimento limitado e retornam ao centro ao sair da janela. Clique, toque, Enter ou Espaço mudam a cor e mostram sorriso; quatro cliques em 1,2s mostram expressão brava de brincadeira; após 1,8s sem interação, retorna ao normal. Sem penalidade ou serviço externo.
 - [x] Movimento reduzido centraliza os olhos e remove as transições; cor/expressão continuam operáveis. Escolhas têm rótulo, estado selecionado e alvo mínimo de 44px.
-- [x] 20 capturas desktop 1440px/mobile 390px: Home, produtos, bônus, ofertas, conta, IA, conta escura com personalização/coroa, seletor de personagens e IA feliz/brava. Geradas com `npm run screenshots -- --offline-review`.
+- [x] 20 capturas desktop 1440px/mobile 390px e um detalhe do mascote: Home, produtos, bônus, ofertas, conta, IA, conta escura com personalização/coroa, seletor de personagens e IA feliz/brava. Geradas com `npm run screenshots -- --offline-review`.
 - [x] Design system adiado conforme orientação de LAB; arquivos em `docs/design/` intactos.
 - [x] HTML e ZIP regenerados com `npm run preview:offline`; ZIP contém somente o HTML autossuficiente.
 - [x] Commit local na branch solicitada; sem push/publicação, PR, merge para main ou deploy.

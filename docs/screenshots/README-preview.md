@@ -14,3 +14,5 @@ Capturas de docs/preview/wireframe.html; dados fictícios e integrações inativ
 | ai | normal | [desktop](ai-refined-desktop.png) | [mobile](ai-refined-mobile.png) |
 | ai | feliz · mudou de cor | [desktop](ai-happy-desktop.png) | [mobile](ai-happy-mobile.png) |
 | ai | bravo de brincadeira · cliques rápidos | [desktop](ai-angry-desktop.png) | [mobile](ai-angry-mobile.png) |
+
+[Detalhe do mascote com olhos ovais](mascot-eyes.png)

@@ -90,6 +90,12 @@ try {
         fullPage: true,
       });
       captureCount++;
+      if (offlineReview && item.screen === "ai" && device === "desktop") {
+        await page
+          .locator(".character-play")
+          .screenshot({ path: "docs/screenshots/mascot-eyes.png" });
+        captureCount++;
+      }
       if (errors.length) throw Error(errors.join("\n"));
       links.push(`[${device}](${file})`);
       if (offlineReview && item.screen === "account") {
@@ -177,6 +183,8 @@ try {
         `| ai | bravo de brincadeira · cliques rápidos | ${angryLinks[0]} | ${angryLinks[1]} |`,
       );
   }
+  if (offlineReview)
+    index.push("", "[Detalhe do mascote com olhos ovais](mascot-eyes.png)");
   await writeFile(
     offline
       ? "docs/screenshots/README-preview.md"

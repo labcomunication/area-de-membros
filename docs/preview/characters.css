@@ -191,12 +191,11 @@ body .sidebar {
   transform: translate(var(--look-x, 0px), var(--look-y, 0px));
   transition: transform 110ms ease-out;
 }
-.character-dot-eyes {
+.character-eyes {
   fill: currentColor;
 }
 .character-mouth-neutral,
 .character-mouth-angry,
-.character-smile-eyes,
 .character-brows {
   stroke: currentColor;
   stroke-width: 3.5;
@@ -217,16 +216,13 @@ body .sidebar {
 .character-mouth-happy,
 .character-tongue,
 .character-mouth-angry,
-.character-smile-eyes,
 .character-brows {
   display: none;
 }
-.character[data-mood="happy"]
-  :is(.character-mouth-neutral, .character-dot-eyes) {
+.character[data-mood="happy"] .character-mouth-neutral {
   display: none;
 }
-.character[data-mood="happy"]
-  :is(.character-mouth-happy, .character-tongue, .character-smile-eyes) {
+.character[data-mood="happy"] :is(.character-mouth-happy, .character-tongue) {
   display: block;
 }
 .character[data-mood="angry"] .character-mouth-neutral {
