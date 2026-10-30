@@ -2,6 +2,8 @@
 
 Capturas de fixtures locais; não representam autenticação ou conteúdo final.
 
+Para a revisão visual independente do HTML offline, veja as [capturas atualizadas da Home](README-preview.md). As imagens abaixo representam a galeria React.
+
 | Tela | Estado | Desktop 1440px | Mobile 390px |
 |---|---|---|---|
 | login | normal | [desktop](login-normal-desktop.png) | [mobile](login-normal-mobile.png) |

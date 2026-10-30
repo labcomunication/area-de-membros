@@ -1,6 +1,7 @@
 import { chromium } from "@playwright/test";
 import { readFile, writeFile, mkdir } from "node:fs/promises";
 import { screens } from "../src/config/members";
+import { refineOfflinePreview } from "./refine-offline-preview";
 const base = process.env.SCREENSHOT_BASE_URL ?? "http://127.0.0.1:3000";
 function keyOf(url: string) {
   const parsed = new URL(url, "https://offline.invalid");
@@ -71,13 +72,19 @@ try {
       const target = keyOf(url);
       if (!snapshots[target] && !queue.includes(target)) queue.push(target);
     }
-    snapshots[key] = captured.content;
+    snapshots[key] = await page.evaluate(
+      refineOfflinePreview,
+      captured.content,
+    );
   }
 } finally {
   await browser.close();
 }
 await mkdir("docs/preview", { recursive: true });
-const css = await readFile("src/app/globals.css", "utf8");
+const css =
+  (await readFile("src/app/globals.css", "utf8")) +
+  "\n" +
+  (await readFile("docs/preview/shell.css", "utf8"));
 const data = JSON.stringify(snapshots).replace(/</g, "\\u003c");
 const options =
   screens
@@ -101,14 +108,14 @@ document.getElementById('screen-select').addEventListener('change',event=>{locat
 window.addEventListener('hashchange',render);window.addEventListener('resize',()=>document.documentElement.style.setProperty('--offline-bar-height',document.getElementById('offline-toolbar').offsetHeight+'px'));
 document.addEventListener('submit',event=>event.preventDefault());
 document.addEventListener('keydown',event=>{if(event.key==='Escape')closeMenu();});
-document.addEventListener('click',event=>{const button=event.target.closest('button');if(button?.getAttribute('aria-label')==='Mais opções'){if(document.getElementById('more-navigation'))return closeMenu();const drawer=document.createElement('div');drawer.className='drawer';drawer.id='more-navigation';const close=document.createElement('button');close.type='button';close.textContent='Fechar';close.setAttribute('aria-label','Fechar opções');close.className='button outline';drawer.append(close);const nav=view.querySelector('.sidebar nav')?.cloneNode(true);if(nav)drawer.append(nav);view.append(drawer);button.setAttribute('aria-expanded','true');return;}if(button?.getAttribute('aria-label')==='Fechar opções')return closeMenu();const link=event.target.closest('a');if(link&&link.getAttribute('href')?.startsWith('/')){event.preventDefault();location.hash='screen=home';}});
+document.addEventListener('click',event=>{const button=event.target.closest('button');if(button?.getAttribute('aria-label')==='Mais opções'){if(document.getElementById('more-navigation'))return closeMenu();const drawer=document.createElement('div');drawer.className='drawer';drawer.id='more-navigation';drawer.setAttribute('role','dialog');drawer.setAttribute('aria-label','Mais opções');const close=document.createElement('button');close.type='button';close.textContent='Fechar';close.setAttribute('aria-label','Fechar opções');close.className='button outline';drawer.append(close);const nav=view.querySelector('.sidebar nav')?.cloneNode(true);if(nav){nav.setAttribute('aria-label','Mais opções');drawer.append(nav);}view.append(drawer);button.setAttribute('aria-expanded','true');close.focus();return;}if(button?.getAttribute('aria-label')==='Fechar opções')return closeMenu();const link=event.target.closest('a');if(link&&link.getAttribute('href')?.startsWith('/')){event.preventDefault();location.hash='screen=home';}});
 render();
 `;
-const html = `<!doctype html><html lang="pt-BR" data-scroll-behavior="smooth"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Wireframe navegável — prévia offline</title><style>${css}\nbody .sidebar{top:var(--offline-bar-height,65px)}.offline-caption{font-size:11px;max-width:580px}#screen-select{max-width:240px}</style></head><body><div id="offline-toolbar" class="gallery-toolbar"><strong>Wireframe navegável<span>Prévia offline · dados fictícios · perfil Essencial</span></strong><span class="offline-caption">Navegação e rolagem disponíveis. Formulários, filtros e integrações inativos.</span><label>Tela<select id="screen-select">${options}</select></label></div><div id="offline-view"></div><script type="application/json" id="snapshots">${data}</script><script>${runtime}</script></body></html>`;
+const html = `<!doctype html><html lang="pt-BR" data-scroll-behavior="smooth"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Wireframe navegável — prévia offline</title><style>${css}</style></head><body><div id="offline-toolbar" class="gallery-toolbar"><strong>Wireframe navegável<span>Prévia offline · dados fictícios · perfil Essencial</span></strong><span class="offline-caption">Navegação e rolagem disponíveis. Formulários, filtros e integrações inativos.</span><label>Tela<select id="screen-select">${options}</select></label></div><div id="offline-view"></div><script type="application/json" id="snapshots">${data}</script><script>${runtime}</script></body></html>`;
 await writeFile("docs/preview/wireframe.html", html);
 await writeFile(
   "docs/preview/README.md",
-  `# Prévia navegável sem instalação\n\nBaixe **wireframe.html** e abra o arquivo no Chrome ou Edge. Não requer Node, servidor ou conexão depois do download.\n\nContém ${Object.keys(snapshots).length} telas/variantes capturadas do wireframe real, com menu e links entre telas. A barra superior permite escolher telas e estados. Menu fixo e carrosséis funcionam no navegador.\n\nÉ uma prévia estática navegável do perfil Essencial: formulários, filtros, abas, login, compras e downloads de materiais estão inativos. Não substitui o projeto React nem simula autenticação. A paleta final continua separada nos documentos de design.\n\nGerar novamente: inicie npm run dev e execute npm run preview:offline. Nenhum deploy foi realizado.\n`,
+  `# Prévia navegável sem instalação\n\nBaixe **wireframe.zip**, extraia e abra **wireframe.html** no Chrome ou Edge. Não requer Node, servidor ou conexão depois do download.\n\nContém ${Object.keys(snapshots).length} telas/variantes a partir das fixtures do wireframe. A barra superior permite escolher telas e estados. A prévia tem refinamento próprio: Home em três zonas, sem hero ou produto duplicado, cards brancos sobre gradiente e menu clear pill com lavanda/vinho. Navegação mobile: Início · Meus Produtos · Mais.\n\nÉ uma prévia estática navegável do perfil Essencial: formulários, filtros, abas, login, compras e downloads de materiais estão inativos. Não substitui o projeto React nem simula autenticação. A aplicação e seus estilos não foram alterados.\n\nFontes da prévia: scripts/refine-offline-preview.ts (estrutura) e docs/preview/shell.css (skin, embutido no HTML). Gerar novamente: inicie npm run dev e execute npm run preview:offline. Para capturas da Home refinada: npm run screenshots -- --offline-home. As capturas antigas da galeria React permanecem identificadas separadamente.\n\nNenhum publish, push, PR, merge ou deploy faz parte desta revisão.\n`,
 );
 console.log(
   `Offline HTML exported: ${Object.keys(snapshots).length} screen variants; ${Buffer.byteLength(html)} bytes.`,

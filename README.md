@@ -95,10 +95,12 @@ A home prioriza uma próxima ação vinculada a produto adquirido e a biblioteca
 - [Tokens, HTML/Markdown e contraste](docs/design/README.md)
 - [Demonstrações de rolagem desktop/mobile](docs/scroll-demos/README.md)
 
-A paleta enviada (lavanda, branco, oliva e grafite), o vinho proposto e o estilo de sidebar clara expandida/recolhida estão **somente nos documentos**. O wireframe continua neutro, como solicitado. Não houve aplicação da identidade final ou deploy.
+A galeria React continua neutra, com a paleta completa e os componentes futuros descritos nos documentos. A prévia HTML recebeu uma revisão visual independente: sidebar branca, ativo lavanda/vinho e canvas suave. Não houve aplicação da identidade na aplicação ou deploy.
 
 Regenerar documentos: `npm run docs:design` (Python 3 + Chromium). Regenerar demonstrações: com `npm run dev` ativo, execute `npm run demo:scroll` (Chromium + FFmpeg do sistema). Quadros da demonstração são capturas do app reproduzidas a 12fps; não representam gravação em tempo real.
 
 ## Abrir sem instalar o projeto
 
 [Baixe a prévia offline](docs/preview/wireframe.zip), extraia e abra wireframe.html no Chrome/Edge. É uma prévia estática navegável de 37 telas/variantes com dados fictícios; menu e rolagem funcionam. Formulários, filtros, abas e integrações estão inativos. Não depende do servidor cloud nem substitui o app React. [Detalhes](docs/preview/README.md).
+
+A Home refinada reúne saudação, próximo passo e biblioteca na zona A, publicações na zona B e ofertas na zona C. O hero de boas-vindas e a repetição do produto foram removidos. [Capturas atualizadas desktop/mobile](docs/screenshots/README-preview.md) · [Checklist desta revisão](docs/preview/acceptance.md).
