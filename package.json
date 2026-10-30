@@ -17,7 +17,8 @@
     "screenshots": "tsx scripts/screenshots.ts",
     "format": "prettier --write src tests scripts *.ts *.mjs",
     "docs:design": "python3 scripts/build-design-docs.py && tsx scripts/export-design-pdfs.ts",
-    "demo:scroll": "tsx scripts/record-menu-scroll.ts"
+    "demo:scroll": "tsx scripts/record-menu-scroll.ts",
+    "preview:offline": "tsx scripts/export-offline-wireframe.ts && python3 -m zipfile -c docs/preview/wireframe.zip docs/preview/wireframe.html"
   },
   "dependencies": {
     "next": "16.4.3",

@@ -98,3 +98,7 @@ A home prioriza uma próxima ação vinculada a produto adquirido e a biblioteca
 A paleta enviada (lavanda, branco, oliva e grafite), o vinho proposto e o estilo de sidebar clara expandida/recolhida estão **somente nos documentos**. O wireframe continua neutro, como solicitado. Não houve aplicação da identidade final ou deploy.
 
 Regenerar documentos: `npm run docs:design` (Python 3 + Chromium). Regenerar demonstrações: com `npm run dev` ativo, execute `npm run demo:scroll` (Chromium + FFmpeg do sistema). Quadros da demonstração são capturas do app reproduzidas a 12fps; não representam gravação em tempo real.
+
+## Abrir sem instalar o projeto
+
+[Baixe a prévia offline](docs/preview/wireframe.zip), extraia e abra wireframe.html no Chrome/Edge. É uma prévia estática navegável de 37 telas/variantes com dados fictícios; menu e rolagem funcionam. Formulários, filtros, abas e integrações estão inativos. Não depende do servidor cloud nem substitui o app React. [Detalhes](docs/preview/README.md).
