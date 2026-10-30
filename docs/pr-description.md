@@ -8,8 +8,8 @@ Magic link e webhook Cakto são contratos provisórios com endpoints inertes (50
 
 - npm ci, lint, TypeScript e build: passaram.
 - 7 testes de domínio/segurança passaram.
-- Desenvolvimento: 64 e2e passaram; 2 exclusivos de produção ignorados.
-- Build de produção local: 10 e2e passaram; 56 exclusivos da galeria ignorados.
+- Desenvolvimento: 69 e2e passaram; 3 exclusivos de produção ignorados.
+- Build de produção local: 10 e2e passaram; 62 exclusivos da galeria ignorados.
 - axe WCAG A/AA em cinco telas, desktop e mobile; 40 capturas.
 - Revisão independente; regressões corrigidas com testes RED→GREEN.
 
@@ -34,4 +34,8 @@ Magic link e webhook Cakto são contratos provisórios com endpoints inertes (50
 - [x] README e env placeholders sem valores.
 - [x] Zero deploy de produção; go LAB/Alisson continua necessário.
 
-Pendências menores: IDs inválidos na galeria local usam fallback; fechar o drawer mobile ainda não restaura foco ao acionador. Auth real, assets Riccele, preços Zed e contrato final Alisson não são parte desta implementação.
+Pendências menores: IDs inválidos na galeria local usam fallback. Retorno de foco do drawer foi corrigido nesta revisão. Auth real, assets Riccele, preços Zed e contrato final Alisson não são parte desta implementação.
+
+## Refinamento e documentação visual v0.2
+
+Home prioriza próxima ação e biblioteca; menus fixos, toolbar sticky e retorno de foco/Escape foram testados. Adiciona pesquisa estrutural (Open edX, Moodle e shadcn/ui), style guide de 6 páginas e design system de 8 páginas, com a paleta enviada + vinho proposto e tokens/contraste. A direção visual fica nos documentos; o wireframe continua neutro. Inclui demonstrações de rolagem desktop/mobile capturadas no app e reproduzidas a 12fps. Nenhum deploy.

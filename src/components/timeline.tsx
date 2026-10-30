@@ -36,7 +36,52 @@ export function Timeline({
         </div>
         <span className="edition">SEU PRÓXIMO CAPÍTULO</span>
       </header>
-      <section className="welcome-hero">
+      <section className="learning-next" aria-label="Seu próximo passo">
+        <div className="learning-next-icon" aria-hidden="true">
+          ▤
+        </div>
+        <div>
+          <span className="eyebrow">SEU PRÓXIMO PASSO</span>
+          <h2>{owned[0]?.title ?? "Vamos explorar sua biblioteca?"}</h2>
+          <p>
+            {owned.length
+              ? `${owned.length} coleções na sua biblioteca. Explore os módulos e acompanhe os materiais em preparação.`
+              : "Seus materiais aparecerão aqui quando forem adicionados à sua biblioteca."}
+          </p>
+        </div>
+        <Link
+          className="button"
+          href={
+            owned[0]
+              ? screenHref("product", preview, owned[0].id)
+              : screenHref("products", preview)
+          }
+        >
+          Ver materiais <span aria-hidden="true">↗</span>
+        </Link>
+      </section>
+      <section className="section-block">
+        <SectionHeading
+          title="Seus Produtos"
+          label="SUA BIBLIOTECA"
+          href={screenHref("products", preview)}
+          action="Ver todos"
+        />
+        {owned.length ? (
+          <div className="product-grid carousel">
+            {owned.map((p) => (
+              <ProductCard key={p.id} product={p} preview={preview} />
+            ))}
+          </div>
+        ) : (
+          <WireframeState
+            kind="empty"
+            title="Você ainda não tem materiais"
+            preview={preview}
+          />
+        )}
+      </section>
+      <section className="welcome-hero section-block">
         <div className="hero-copy">
           <span className="eyebrow">ESTE ESPAÇO É SEU</span>
           <h2>
@@ -60,27 +105,6 @@ export function Timeline({
           </div>
         </div>
         <span className="hero-caption">Vídeo de boas-vindas em breve</span>
-      </section>
-      <section className="section-block">
-        <SectionHeading
-          title="Seus Produtos"
-          label="SUA BIBLIOTECA"
-          href={screenHref("products", preview)}
-          action="Ver todos"
-        />
-        {owned.length ? (
-          <div className="product-grid carousel">
-            {owned.map((p) => (
-              <ProductCard key={p.id} product={p} preview={preview} />
-            ))}
-          </div>
-        ) : (
-          <WireframeState
-            kind="empty"
-            title="Você ainda não tem materiais"
-            preview={preview}
-          />
-        )}
       </section>
       <section className="section-block">
         <SectionHeading title="Uma ideia para cada momento" label="COLEÇÕES" />

@@ -15,7 +15,9 @@
     "test": "tsx --test tests/*.test.ts",
     "test:e2e": "playwright test",
     "screenshots": "tsx scripts/screenshots.ts",
-    "format": "prettier --write src tests scripts *.ts *.mjs"
+    "format": "prettier --write src tests scripts *.ts *.mjs",
+    "docs:design": "python3 scripts/build-design-docs.py && tsx scripts/export-design-pdfs.ts",
+    "demo:scroll": "tsx scripts/record-menu-scroll.ts"
   },
   "dependencies": {
     "next": "16.4.3",

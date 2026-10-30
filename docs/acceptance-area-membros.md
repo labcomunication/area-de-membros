@@ -20,7 +20,7 @@ Escopo desta entrega: wireframes e skeleton. Auth, pagamentos, entrega de arquiv
 - `npm run lint`: passou.
 - `npm run typecheck`: passou.
 - `npm test`: 7 testes passaram (união/deduplicação, ofertas desconhecidas/perfis ausentes/chaves herdadas, acesso exato, sessão ausente, stubs inertes).
-- `npm run test:e2e`: 64 passaram; 2 casos exclusivos de produção ignorados de forma explícita. Projetos Chromium desktop 1440×1000 e mobile 390×844.
+- `npm run test:e2e`: 69 passaram; 3 casos exclusivos de produção ignorados de forma explícita. Projetos Chromium desktop 1440×1000 e mobile 390×844.
 - `npm run build`: passou, com todas as rotas App Router esperadas e Proxy de negação antecipada.
 - A11y: axe WCAG A/AA nas telas home, login, catálogo, produto e suporte, em ambas as dimensões. Isso não substitui uma auditoria manual completa.
 - Matriz de estados: testes percorrem as 15 telas para cada estado não normal.
@@ -28,7 +28,7 @@ Escopo desta entrega: wireframes e skeleton. Auth, pagamentos, entrega de arquiv
 
 Capturas: 40 PNGs, incluindo as 15 telas em ambas as dimensões e cinco estados representativos. [Índice de capturas](screenshots/README.md).
 
-`TEST_PRODUCTION=1 npm run test:e2e`: **10 passaram**, **56 casos de galeria ignorados explicitamente**. Galeria devolve 404, rotas protegidas negam acesso, ajuda pública responde e stubs ficam inertes.
+`TEST_PRODUCTION=1 npm run test:e2e`: **10 passaram**, **62 casos exclusivos da galeria ignorados explicitamente**. Galeria devolve 404, rotas protegidas negam acesso, ajuda pública responde e stubs ficam inertes.
 
 `npm ci` pelo lockfile foi executado novamente com sucesso antes do build final.
 
@@ -58,7 +58,7 @@ Revisão de código independente não encontrou bypass atual de autorização. C
 Limitações menores registradas para revisão posterior:
 
 - Na galeria de desenvolvimento, IDs explícitos inválidos ainda recaem em fixtures padrão. As rotas reais validam IDs.
-- Ao fechar o drawer mobile pelo botão, o foco ainda não retorna ao acionador. A navegação por teclado está disponível; resta aprimorar essa restauração.
+- Retorno de foco do drawer foi resolvido nesta rodada: fechar e Escape devolvem foco a Mais opções, com teste no mobile.
 
 A revisão não certificou fidelidade a referências ausentes ou uma auditoria manual completa de acessibilidade. Go de produção continua fora desta entrega.
 
@@ -73,3 +73,11 @@ A revisão não certificou fidelidade a referências ausentes ou uma auditoria m
 Branch `feat/members-wireframe` enviada e SHA remoto conferido com o local. A criação automática do PR falhou: API GraphQL do GitHub respondeu `Forbidden`. O acesso por Git continua funcionando. Nenhum PR foi criado automaticamente e nenhum merge/deploy foi realizado.
 
 [Abrir formulário do PR](https://github.com/labcomunication/area-de-membros/pull/new/feat/members-wireframe) · [Descrição pronta para o PR](pr-description.md)
+
+## Refinamento v0.2
+
+Home remapeada para próxima ação → biblioteca → boas-vindas → conteúdo editorial. Menu fixo antes/depois de scroll e controles da revisão persistentes testados. Pesquisa consultou Open edX, Moodle e shadcn/ui; sites comerciais bloqueados não foram apresentados como observados.
+
+Documentos independentes: style guide (6 páginas), design system (8 páginas), tokens JSON/CSS, contrastes calculados e referências. Paleta não aplicada ao app. PDFs validados quanto a número de páginas, texto e rodapé; exemplos de sidebar com 48px e foco offset 2px conferidos no navegador. Dois vídeos de quadros reais e quatro capturas de viewport demonstram rolagem; screenshots das 15 telas/estados atualizados.
+
+Revisão independente não encontrou falhas críticas/importantes. Ajustes documentais de consistência foram resolvidos: métricas dos exemplos alinhadas e promessa de sincronização automática da narrativa restringida; tokens de cor/layout exportados são derivados do JSON. A limitação de IDs inválidos na galeria local permanece.

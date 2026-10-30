@@ -83,3 +83,18 @@ Magic link ainda exige provedor, TTL curto, token de uso único, respostas neutr
 - **Nenhum deploy de produção, merge ou publish é autorizado por este código. Exige go LAB/Alisson.**
 
 [Briefing integral](docs/briefings/2026-10-30-briefing-codex-area-membros-wireframe.md) · [Plano](docs/superpowers/plans/2026-10-30-area-membros-wireframe.md)
+
+## Revisão de blocagem e pacote visual (v0.2)
+
+A home prioriza uma próxima ação vinculada a produto adquirido e a biblioteca antes das boas-vindas. Menu lateral desktop e navegação inferior mobile permanecem fixos; toolbar da galeria é sticky, menu interno acomoda janelas baixas e o drawer devolve foco ao fechar/Escape.
+
+- [Pesquisa de padrões e mercado](docs/reviews/2026-10-30-market-blocks.md)
+- [Relatório do remapeamento](docs/reviews/2026-10-30-layout-remap.md)
+- [Style guide — PDF](docs/design/style-guide.pdf)
+- [Design system — PDF](docs/design/design-system.pdf)
+- [Tokens, HTML/Markdown e contraste](docs/design/README.md)
+- [Demonstrações de rolagem desktop/mobile](docs/scroll-demos/README.md)
+
+A paleta enviada (lavanda, branco, oliva e grafite), o vinho proposto e o estilo de sidebar clara expandida/recolhida estão **somente nos documentos**. O wireframe continua neutro, como solicitado. Não houve aplicação da identidade final ou deploy.
+
+Regenerar documentos: `npm run docs:design` (Python 3 + Chromium). Regenerar demonstrações: com `npm run dev` ativo, execute `npm run demo:scroll` (Chromium + FFmpeg do sistema). Quadros da demonstração são capturas do app reproduzidas a 12fps; não representam gravação em tempo real.

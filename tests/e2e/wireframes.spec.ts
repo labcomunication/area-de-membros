@@ -275,3 +275,61 @@ test("review regression: a filtered featured story opens that story and its own 
     "Organização",
   );
 });
+
+test("remap: toolbar and navigation stay anchored during page scroll", async ({
+  page,
+}, info) => {
+  test.skip(production);
+  await page.goto("/wireframes?screen=home");
+  const nav = page.locator(
+    info.project.name === "mobile" ? ".bottom-nav" : ".sidebar",
+  );
+  const before = await nav.boundingBox();
+  await page.evaluate(() =>
+    window.scrollTo({ top: 1600, behavior: "instant" }),
+  );
+  const after = await nav.boundingBox();
+  expect(Math.abs(after!.y - before!.y)).toBeLessThan(1);
+  const toolbar = await page.locator(".gallery-toolbar").boundingBox();
+  expect(toolbar!.y).toBeGreaterThanOrEqual(0);
+  if (info.project.name === "desktop")
+    expect(Math.abs(after!.y - (toolbar!.y + toolbar!.height))).toBeLessThan(1);
+});
+test("remap: library precedes welcome hero and next action respects ownership", async ({
+  page,
+}) => {
+  test.skip(production);
+  await page.goto("/wireframes?screen=home&profile=organizado");
+  const library = await page
+    .getByRole("heading", { name: "Seus Produtos", exact: true })
+    .boundingBox();
+  const hero = await page.locator(".welcome-hero").boundingBox();
+  expect(library!.y).toBeLessThan(hero!.y);
+  await page
+    .locator(".learning-next")
+    .getByRole("link", { name: "Ver materiais", exact: true })
+    .click();
+  await expect(page.getByRole("heading", { level: 1 })).toHaveText(
+    "Custos e organização",
+  );
+  await expect(
+    page.getByRole("tab", { name: "Conteúdo", exact: true }),
+  ).toBeVisible();
+});
+test("remap: closing mobile navigation restores keyboard focus", async ({
+  page,
+}, info) => {
+  test.skip(production || info.project.name !== "mobile");
+  await page.goto("/wireframes?screen=home");
+  const trigger = page.getByRole("button", {
+    name: "Mais opções",
+    exact: true,
+  });
+  await trigger.click();
+  await page.getByRole("button", { name: "Fechar opções" }).click();
+  await expect(trigger).toBeFocused();
+  await trigger.click();
+  await page.keyboard.press("Escape");
+  await expect(page.locator("#more-navigation")).toHaveCount(0);
+  await expect(trigger).toBeFocused();
+});

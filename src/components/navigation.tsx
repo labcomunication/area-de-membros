@@ -1,6 +1,6 @@
 "use client";
 import { MemberLink as Link } from "./member-link";
-import { useState } from "react";
+import { useState, useRef, useCallback, useEffect } from "react";
 import type { Screen } from "@/config/members";
 import { navigation, screenHref } from "@/config/navigation";
 export function Navigation({
@@ -11,6 +11,22 @@ export function Navigation({
   preview: boolean;
 }) {
   const [open, setOpen] = useState(false);
+  const triggerRef = useRef<HTMLButtonElement>(null);
+  const close = useCallback(() => {
+    setOpen(false);
+    triggerRef.current?.focus();
+  }, []);
+  useEffect(() => {
+    if (!open) return;
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        event.preventDefault();
+        close();
+      }
+    };
+    document.addEventListener("keydown", onKeyDown);
+    return () => document.removeEventListener("keydown", onKeyDown);
+  }, [open, close]);
   const item = (entry: (typeof navigation)[number]) => (
     <Link
       key={entry.screen}
@@ -66,6 +82,7 @@ export function Navigation({
         <button
           type="button"
           aria-label="Mais opções"
+          ref={triggerRef}
           aria-expanded={open}
           aria-controls="more-navigation"
           onClick={() => setOpen(!open)}
@@ -77,11 +94,7 @@ export function Navigation({
         <div className="drawer" id="more-navigation">
           <div className="drawer-heading">
             <strong>Mais opções</strong>
-            <button
-              type="button"
-              aria-label="Fechar opções"
-              onClick={() => setOpen(false)}
-            >
+            <button type="button" aria-label="Fechar opções" onClick={close}>
               ×
             </button>
           </div>

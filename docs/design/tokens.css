@@ -1,0 +1,46 @@
+/* Proposta visual v0.2 — NÃO importada pelo app. Escopo opt-in futuro. */
+[data-members-theme="brand"] {
+  --palette-lavanda: #D0D8EF;
+  --palette-branco: #FFFFFF;
+  --palette-oliva: #9EA466;
+  --palette-grafite: #2D2D2D;
+  --palette-vinho: #722F46;
+  --surface: #FFFFFF;
+  --background: #F7F8FA;
+  --text: #2D2D2D;
+  --text-muted: #5B606B;
+  --border-control: #737781;
+  --border-decorative: #D7D9E0;
+  --selected-background: #D0D8EF;
+  --selected-text: #2D2D2D;
+  --selected-indicator: #722F46;
+  --access-background: #9EA466;
+  --access-text: #2D2D2D;
+  --access-border: #2D2D2D;
+  --access-hover: #939A5B;
+  --buy-background: #722F46;
+  --buy-text: #FFFFFF;
+  --buy-hover: #62273B;
+  --buy-active: #512031;
+  --focus-ring: #722F46;
+  --disabled-background: #ECEEF3;
+  --disabled-text: #5B606B;
+  --info-background: #D0D8EF;
+  --info-text: #2D2D2D;
+  --error-background: #F4E9ED;
+  --error-text: #722F46;
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-6: 24px;
+  --space-8: 32px;
+  --space-12: 48px;
+  --space-16: 64px;
+  --sidebar-expanded: 240px;
+  --sidebar-collapsed: 72px;
+  --touch-target: 44px;
+  --control-height: 48px;
+  --content-max: 1120px;
+  --font-body: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+}
