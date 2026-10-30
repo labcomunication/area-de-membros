@@ -67,3 +67,9 @@ A revisão não certificou fidelidade a referências ausentes ou uma auditoria m
 - `next-env.d.ts` é gerado pelo Next e ignorado para não sujar o Git ao alternar dev/build.
 - ESLint está fixado em 9.39.5 por compatibilidade com os peers dos plugins React do Next. A ferramenta emite aviso de fim de suporte; migrar quando os plugins aceitarem a versão seguinte. Isso não altera dependências de runtime.
 - Não foi criado worktree: o checkout cloud já é isolado. Ledger local foi mantido diretamente porque os scripts auxiliares da skill são recursos cloud, não executáveis locais.
+
+## Publicação no GitHub
+
+Branch `feat/members-wireframe` enviada e SHA remoto conferido com o local. A criação automática do PR falhou: API GraphQL do GitHub respondeu `Forbidden`. O acesso por Git continua funcionando. Nenhum PR foi criado automaticamente e nenhum merge/deploy foi realizado.
+
+[Abrir formulário do PR](https://github.com/labcomunication/area-de-membros/pull/new/feat/members-wireframe) · [Descrição pronta para o PR](pr-description.md)
