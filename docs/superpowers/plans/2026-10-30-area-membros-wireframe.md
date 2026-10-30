@@ -26,7 +26,7 @@
 
 O único checkout disponível é `labcomunication/cozinhando-com-vovo-maria`, com aplicação Node em `site/`. Não foram encontrados `/workspace/briefings/refs/`, `/workspace/isabella-membros/`, `/workspace/tech-prep-lp/` ou o benchmark Luana. Não foi inspecionada nenhuma das duas imagens; sua conformidade não pode ser declarada. O anexo é especificação de produto; instruções operacionais nele não autorizam publicação ou mensagens para terceiros.
 
-Destino solicitado pelo usuário: novo repositório, nome normalizado `area-de-membros-doces-saas`; owner proposto `labcomunication`, privado. Pasta local: `/workspace/area-de-membros-doces-saas`. A criação no GitHub está bloqueada pelo acesso à API; não foi criado remoto. Caminhos abaixo são relativos à raiz desse novo app. Não supor acesso ao isabella-membros, payload real Cakto ou ADR-001. Até acesso aos contratos, manter os quatro campos exigidos como contrato provisório explicitamente documentado, sem inferir semântica de verificação.
+Destino confirmado pelo usuário: repositório público `labcomunication/area-de-membros`, criado pelo usuário. Pasta local: `/workspace/area-de-membros-doces-saas`. Caminhos abaixo são relativos à raiz desse novo app. A API do GitHub permanece bloqueada; leitura e envio por Git são verificados separadamente. Não supor acesso ao isabella-membros, payload real Cakto ou ADR-001. Até acesso aos contratos, manter os quatro campos exigidos como contrato provisório explicitamente documentado, sem inferir semântica de verificação.
 
 Decisões propostas: bottom nav com drawer “Mais”; omitir atalho Módulos no v1; feed em fixtures TypeScript (decisão MDX/CMS adiada); todos os arquivos reais pendentes. Preços, depoimentos e progresso de exemplos devem estar identificados como fixtures, nunca alegações reais.
 
@@ -113,4 +113,4 @@ Entrega posterior: Pike revisa estrutura/responsividade; Alisson revisa stack/gu
 
 ## Próxima ação
 
-Destino local definido; resta criar remoto quando a API estiver acessível e revisar este plano. Recomendada execução nesta sessão pelo agente principal, sem delegação: shell, config e guardas compartilham interfaces. A skill writing-plans exige revisão do plano antes de implementação; nenhuma dependência ou scaffold foi criado nesta etapa.
+Destino remoto definido pelo usuário: `https://github.com/labcomunication/area-de-membros.git`. Revisar este plano antes de implementar. Recomendada execução nesta sessão pelo agente principal, sem delegação: shell, config e guardas compartilham interfaces. A skill writing-plans exige revisão do plano antes de implementação; nenhuma dependência ou scaffold foi criado nesta etapa.
