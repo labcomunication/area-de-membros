@@ -2,10 +2,12 @@
 
 Baixe **wireframe.zip**, extraia e abra **wireframe.html** no Chrome ou Edge. Não requer Node, servidor ou conexão depois do download.
 
-Contém 37 telas/variantes a partir das fixtures do wireframe. A barra superior permite escolher telas e estados. A prévia tem refinamento próprio: Home em três zonas, sem hero ou produto duplicado, cards brancos sobre gradiente e menu clear pill com lavanda/vinho. Navegação mobile: Início · Meus Produtos · Mais.
+Contém 38 telas/variantes a partir das fixtures e uma tela futura de Estúdio IA. A barra superior permite escolher telas e estados. Home em três zonas, cards brancos sobre gradiente e menu clear pill. Navegação mobile: Início · Meus Produtos · Mais.
 
-É uma prévia estática navegável do perfil Essencial: formulários, filtros, abas, login, compras e downloads de materiais estão inativos. Não substitui o projeto React nem simula autenticação. A aplicação e seus estilos não foram alterados.
+Nesta revisão: imagens editoriais contidas, hover somente na imagem, badges arredondados, preços explicitamente fictícios, capa bloqueada com cadeado, banner de catálogo/ofertas e Minha conta com mapa de atividade e conquistas ilustrativos. Em Personalização → Editar, experimente claro/escuro, detalhes oliva/vinho/bege e coroa de exemplo. Preferências apenas em memória; recarregar restaura os padrões. Estúdio IA tem esfera abstrata animada e geração de PDFs marcada como futura.
 
-Fontes da prévia: scripts/refine-offline-preview.ts (estrutura) e docs/preview/shell.css (skin, embutido no HTML). Gerar novamente: inicie npm run dev e execute npm run preview:offline. Para capturas da Home refinada: npm run screenshots -- --offline-home. As capturas antigas da galeria React permanecem identificadas separadamente.
+É uma demonstração visual do perfil Essencial: formulários, filtros, login, compras, geração de PDFs e downloads de materiais estão inativos. Mapa/conquistas não representam acessos, vendas ou conclusões reais. Sem coleta, API, cookies ou persistência. Não substitui a aplicação React, que permanece intacta.
+
+Fontes: scripts/refine-offline-preview.ts, scripts/enhance-offline-preview.ts, scripts/offline-preview-runtime.js e docs/preview/shell.css, embutidos no HTML. Para regenerar: npm run dev e npm run preview:offline. Capturas: npm run screenshots -- --offline-review (ou --offline-home para somente Home). Veja iteration-account-ai.md e acceptance.md.
 
 Nenhum publish, push, PR, merge ou deploy faz parte desta revisão.

@@ -2,6 +2,7 @@ import { chromium } from "@playwright/test";
 import { readFile, writeFile, mkdir } from "node:fs/promises";
 import { screens } from "../src/config/members";
 import { refineOfflinePreview } from "./refine-offline-preview";
+import { enhanceOfflinePreview } from "./enhance-offline-preview";
 const base = process.env.SCREENSHOT_BASE_URL ?? "http://127.0.0.1:3000";
 function keyOf(url: string) {
   const parsed = new URL(url, "https://offline.invalid");
@@ -72,11 +73,16 @@ try {
       const target = keyOf(url);
       if (!snapshots[target] && !queue.includes(target)) queue.push(target);
     }
-    snapshots[key] = await page.evaluate(
-      refineOfflinePreview,
-      captured.content,
-    );
+    const refined = await page.evaluate(refineOfflinePreview, captured.content);
+    snapshots[key] = await page.evaluate(enhanceOfflinePreview, {
+      html: refined,
+      key,
+    });
   }
+  snapshots["screen=ai"] = await page.evaluate(enhanceOfflinePreview, {
+    html: snapshots["screen=home"],
+    key: "screen=ai",
+  });
 } finally {
   await browser.close();
 }
@@ -92,30 +98,19 @@ const options =
       ([screen, label]) => `<option value="screen=${screen}">${label}</option>`,
     )
     .join("") +
+  '<option value="screen=ai">Estúdio IA · Em breve</option>' +
   ["empty", "loading", "error", "pending", "expired"]
     .map(
       (state) =>
         `<option value="screen=products&state=${state}">Produtos · ${state}</option>`,
     )
     .join("");
-const runtime = String.raw`
-const snapshots=JSON.parse(document.getElementById('snapshots').textContent);
-const view=document.getElementById('offline-view');
-function keyOf(url){const parsed=new URL(url,'https://offline.invalid');const q=new URLSearchParams();for(const k of ['screen','state','product','module','post','category']){const v=parsed.searchParams.get(k);if(v&&!(k==='state'&&v==='normal'))q.set(k,v);}if(!q.has('screen'))q.set('screen','home');q.sort();return q.toString();}
-function closeMenu(){document.getElementById('more-navigation')?.remove();const trigger=view.querySelector('button[aria-label="Mais opções"]');trigger?.setAttribute('aria-expanded','false');trigger?.focus();}
-function render(){const key=keyOf('/wireframes?'+location.hash.slice(1));view.innerHTML=snapshots[key]||snapshots['screen=home'];document.querySelectorAll('#offline-view a[href^="/wireframes"]').forEach(a=>a.setAttribute('href','#'+keyOf(a.getAttribute('href'))));const select=document.getElementById('screen-select');select.value=[...select.options].some(o=>o.value===key)?key:'';document.documentElement.style.setProperty('--offline-bar-height',document.getElementById('offline-toolbar').offsetHeight+'px');window.scrollTo({top:0,behavior:'instant'});}
-document.getElementById('screen-select').addEventListener('change',event=>{location.hash=event.target.value;});
-window.addEventListener('hashchange',render);window.addEventListener('resize',()=>document.documentElement.style.setProperty('--offline-bar-height',document.getElementById('offline-toolbar').offsetHeight+'px'));
-document.addEventListener('submit',event=>event.preventDefault());
-document.addEventListener('keydown',event=>{if(event.key==='Escape')closeMenu();});
-document.addEventListener('click',event=>{const button=event.target.closest('button');if(button?.getAttribute('aria-label')==='Mais opções'){if(document.getElementById('more-navigation'))return closeMenu();const drawer=document.createElement('div');drawer.className='drawer';drawer.id='more-navigation';drawer.setAttribute('role','dialog');drawer.setAttribute('aria-label','Mais opções');const close=document.createElement('button');close.type='button';close.textContent='Fechar';close.setAttribute('aria-label','Fechar opções');close.className='button outline';drawer.append(close);const nav=view.querySelector('.sidebar nav')?.cloneNode(true);if(nav){nav.setAttribute('aria-label','Mais opções');drawer.append(nav);}view.append(drawer);button.setAttribute('aria-expanded','true');close.focus();return;}if(button?.getAttribute('aria-label')==='Fechar opções')return closeMenu();const link=event.target.closest('a');if(link&&link.getAttribute('href')?.startsWith('/')){event.preventDefault();location.hash='screen=home';}});
-render();
-`;
+const runtime = await readFile("scripts/offline-preview-runtime.js", "utf8");
 const html = `<!doctype html><html lang="pt-BR" data-scroll-behavior="smooth"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Wireframe navegável — prévia offline</title><style>${css}</style></head><body><div id="offline-toolbar" class="gallery-toolbar"><strong>Wireframe navegável<span>Prévia offline · dados fictícios · perfil Essencial</span></strong><span class="offline-caption">Navegação e rolagem disponíveis. Formulários, filtros e integrações inativos.</span><label>Tela<select id="screen-select">${options}</select></label></div><div id="offline-view"></div><script type="application/json" id="snapshots">${data}</script><script>${runtime}</script></body></html>`;
 await writeFile("docs/preview/wireframe.html", html);
 await writeFile(
   "docs/preview/README.md",
-  `# Prévia navegável sem instalação\n\nBaixe **wireframe.zip**, extraia e abra **wireframe.html** no Chrome ou Edge. Não requer Node, servidor ou conexão depois do download.\n\nContém ${Object.keys(snapshots).length} telas/variantes a partir das fixtures do wireframe. A barra superior permite escolher telas e estados. A prévia tem refinamento próprio: Home em três zonas, sem hero ou produto duplicado, cards brancos sobre gradiente e menu clear pill com lavanda/vinho. Navegação mobile: Início · Meus Produtos · Mais.\n\nÉ uma prévia estática navegável do perfil Essencial: formulários, filtros, abas, login, compras e downloads de materiais estão inativos. Não substitui o projeto React nem simula autenticação. A aplicação e seus estilos não foram alterados.\n\nFontes da prévia: scripts/refine-offline-preview.ts (estrutura) e docs/preview/shell.css (skin, embutido no HTML). Gerar novamente: inicie npm run dev e execute npm run preview:offline. Para capturas da Home refinada: npm run screenshots -- --offline-home. As capturas antigas da galeria React permanecem identificadas separadamente.\n\nNenhum publish, push, PR, merge ou deploy faz parte desta revisão.\n`,
+  `# Prévia navegável sem instalação\n\nBaixe **wireframe.zip**, extraia e abra **wireframe.html** no Chrome ou Edge. Não requer Node, servidor ou conexão depois do download.\n\nContém ${Object.keys(snapshots).length} telas/variantes a partir das fixtures e uma tela futura de Estúdio IA. A barra superior permite escolher telas e estados. Home em três zonas, cards brancos sobre gradiente e menu clear pill. Navegação mobile: Início · Meus Produtos · Mais.\n\nNesta revisão: imagens editoriais contidas, hover somente na imagem, badges arredondados, preços explicitamente fictícios, capa bloqueada com cadeado, banner de catálogo/ofertas e Minha conta com mapa de atividade e conquistas ilustrativos. Em Personalização → Editar, experimente claro/escuro, detalhes oliva/vinho/bege e coroa de exemplo. Preferências apenas em memória; recarregar restaura os padrões. Estúdio IA tem esfera abstrata animada e geração de PDFs marcada como futura.\n\nÉ uma demonstração visual do perfil Essencial: formulários, filtros, login, compras, geração de PDFs e downloads de materiais estão inativos. Mapa/conquistas não representam acessos, vendas ou conclusões reais. Sem coleta, API, cookies ou persistência. Não substitui a aplicação React, que permanece intacta.\n\nFontes: scripts/refine-offline-preview.ts, scripts/enhance-offline-preview.ts, scripts/offline-preview-runtime.js e docs/preview/shell.css, embutidos no HTML. Para regenerar: npm run dev e npm run preview:offline. Capturas: npm run screenshots -- --offline-review (ou --offline-home para somente Home). Veja iteration-account-ai.md e acceptance.md.\n\nNenhum publish, push, PR, merge ou deploy faz parte desta revisão.\n`,
 );
 console.log(
   `Offline HTML exported: ${Object.keys(snapshots).length} screen variants; ${Buffer.byteLength(html)} bytes.`,

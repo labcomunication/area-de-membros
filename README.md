@@ -101,6 +101,10 @@ Regenerar documentos: `npm run docs:design` (Python 3 + Chromium). Regenerar dem
 
 ## Abrir sem instalar o projeto
 
-[Baixe a prévia offline](docs/preview/wireframe.zip), extraia e abra wireframe.html no Chrome/Edge. É uma prévia estática navegável de 37 telas/variantes com dados fictícios; menu e rolagem funcionam. Formulários, filtros, abas e integrações estão inativos. Não depende do servidor cloud nem substitui o app React. [Detalhes](docs/preview/README.md).
+[Baixe a prévia offline](docs/preview/wireframe.zip), extraia e abra wireframe.html no Chrome/Edge. É uma prévia navegável de 38 telas/variantes com dados fictícios; menu, rolagem e demonstrações de aparência funcionam. Formulários, filtros, abas de conteúdo e integrações estão inativos. Não depende do servidor cloud nem substitui o app React. [Detalhes](docs/preview/README.md).
 
 A Home refinada reúne saudação, próximo passo e biblioteca na zona A, publicações na zona B e ofertas na zona C. O hero de boas-vindas e a repetição do produto foram removidos. [Capturas atualizadas desktop/mobile](docs/screenshots/README-preview.md) · [Checklist desta revisão](docs/preview/acceptance.md).
+
+A revisão de conta e IA acrescenta imagens editoriais contidas com hover apenas na imagem, preços de exemplo, badges arredondados, capas bloqueadas escuras e um banner compartilhado no catálogo/ofertas. Minha conta inclui mapa de atividade e conquistas ilustrativos, coroa de exemplo e personalização: claro/escuro para a aparência geral; oliva/vinho/bege nos detalhes. As preferências duram apenas enquanto o HTML estiver aberto. Estúdio IA é uma tela futura, com esfera abstrata animada; geração de PDFs permanece indisponível. [Escopo e próximos passos de integração](docs/preview/iteration-account-ai.md).
+
+Regenerar esta revisão: com `npm run dev` ativo, execute `npm run preview:offline` e `npm run screenshots -- --offline-review`. Verificar o HTML exportado: `npx tsx scripts/verify-offline-preview.ts`.

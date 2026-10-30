@@ -3,7 +3,9 @@ import { mkdir, readFile, writeFile } from "node:fs/promises";
 import { screens, states } from "../src/config/members";
 const baseURL = process.env.SCREENSHOT_BASE_URL ?? "http://127.0.0.1:3000";
 const offlineHome = process.argv.includes("--offline-home");
-const offlineHtml = offlineHome
+const offlineReview = process.argv.includes("--offline-review");
+const offline = offlineHome || offlineReview;
+const offlineHtml = offline
   ? await readFile("docs/preview/wireframe.html", "utf8")
   : undefined;
 const browser = await chromium.launch({
@@ -11,12 +13,12 @@ const browser = await chromium.launch({
   args: ["--no-sandbox"],
 });
 const index = [
-  offlineHome
-    ? "# Home — prévia HTML refinada"
+  offline
+    ? "# Capturas — prévia HTML refinada"
     : "# Wireframes — índice de capturas",
   "",
-  offlineHome
-    ? "Capturas de docs/preview/wireframe.html; dados fictícios e integrações inativas. A galeria React mantém seu layout anterior. Regenerar: npm run screenshots -- --offline-home."
+  offline
+    ? "Capturas de docs/preview/wireframe.html; dados fictícios e integrações inativas. A galeria React mantém seu layout anterior. Regenerar: npm run screenshots -- --offline-review (ou --offline-home para somente Home). Temas e conquistas são demonstrações."
     : "Capturas de fixtures locais; não representam autenticação ou conteúdo final. Para a revisão visual independente do HTML offline, veja as [capturas atualizadas da Home](README-preview.md). As imagens abaixo representam a galeria React.",
   "",
   "| Tela | Estado | Desktop 1440px | Mobile 390px |",
@@ -25,16 +27,21 @@ const index = [
 await mkdir("docs/screenshots", { recursive: true });
 try {
   // Every principal screen, plus each non-normal state on a representative page.
-  const cases = offlineHome
-    ? [{ screen: "home", state: "normal" }]
+  const cases = offline
+    ? (offlineReview
+        ? ["home", "products", "bonus", "offers", "account", "ai"]
+        : ["home"]
+      ).map((screen) => ({ screen, state: "normal" }))
     : [
         ...screens.map(([screen]) => ({ screen, state: "normal" })),
         ...states
           .filter((state) => state !== "normal")
           .map((state) => ({ screen: "products", state })),
       ];
+  let captureCount = 0;
   for (const item of cases) {
     const links = [];
+    const darkLinks = [];
     for (const [device, width, height] of [
       ["desktop", 1440, 1000],
       ["mobile", 390, 844],
@@ -48,6 +55,15 @@ try {
       if (offlineHtml) {
         await page.route("**/*", (route) => route.abort());
         await page.setContent(offlineHtml);
+        await page.evaluate((screen) => {
+          location.hash = "screen=" + screen;
+        }, item.screen);
+        await page.waitForFunction(
+          (screen) =>
+            document.getElementById("offline-view")?.dataset.previewKey ===
+            "screen=" + screen,
+          item.screen,
+        );
       } else {
         const response = await page.goto(
           `${baseURL}/wireframes?screen=${item.screen}&state=${item.state}`,
@@ -63,28 +79,50 @@ try {
       await page.addStyleTag({
         content: "nextjs-portal { display:none !important; }",
       });
-      const file = offlineHome
-        ? `home-refined-${device}.png`
+      const file = offline
+        ? `${item.screen}-refined-${device}.png`
         : `${item.screen}-${item.state}-${device}.png`;
       await page.screenshot({
         path: `docs/screenshots/${file}`,
         fullPage: true,
       });
+      captureCount++;
       if (errors.length) throw Error(errors.join("\n"));
       links.push(`[${device}](${file})`);
+      if (offlineReview && item.screen === "account") {
+        await page.getByRole("button", { name: "Editar", exact: true }).click();
+        await page.getByRole("button", { name: "Escuro", exact: true }).click();
+        await page
+          .getByRole("button", { name: "Ver coroa no perfil", exact: true })
+          .click();
+        await page.evaluate(() => {
+          (document.activeElement as HTMLElement)?.blur();
+          window.scrollTo({ top: 0, behavior: "instant" });
+        });
+        await page.screenshot({
+          path: `docs/screenshots/account-dark-${device}.png`,
+          fullPage: true,
+        });
+        captureCount++;
+        darkLinks.push(`[${device}](account-dark-${device}.png)`);
+      }
       await page.close();
     }
     index.push(
       `| ${item.screen} | ${item.state} | ${links[0]} | ${links[1]} |`,
     );
+    if (darkLinks.length)
+      index.push(
+        `| account | escuro · opções abertas · coroa de exemplo | ${darkLinks[0]} | ${darkLinks[1]} |`,
+      );
   }
   await writeFile(
-    offlineHome
+    offline
       ? "docs/screenshots/README-preview.md"
       : "docs/screenshots/README.md",
     index.join("\n") + "\n",
   );
-  console.log(`${cases.length * 2} screenshots captured.`);
+  console.log(`${captureCount} screenshots captured.`);
 } finally {
   await browser.close();
 }
