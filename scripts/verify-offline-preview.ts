@@ -144,9 +144,9 @@ try {
   );
   assert.equal(
     await page
-      .locator(".sidebar nav a[aria-current]")
-      .evaluate((el) => getComputedStyle(el).backgroundColor),
-    "rgb(238, 240, 223)",
+      .locator(".sidebar nav a[aria-current] .nav-icon")
+      .evaluate((el) => getComputedStyle(el).color),
+    "rgb(104, 113, 61)",
   );
   await page.keyboard.press("Escape");
   assert.equal(await page.locator("#appearance-options").isVisible(), false);
@@ -162,18 +162,19 @@ try {
   await page.locator(".drawer [data-future-ai]").click();
   await page.locator(".ai-studio").waitFor();
   assert.equal(await page.locator(".drawer").count(), 0);
-  assert.equal(await page.locator(".ai-studio button").isDisabled(), true);
-  assert.notEqual(
+  assert.equal(
     await page
-      .locator(".ai-orb-spark")
-      .evaluate((el) => getComputedStyle(el).animationName),
-    "none",
+      .getByRole("button", { name: "Geração de PDFs · Em breve", exact: true })
+      .isDisabled(),
+    true,
   );
+  assert.equal(await page.locator(".ai-orb").count(), 0);
+  assert.equal(await page.locator(".character-play").isEnabled(), true);
   await page.emulateMedia({ reducedMotion: "reduce" });
   assert.equal(
     await page
-      .locator(".ai-orb-spark")
-      .evaluate((el) => getComputedStyle(el).animationName),
+      .locator(".character-play .character-gaze")
+      .evaluate((el) => getComputedStyle(el).transform),
     "none",
   );
   await go(page, "screen=bonus");

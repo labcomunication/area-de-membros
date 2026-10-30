@@ -42,6 +42,9 @@ try {
   for (const item of cases) {
     const links = [];
     const darkLinks = [];
+    const avatarLinks = [];
+    const happyLinks = [];
+    const angryLinks = [];
     for (const [device, width, height] of [
       ["desktop", 1440, 1000],
       ["mobile", 390, 844],
@@ -90,6 +93,23 @@ try {
       if (errors.length) throw Error(errors.join("\n"));
       links.push(`[${device}](${file})`);
       if (offlineReview && item.screen === "account") {
+        await page.locator('[data-action="avatar-picker"]').click();
+        await page
+          .getByRole("button", { name: "Lavanda", exact: true })
+          .click();
+        await page.evaluate(() => {
+          (document.activeElement as HTMLElement)?.blur();
+          window.scrollTo({ top: 0, behavior: "instant" });
+        });
+        await page.screenshot({
+          path: `docs/screenshots/account-avatars-${device}.png`,
+          fullPage: true,
+        });
+        captureCount++;
+        avatarLinks.push(`[${device}](account-avatars-${device}.png)`);
+        await page
+          .getByRole("button", { name: "Concluir", exact: true })
+          .click();
         await page.getByRole("button", { name: "Editar", exact: true }).click();
         await page.getByRole("button", { name: "Escuro", exact: true }).click();
         await page
@@ -106,6 +126,35 @@ try {
         captureCount++;
         darkLinks.push(`[${device}](account-dark-${device}.png)`);
       }
+      if (offlineReview && item.screen === "ai") {
+        const player = page.getByRole("button", {
+          name: "Brincar com personagem",
+          exact: true,
+        });
+        await player.click();
+        await page.evaluate(() => {
+          (document.activeElement as HTMLElement)?.blur();
+          window.scrollTo({ top: 0, behavior: "instant" });
+        });
+        await page.screenshot({
+          path: `docs/screenshots/ai-happy-${device}.png`,
+          fullPage: true,
+        });
+        captureCount++;
+        happyLinks.push(`[${device}](ai-happy-${device}.png)`);
+        for (let i = 0; i < 4; i++) await player.click();
+        await page.evaluate(() => {
+          (document.activeElement as HTMLElement)?.blur();
+          window.scrollTo({ top: 0, behavior: "instant" });
+        });
+        await page.screenshot({
+          path: `docs/screenshots/ai-angry-${device}.png`,
+          fullPage: true,
+        });
+        captureCount++;
+        angryLinks.push(`[${device}](ai-angry-${device}.png)`);
+      }
+      if (errors.length) throw Error(errors.join("\n"));
       await page.close();
     }
     index.push(
@@ -114,6 +163,18 @@ try {
     if (darkLinks.length)
       index.push(
         `| account | escuro · opções abertas · coroa de exemplo | ${darkLinks[0]} | ${darkLinks[1]} |`,
+      );
+    if (avatarLinks.length)
+      index.push(
+        `| account | seleção de personagens | ${avatarLinks[0]} | ${avatarLinks[1]} |`,
+      );
+    if (happyLinks.length)
+      index.push(
+        `| ai | feliz · mudou de cor | ${happyLinks[0]} | ${happyLinks[1]} |`,
+      );
+    if (angryLinks.length)
+      index.push(
+        `| ai | bravo de brincadeira · cliques rápidos | ${angryLinks[0]} | ${angryLinks[1]} |`,
       );
   }
   await writeFile(

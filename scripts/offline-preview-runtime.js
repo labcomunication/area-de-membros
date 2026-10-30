@@ -1,7 +1,12 @@
 /* Embedded into the standalone HTML. No network, auth or persistence. */
 const snapshots = JSON.parse(document.getElementById("snapshots").textContent);
 const view = document.getElementById("offline-view");
-const appearance = { mode: "light", accent: "wine", crown: false };
+const appearance = {
+  mode: "light",
+  accent: "wine",
+  crown: false,
+  avatar: "pistache",
+};
 
 function keyOf(url) {
   const parsed = new URL(url, "https://offline.invalid");
@@ -33,6 +38,7 @@ function setBarHeight() {
 function applyAppearance() {
   document.documentElement.dataset.previewMode = appearance.mode;
   document.documentElement.dataset.previewAccent = appearance.accent;
+  window.previewCharacters.paintProfileAvatars();
   view.querySelectorAll("button[data-mode]").forEach((button) => {
     button.setAttribute(
       "aria-pressed",
@@ -79,6 +85,7 @@ function render() {
   const key = snapshots[requested] ? requested : "screen=home";
   view.innerHTML = snapshots[key];
   view.dataset.previewKey = key;
+  window.previewCharacters.restoreNavigationGroups();
   view.querySelectorAll('a[href^="/wireframes"]').forEach((link) => {
     link.setAttribute("href", "#" + keyOf(link.getAttribute("href")));
   });
@@ -99,6 +106,9 @@ window.addEventListener("resize", setBarHeight);
 document.addEventListener("submit", (event) => event.preventDefault());
 document.addEventListener("keydown", (event) => {
   if (event.key !== "Escape") return;
+  const picker = document.getElementById("avatar-picker-panel");
+  if (picker && !picker.hidden)
+    return window.previewCharacters.closeAvatarPicker();
   const options = document.getElementById("appearance-options");
   if (options && !options.hidden) {
     options.hidden = true;
@@ -110,6 +120,31 @@ document.addEventListener("keydown", (event) => {
 document.addEventListener("click", (event) => {
   const button = event.target.closest("button");
   if (button?.disabled) return;
+  if (button?.dataset.action === "avatar-picker") {
+    const picker = document.getElementById("avatar-picker-panel");
+    picker.hidden = !picker.hidden;
+    button.setAttribute("aria-expanded", String(!picker.hidden));
+    if (!picker.hidden) picker.querySelector('[aria-pressed="true"]')?.focus();
+    return;
+  }
+  if (button?.dataset.action === "close-avatar-picker")
+    return window.previewCharacters.closeAvatarPicker();
+  if (button?.dataset.avatarChoice) {
+    appearance.avatar = button.dataset.avatarChoice;
+    characterState.step = 0;
+    characterState.mood = "curious";
+    characterState.clicks = [];
+    clearTimeout(characterState.resetTimer);
+    applyAppearance();
+    const selected = characterStyles.find(
+      (style) => style.id === appearance.avatar,
+    );
+    document.getElementById("avatar-choice-status").textContent =
+      selected.name + " selecionado. Sua escolha vale apenas para esta prévia.";
+    return;
+  }
+  if (button?.dataset.action === "play-character")
+    return window.previewCharacters.playCharacter();
   if (button?.dataset.action === "appearance") {
     const options = document.getElementById("appearance-options");
     options.hidden = !options.hidden;

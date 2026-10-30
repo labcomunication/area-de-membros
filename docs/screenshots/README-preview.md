@@ -10,4 +10,7 @@ Capturas de docs/preview/wireframe.html; dados fictícios e integrações inativ
 | offers | normal | [desktop](offers-refined-desktop.png) | [mobile](offers-refined-mobile.png) |
 | account | normal | [desktop](account-refined-desktop.png) | [mobile](account-refined-mobile.png) |
 | account | escuro · opções abertas · coroa de exemplo | [desktop](account-dark-desktop.png) | [mobile](account-dark-mobile.png) |
+| account | seleção de personagens | [desktop](account-avatars-desktop.png) | [mobile](account-avatars-mobile.png) |
 | ai | normal | [desktop](ai-refined-desktop.png) | [mobile](ai-refined-mobile.png) |
+| ai | feliz · mudou de cor | [desktop](ai-happy-desktop.png) | [mobile](ai-happy-mobile.png) |
+| ai | bravo de brincadeira · cliques rápidos | [desktop](ai-angry-desktop.png) | [mobile](ai-angry-mobile.png) |
