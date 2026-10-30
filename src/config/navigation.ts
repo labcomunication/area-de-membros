@@ -45,3 +45,14 @@ export function screenHref(
   };
   return paths[screen] ?? "/area";
 }
+
+export function articleHref(slug: string, preview: boolean): string {
+  return preview
+    ? `/wireframes?screen=article&post=${encodeURIComponent(slug)}`
+    : `/area/blog/${encodeURIComponent(slug)}`;
+}
+export function categoryHref(slug: string, preview: boolean): string {
+  return preview
+    ? `/wireframes?screen=category&category=${encodeURIComponent(slug)}`
+    : `/area/blog/categoria/${encodeURIComponent(slug)}`;
+}

@@ -15,7 +15,7 @@ export default defineConfig({
   webServer: {
     command: production ? "npm run start" : "npm run dev",
     url: "http://127.0.0.1:3000",
-    reuseExistingServer: false,
+    reuseExistingServer: !production && process.env.REUSE_DEV_SERVER === "1",
     timeout: 120000,
   },
   projects: [

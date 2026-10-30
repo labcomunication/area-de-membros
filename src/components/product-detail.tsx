@@ -1,5 +1,5 @@
 "use client";
-import Link from "next/link";
+import { MemberLink as Link } from "./member-link";
 import { useState } from "react";
 import { products, type Product, type Module } from "@/config/members";
 import { AssetPlaceholder, ProductCard } from "./product-card";

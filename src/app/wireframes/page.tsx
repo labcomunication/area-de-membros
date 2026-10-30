@@ -13,6 +13,7 @@ import {
 import { resolveEntitlements } from "@/domain/entitlements";
 import { MembersShell } from "@/components/members-shell";
 import { PageContent } from "@/components/member-pages";
+import { GalleryProvider } from "@/components/member-link";
 import { GalleryToolbar } from "@/components/gallery-toolbar";
 export const dynamic = "force-dynamic";
 export default async function Page({
@@ -55,7 +56,11 @@ export default async function Page({
   };
   const auth = ["login", "sent", "verify"].includes(screen);
   return (
-    <>
+    <GalleryProvider
+      profile={
+        typeof params.profile === "string" ? params.profile : "essencial"
+      }
+    >
       <Suspense>
         <GalleryToolbar />
       </Suspense>
@@ -68,6 +73,6 @@ export default async function Page({
           <PageContent {...props} />
         </MembersShell>
       )}
-    </>
+    </GalleryProvider>
   );
 }

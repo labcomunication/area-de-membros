@@ -1,4 +1,4 @@
-import Link from "next/link";
+import { MemberLink as Link } from "./member-link";
 import type { Product } from "@/config/members";
 import { screenHref } from "@/config/navigation";
 export function AssetPlaceholder({

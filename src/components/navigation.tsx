@@ -1,5 +1,5 @@
 "use client";
-import Link from "next/link";
+import { MemberLink as Link } from "./member-link";
 import { useState } from "react";
 import type { Screen } from "@/config/members";
 import { navigation, screenHref } from "@/config/navigation";

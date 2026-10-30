@@ -1,5 +1,5 @@
 "use client";
-import Link from "next/link";
+import { MemberLink as Link } from "./member-link";
 export function WireframeState({
   kind,
   title,

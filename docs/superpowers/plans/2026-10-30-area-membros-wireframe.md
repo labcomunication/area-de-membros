@@ -46,12 +46,12 @@ Para conciliar proteção com revisão visual, usar galeria local de wireframes 
 
 **Interfaces:** `MembersShell({children: React.ReactNode})`; `WireframeState({kind: 'empty'|'loading'|'error'|'pending', title: string})`. Tokens da seção 9 em CSS variables; corpo 16px, toque ≥44px; sidebar 240px, conteúdo 1120px, bottom nav 64px.
 
-- [ ] Verificar instruções AGENTS.md, stack, versões e CI no destino confirmado; criar branch feature no checkout existente, preservando mudanças locais.
-- [ ] Fixar versões compatíveis de Next/React 19 e ferramentas no lockfile; usar convenções do destino quando existirem.
-- [ ] Criar teste de navegação do shell: sidebar desktop, drawer/bottom nav mobile, rota ativa, foco e ausência de overflow a 390px.
-- [ ] Implementar shell e mapa de todas as rotas da seção 6; criar `/`, `/entrar`, `/entrar/enviado`, `/entrar/verificar`, `/area`, rotas blog/produtos/bonus/ofertas/suporte/conta, `loading.tsx`, `error.tsx`, `not-found.tsx`.
-- [ ] Adicionar galeria local de telas/estados sob guarda server-side de desenvolvimento; produção deve responder 404. A galeria renderiza componentes de conteúdo compartilhados, sem liberar `/area`.
-- [ ] Verificar lint, typecheck e testes do shell; commit específico da base.
+- [x] Verificar instruções AGENTS.md, stack, versões e CI no destino confirmado; criar branch feature no checkout existente, preservando mudanças locais.
+- [x] Fixar versões compatíveis de Next/React 19 e ferramentas no lockfile; usar convenções do destino quando existirem.
+- [x] Criar teste de navegação do shell: sidebar desktop, drawer/bottom nav mobile, rota ativa, foco e ausência de overflow a 390px.
+- [x] Implementar shell e mapa de todas as rotas da seção 6; criar `/`, `/entrar`, `/entrar/enviado`, `/entrar/verificar`, `/area`, rotas blog/produtos/bonus/ofertas/suporte/conta, `loading.tsx`, `error.tsx`, `not-found.tsx`.
+- [x] Adicionar galeria local de telas/estados sob guarda server-side de desenvolvimento; produção deve responder 404. A galeria renderiza componentes de conteúdo compartilhados, sem liberar `/area`.
+- [x] Verificar lint, typecheck e testes do shell; commit específico da base.
 
 ## Task 2: Modelo de produtos e entitlement
 
@@ -59,11 +59,11 @@ Para conciliar proteção com revisão visual, usar galeria local de wireframes 
 
 **Interfaces:** `AssetSlot = {slot: string; url: string|null}`; `Product = {id: string; title: string; description: string; kind: 'principal'|'complemento'|'bonus'; cover: AssetSlot; modules: Module[]}`; `Module = {id: string; title: string; type: 'pdf'|'video'; asset: AssetSlot}`; `AccessProfile = {id: string; productIds: string[]}`; `resolveEntitlements(offerIds: readonly string[], offerProfiles: Readonly<Record<string,string>>, profiles: readonly AccessProfile[]): string[]`; `canAccessProduct(productId: string, entitlementIds: readonly string[]): boolean`.
 
-- [ ] Escrever testes: duas compras acumulam produtos; repetição não duplica; offer desconhecida não concede; perfil inexistente não concede; slug inválido não aponta para outro material.
-- [ ] Executar testes antes da implementação e confirmar falhas relevantes.
-- [ ] Implementar funções puras e config de slots com `url: null`, descrições ≤140 caracteres e relação oferta/perfil/produtos explícita.
-- [ ] Disponibilizar fixtures sem produtos, vários produtos, produto bloqueado, PDF pendente e sem ofertas. Nenhum preço de exemplo vira preço aprovado.
-- [ ] Confirmar os testes, lint e tipos; commit do domínio.
+- [x] Escrever testes: duas compras acumulam produtos; repetição não duplica; offer desconhecida não concede; perfil inexistente não concede; slug inválido não aponta para outro material.
+- [x] Executar testes antes da implementação e confirmar falhas relevantes.
+- [x] Implementar funções puras e config de slots com `url: null`, descrições ≤140 caracteres e relação oferta/perfil/produtos explícita.
+- [x] Disponibilizar fixtures sem produtos, vários produtos, produto bloqueado, PDF pendente e sem ofertas. Nenhum preço de exemplo vira preço aprovado.
+- [x] Confirmar os testes, lint e tipos; commit do domínio.
 
 ## Task 3: Wireframes completos
 
@@ -71,15 +71,15 @@ Para conciliar proteção com revisão visual, usar galeria local de wireframes 
 
 **Interfaces:** componentes recebem catálogo e entitlement por props; nenhuma leitura privilegiada em componentes de cliente. `ModuleView({module: Module, entitled: boolean})` não mostra viewer/URL quando sem acesso ou asset pendente.
 
-- [ ] Criar teste de inventário das 15 telas/estados principais e matriz de estados 8.8; falhar se alguma tela não tiver caso navegável na galeria.
-- [ ] Implementar acesso: pedido de link, confirmação com e-mail mascarado, cooldown de reenvio 60s, callback inválido/expirado/usado e aviso de sessão expirada. Nenhuma tela alega envio real pelo stub.
-- [ ] Implementar timeline: saudação, hero 16:7 sem play enquanto vídeo pendente, Seus Produtos, coleções filtráveis, destaque + três artigos, destaques/comunidade em slots, ofertas e banda de novidades inativa.
-- [ ] Implementar artigo e categoria com breadcrumb, conteúdo placeholder e estados vazios.
-- [ ] Implementar catálogo com filtros, produto com abas/módulos/progresso fixture e estado bloqueado; módulo PDF/vídeo pendente com anterior/próximo e sem download fictício.
-- [ ] Implementar bônus, ofertas que excluem produtos adquiridos, FAQ acessível e conta com e-mail somente leitura/compras fictícias. Contato e compra permanecem desativados sem configuração aprovada.
-- [ ] Implementar loading em formas reais, erro com retry e suporte, not-found, vazio por contexto e pendência de assets; preservar Seus Produtos quando feed vazio.
-- [ ] Validar todas as telas a 1440px e 390px, teclado/foco, contraste AA, toques e carrossel com peek. Não usar dados pessoais reais em screenshots.
-- [ ] Confirmar testes, lint e tipos; commit da UI estrutural.
+- [x] Criar teste de inventário das 15 telas/estados principais e matriz de estados 8.8; falhar se alguma tela não tiver caso navegável na galeria.
+- [x] Implementar acesso: pedido de link, confirmação com e-mail mascarado, cooldown de reenvio 60s, callback inválido/expirado/usado e aviso de sessão expirada. Nenhuma tela alega envio real pelo stub.
+- [x] Implementar timeline: saudação, hero 16:7 sem play enquanto vídeo pendente, Seus Produtos, coleções filtráveis, destaque + três artigos, destaques/comunidade em slots, ofertas e banda de novidades inativa.
+- [x] Implementar artigo e categoria com breadcrumb, conteúdo placeholder e estados vazios.
+- [x] Implementar catálogo com filtros, produto com abas/módulos/progresso fixture e estado bloqueado; módulo PDF/vídeo pendente com anterior/próximo e sem download fictício.
+- [x] Implementar bônus, ofertas que excluem produtos adquiridos, FAQ acessível e conta com e-mail somente leitura/compras fictícias. Contato e compra permanecem desativados sem configuração aprovada.
+- [x] Implementar loading em formas reais, erro com retry e suporte, not-found, vazio por contexto e pendência de assets; preservar Seus Produtos quando feed vazio.
+- [x] Validar todas as telas a 1440px e 390px, teclado/foco, contraste AA, toques e carrossel com peek. Não usar dados pessoais reais em screenshots.
+- [x] Confirmar testes, lint e tipos; commit da UI estrutural.
 
 ## Task 4: Limites server-side e contratos inertes
 
@@ -87,23 +87,23 @@ Para conciliar proteção com revisão visual, usar galeria local de wireframes 
 
 **Interfaces:** `readVerifiedSession(): Promise<MemberSession|null>` começa retornando `null`, com TODO de adaptador real, nunca confiança no texto do cookie. `PurchaseApprovedPayload` contém `event: 'purchase_approved'` e `data.id`, `data.customer.id`, `data.customer.email`, `data.offer.id` como contrato provisório. `MagicLinkRequest = {email: string}`. POST de ambos os stubs responde HTTP 501 com erro `not_implemented`, sem chamadas externas ou efeitos.
 
-- [ ] Escrever testes negativos: cookie forjado, nenhum token, callback expirado e tentativa direta a rota profunda redirecionam/negam acesso; galeria fica 404 em produção.
-- [ ] Escrever testes dos stubs: HTTP 501, nenhum e-mail, fetch externo, sessão ou entitlement criado; nenhum corpo com segredo é registrado.
-- [ ] Implementar guarda de layout server-side e verificações no carregamento de produto/módulo; documentar futuros cookie httpOnly, Secure em produção, SameSite e TTL sem implementar autenticação falsa.
-- [ ] Implementar contratos tipados e handlers inertes com TODO; não cadastrar nada em Cakto, não consumir token real, não enviar e-mail, não simular sucesso.
-- [ ] Rodar testes relevantes e tipos; commit dos contratos e guardas.
+- [x] Escrever testes negativos: cookie forjado, nenhum token, callback expirado e tentativa direta a rota profunda redirecionam/negam acesso; galeria fica 404 em produção.
+- [x] Escrever testes dos stubs: HTTP 501, nenhum e-mail, fetch externo, sessão ou entitlement criado; nenhum corpo com segredo é registrado.
+- [x] Implementar guarda de layout server-side e verificações no carregamento de produto/módulo; documentar futuros cookie httpOnly, Secure em produção, SameSite e TTL sem implementar autenticação falsa.
+- [x] Implementar contratos tipados e handlers inertes com TODO; não cadastrar nada em Cakto, não consumir token real, não enviar e-mail, não simular sucesso.
+- [x] Rodar testes relevantes e tipos; commit dos contratos e guardas.
 
 ## Task 5: Evidências, documentação e PR
 
 **Files:** `README.md`, `.env.example`, `docs/acceptance-area-membros.md`, `docs/screenshots/`, script de captura e testes e2e conforme convenção do destino.
 
-- [ ] Documentar comandos de instalação, dev, galeria local, build, lint, tipos e testes; `.env.example` só contém nomes comentados (sem valores).
-- [ ] Executar `npm run lint`, `npm run typecheck`, testes do domínio e segurança, `npm run build` e testes HTTP contra o servidor do build. Registrar contagens e resultados reais.
-- [ ] Capturar cada tela/estado principal em desktop 1440px e mobile 390px; gerar índice com rota, estado e arquivo. Screenshots originam-se de fixtures locais sem bypass público de auth.
-- [ ] Validar seção 12 item a item: marcar somente o que tem evidência. Correspondência visual permanece pendente enquanto faltarem imagens; contrato final permanece pendente enquanto faltar spec Tech.
-- [ ] Inspecionar diff, arquivos não rastreados e histórico do branch quanto a segredos/arquivos acidentais; preservar assets do projeto existente.
+- [x] Documentar comandos de instalação, dev, galeria local, build, lint, tipos e testes; `.env.example` só contém nomes comentados (sem valores).
+- [x] Executar `npm run lint`, `npm run typecheck`, testes do domínio e segurança, `npm run build` e testes HTTP contra o servidor do build. Registrar contagens e resultados reais.
+- [x] Capturar cada tela/estado principal em desktop 1440px e mobile 390px; gerar índice com rota, estado e arquivo. Screenshots originam-se de fixtures locais sem bypass público de auth.
+- [x] Validar seção 12 item a item: marcar somente o que tem evidência. Correspondência visual permanece pendente enquanto faltarem imagens; contrato final permanece pendente enquanto faltar spec Tech.
+- [x] Inspecionar diff, arquivos não rastreados e histórico do branch quanto a segredos/arquivos acidentais; preservar assets do projeto existente.
 - [ ] Abrir PR no GitHub do destino confirmado com problema/resultado, limites, screenshots e checklist; anexar URL ao chat via ferramenta de artifact. Se a autenticação de push/PR não funcionar, registrar erro preciso sem pedir token em chat.
-- [ ] Não fazer merge, publish ou deploy. Nenhum aceite de produção é inferido deste plano ou do PR.
+- [x] Não fazer merge, publish ou deploy. Nenhum aceite de produção é inferido deste plano ou do PR.
 
 ## Cobertura do briefing e handoff
 
@@ -114,3 +114,7 @@ Entrega posterior: Pike revisa estrutura/responsividade; Alisson revisa stack/gu
 ## Próxima ação
 
 Destino remoto definido pelo usuário: `https://github.com/labcomunication/area-de-membros.git`. Revisar este plano antes de implementar. Recomendada execução nesta sessão pelo agente principal, sem delegação: shell, config e guardas compartilham interfaces. A skill writing-plans exige revisão do plano antes de implementação; nenhuma dependência ou scaffold foi criado nesta etapa.
+
+## Estado da execução
+
+Implementação autorizada pelo usuário nesta sessão e concluída na branch `feat/members-wireframe`. Evidências e limitações estão em `docs/acceptance-area-membros.md`; comparação com as imagens continua pendente. Abertura automática do PR depende do acesso à API GitHub. Nenhum deploy foi executado.

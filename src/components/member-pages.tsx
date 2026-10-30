@@ -1,5 +1,5 @@
 "use client";
-import Link from "next/link";
+import { MemberLink as Link } from "./member-link";
 import { useState } from "react";
 import {
   products,
@@ -14,6 +14,7 @@ import { ProductDetail, ModuleView } from "./product-detail";
 import { Offers } from "./offers";
 import { WireframeState } from "./wireframe-state";
 import { AccessScreen } from "./access-screens";
+import { articleHref, categoryHref } from "@/config/navigation";
 import { screenHref } from "@/config/navigation";
 export interface PageContentProps {
   screen: Screen;
@@ -333,7 +334,7 @@ function Article({ preview, slug }: { preview: boolean; slug?: string }) {
       <div className="breadcrumb">
         <Link href={screenHref("home", preview)}>Início</Link>
         <span>/</span>
-        <Link href={screenHref("category", preview)}>{post.category}</Link>
+        <Link href={categoryHref(post.category, preview)}>{post.category}</Link>
       </div>
       <span className="eyebrow">{post.category}</span>
       <h1>{post.title}</h1>
@@ -384,7 +385,7 @@ function Category({ preview, id }: { preview: boolean; id?: string }) {
           {entries.map((p) => (
             <Link
               className="editorial-card"
-              href={`${screenHref("article", preview)}${preview ? "&post=" + p.slug : ""}`}
+              href={articleHref(p.slug, preview)}
               key={p.slug}
             >
               <AssetPlaceholder label="Imagem editorial" variant="wide" />
@@ -405,7 +406,7 @@ function Category({ preview, id }: { preview: boolean; id?: string }) {
     </>
   );
 }
-function Support({ preview }: { preview: boolean }) {
+export function Support({ preview }: { preview: boolean }) {
   const faq = [
     [
       "Como acesso meus materiais?",

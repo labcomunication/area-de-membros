@@ -1,4 +1,4 @@
-import Link from "next/link";
+import { MemberLink as Link } from "./member-link";
 import { Navigation } from "./navigation";
 import { screenHref } from "@/config/navigation";
 import type { Screen } from "@/config/members";

@@ -1,5 +1,5 @@
 "use client";
-import Link from "next/link";
+import { MemberLink as Link } from "./member-link";
 import { useEffect, useState } from "react";
 import { screenHref } from "@/config/navigation";
 export function AccessScreen({
@@ -141,7 +141,9 @@ export function AccessScreen({
         )}
         <p className="access-support">
           Não recebeu?{" "}
-          <Link href={screenHref("support", preview)}>Fale com o suporte</Link>
+          <Link href={preview ? screenHref("support", true) : "/ajuda"}>
+            Fale com o suporte
+          </Link>
         </p>
       </section>
       <p className="access-footer">Um espaço para continuar aprendendo.</p>

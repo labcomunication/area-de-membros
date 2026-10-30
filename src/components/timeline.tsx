@@ -1,7 +1,8 @@
 "use client";
-import Link from "next/link";
+import { MemberLink as Link } from "./member-link";
 import { useState } from "react";
 import { brand, products, categories, posts } from "@/config/members";
+import { articleHref, categoryHref } from "@/config/navigation";
 import { screenHref } from "@/config/navigation";
 import { AssetPlaceholder, ProductCard } from "./product-card";
 import { Offers } from "./offers";
@@ -100,7 +101,7 @@ export function Timeline({
             .filter((c) => filter === "Todas" || c.title === filter)
             .map((c, i) => (
               <Link
-                href={`${screenHref("category", preview)}${preview ? "&category=" + c.id : ""}`}
+                href={categoryHref(c.id, preview)}
                 className="category-card"
                 key={c.id}
               >
@@ -149,7 +150,7 @@ export function Timeline({
               <div className="stories-grid">
                 <Link
                   className="featured-story"
-                  href={screenHref("article", preview)}
+                  href={articleHref(entries[0].slug, preview)}
                 >
                   <AssetPlaceholder
                     label="Imagem da publicação"
@@ -167,7 +168,7 @@ export function Timeline({
                 <div className="story-list">
                   {entries.slice(1).map((p) => (
                     <Link
-                      href={`${screenHref("article", preview)}${preview ? "&post=" + p.slug : ""}`}
+                      href={articleHref(p.slug, preview)}
                       className="story-item"
                       key={p.slug}
                     >

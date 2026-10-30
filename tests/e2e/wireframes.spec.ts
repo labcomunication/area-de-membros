@@ -211,3 +211,67 @@ test("changing fixture entitlements updates bonuses, catalog and no-offer state"
   ).toBeVisible();
   await expect(page.locator(".offer-card")).toHaveCount(0);
 });
+
+test("review regression: selected ownership survives catalog to product to module navigation", async ({
+  page,
+}) => {
+  test.skip(production);
+  await page.goto("/wireframes?screen=products&profile=organizado");
+  await page
+    .locator('[data-product="precificacao"]')
+    .first()
+    .getByRole("link", { name: "Ver conteúdo", exact: true })
+    .click();
+  await expect(
+    page.getByRole("tab", { name: "Conteúdo", exact: true }),
+  ).toBeVisible();
+  await page.getByRole("tab", { name: "Bônus", exact: true }).click();
+  await page
+    .locator('[data-product="checklist"]')
+    .getByRole("link", { name: "Ver conteúdo", exact: true })
+    .click();
+  await expect(page.getByRole("heading", { level: 1 })).toHaveText(
+    "Checklist da cozinha",
+  );
+  await page.getByRole("link", { name: /Ver primeiro módulo/ }).click();
+  await expect(page.getByRole("heading", { level: 1 })).toHaveText(
+    "Checklist de preparo",
+  );
+  await expect(page).toHaveURL(/profile=organizado/);
+});
+test("review regression: public support is reachable without a session", async ({
+  page,
+}) => {
+  await page.goto("/entrar");
+  await page
+    .getByRole("link", { name: "Fale com o suporte", exact: true })
+    .click();
+  await expect(
+    page.getByRole("heading", { name: "Como podemos ajudar?" }),
+  ).toBeVisible();
+  await expect(
+    page.getByRole("heading", { name: "Perguntas frequentes" }),
+  ).toBeVisible();
+});
+test("review regression: a filtered featured story opens that story and its own category", async ({
+  page,
+}) => {
+  test.skip(production);
+  await page.goto("/wireframes?screen=home");
+  await page.getByLabel("Buscar publicações").fill("caderno");
+  await page
+    .getByRole("link")
+    .filter({
+      has: page.getByRole("heading", {
+        name: "Um caderno para guardar suas descobertas",
+      }),
+    })
+    .click();
+  await expect(page.getByRole("heading", { level: 1 })).toHaveText(
+    "Um caderno para guardar suas descobertas",
+  );
+  await page.getByRole("link", { name: "organizacao", exact: true }).click();
+  await expect(page.getByRole("heading", { level: 1 })).toHaveText(
+    "Organização",
+  );
+});
