@@ -22,6 +22,8 @@ Capturas de docs/preview/wireframe.html; dados fictícios e integrações inativ
 | notes | menu de movimentação | [desktop](notes-menu-desktop.png) | [mobile](notes-menu-mobile.png) |
 | notes | referências de e-books | [desktop](notes-ebooks-desktop.png) | [mobile](notes-ebooks-mobile.png) |
 | notes | editor local de anotação | [desktop](notes-editor-desktop.png) | [mobile](notes-editor-mobile.png) |
+| edição Dev | controles de recursos | [desktop](edition-dev-desktop.png) | [mobile](edition-dev-mobile.png) |
+| edição usuário | Estúdio sem quadro de ideias | [desktop](edition-usuario-desktop.png) | [mobile](edition-usuario-mobile.png) |
 
 [Menu em janela baixa, com rolagem preservada](home-short-window.png)
 

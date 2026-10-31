@@ -33,7 +33,7 @@ function keyOf(url) {
 function setBarHeight() {
   document.documentElement.style.setProperty(
     "--offline-bar-height",
-    document.getElementById("offline-toolbar").offsetHeight + "px",
+    (document.getElementById("offline-toolbar")?.offsetHeight || 0) + "px",
   );
 }
 
@@ -123,26 +123,38 @@ function closeMenu() {
   window.previewNav.sync();
 }
 
-function render() {
+function render(event) {
   closeMenu();
-  const savedShell = window.previewNav.captureShell();
+  const savedShell =
+    event?.type === "previewfeatureschange"
+      ? []
+      : window.previewNav.captureShell();
   window.previewCharacters.disposeVolume();
   window.previewFlow?.dispose();
   window.previewNotes.closeTransient();
   const requested = keyOf("/wireframes?" + location.hash.slice(1));
-  const key = snapshots[requested] ? requested : "screen=home";
+  const key =
+    snapshots[requested] &&
+    !(
+      requested === "screen=notes" && !window.previewFeatures.isEnabled("notes")
+    )
+      ? requested
+      : "screen=home";
   view.innerHTML = snapshots[key];
+  window.previewFeatures.apply(view);
   view.dataset.previewKey = key;
   window.previewNav.restoreShell(savedShell);
+  window.previewFeatures.apply(view);
   window.previewNav.sync();
   window.previewCharacters.restoreNavigationGroups();
   view.querySelectorAll('a[href^="/wireframes"]').forEach((link) => {
     link.setAttribute("href", "#" + keyOf(link.getAttribute("href")));
   });
   const select = document.getElementById("screen-select");
-  select.value = [...select.options].some((option) => option.value === key)
-    ? key
-    : "";
+  if (select)
+    select.value = [...select.options].some((option) => option.value === key)
+      ? key
+      : "";
   applyAppearance();
   window.previewWorkspace.mount();
   window.previewNav.sync();
@@ -150,10 +162,13 @@ function render() {
   window.scrollTo({ top: 0, behavior: "instant" });
 }
 
-document.getElementById("screen-select").addEventListener("change", (event) => {
-  location.hash = event.target.value;
-});
+document
+  .getElementById("screen-select")
+  ?.addEventListener("change", (event) => {
+    location.hash = event.target.value;
+  });
 window.addEventListener("hashchange", render);
+window.addEventListener("previewfeatureschange", render);
 window.addEventListener("resize", setBarHeight);
 document.addEventListener("submit", (event) => event.preventDefault());
 document.addEventListener("keydown", (event) => {

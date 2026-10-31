@@ -117,6 +117,7 @@ function enhanceNotesBoard(board) {
   }
 }
 function drawNotes() {
+  if (!window.previewFeatures.isEnabled("notes")) return;
   closeNotesMenu();
   const board = view.querySelector(".notes-board");
   if (!board) return;
@@ -512,6 +513,7 @@ function closeNotesTransient(restoreFocus = false) {
   return editorClosed || pickerClosed || menuClosed;
 }
 document.addEventListener("submit", (event) => {
+  if (!window.previewFeatures.isEnabled("notes")) return;
   const form = event.target;
   if (!form.matches("[data-note-editor]")) return;
   event.preventDefault();
@@ -562,6 +564,7 @@ document.addEventListener("focusin", (event) => {
     closeNotesMenu();
 });
 document.addEventListener("click", (event) => {
+  if (!window.previewFeatures.isEnabled("notes")) return;
   const button = event.target.closest("button");
   if (!button || button.disabled) return;
   const action = button.dataset.action;
@@ -668,6 +671,7 @@ document.addEventListener("click", (event) => {
   }
 });
 document.addEventListener("contextmenu", (event) => {
+  if (!window.previewFeatures.isEnabled("notes")) return;
   const card = event.target.closest(".product-card[data-product]");
   const board = event.target.closest(".notes-board");
   if (!card && !board) return;

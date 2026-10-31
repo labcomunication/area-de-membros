@@ -17,3 +17,13 @@ Revisão de 31/10/2026 em feat/members-wireframe, sobre 65aaede. Escopo autoriza
 Passaram os oito verificadores anteriores (offline-preview, preview-characters, preview-workspace, review-regressions, nav-labels, mascot-volume, notes-review, preview-review) e cinco adicionais (ailo-characters, preview-flow, flow-regressions, notes-composer, studio-refinement), executados com npx tsx scripts/verify-<nome>.ts. Build, lint, tipos e sete testes unitários passaram. Foram geradas 38 capturas e inspecionados os componentes selecionados no desktop/mobile. [Índice](../screenshots/README-preview.md) · [Comparação visual](../../design-qa.md) · [Revisão independente e correções](../reviews/2026-10-31-studio-nodes-review.md).
 
 Essa verificação técnica não representa aprovação do design final ou do design system. O ZIP é autossuficiente e contém somente o HTML, com Three.js e Noto Sans/licenças incorporados.
+
+## Edições Dev/usuário e cor de detalhes
+
+- [x] Edições identificadas como wireframe.dev.html e wireframe.usuario.html, com ZIPs correspondentes e base de código comum. O arquivo anterior continua como alias Dev.
+- [x] Dev com seletor, quadro de ideias e Configurações Dev; usuário sem esses controles. Preferências pessoais e edição das próprias notas preservadas quando ativas.
+- [x] Chave Minhas anotações propaga para as abas de usuário abertas pelo painel, remove links/marcadores, fecha o editor e bloqueia a rota; reativar restaura o recurso. Dev continua com acesso para testes.
+- [x] Download da visão de usuário incorpora a configuração para abertura independente. A conexão ao vivo vale para as abas abertas pelo painel; não é uma integração de autorização de produção.
+- [x] O antigo preenchimento azul do tema vinho agora usa um tom de vinho. Destaques/seleções acompanham oliva, vinho e bege, em claro/escuro.
+
+Passaram verify-preview-audiences.ts, verify-offline-preview.ts, verify-notes-review.ts, verify-preview-flow.ts e verify-studio-refinement.ts, além de lint/tipos. O novo verificador exercita também a ligação entre abas em uma origem HTTP local simulada, a reversão da chave e o download real, reaberto em páginas independentes a partir dos bytes salvos. O Chromium gerenciado bloqueia navegação file://; não foi alegado teste dessa navegação. Os três ZIPs foram comparados byte a byte com os HTMLs. São agora 42 capturas, incluindo as duas edições no desktop/mobile. [Guia das edições](editions.md).

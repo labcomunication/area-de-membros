@@ -7,6 +7,57 @@
   --continuous-radius: 24px;
   --continuous-corner: superellipse(1.6);
 }
+.dev-preview-settings {
+  position: relative;
+  margin-left: auto;
+}
+.dev-preview-settings > summary {
+  min-height: 44px;
+  display: flex;
+  align-items: center;
+  padding: 8px 14px;
+  border-radius: 12px;
+  background: var(--selection-surface);
+  color: var(--color-text);
+  cursor: pointer;
+  font-size: 12px;
+  font-weight: 600;
+}
+.dev-feature-panel {
+  position: absolute;
+  right: 0;
+  top: calc(100% + 12px);
+  z-index: 1200;
+  display: grid;
+  gap: 16px;
+  width: min(360px, calc(100vw - 32px));
+  padding: 24px;
+  border-radius: 24px;
+  corner-shape: var(--continuous-corner);
+  background: var(--color-surface);
+  color: var(--color-text);
+  box-shadow: 0 16px 48px #20252030;
+}
+.dev-feature-panel h2 {
+  margin: 0;
+  font-size: 18px;
+}
+.dev-feature-panel > label {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-height: 44px;
+}
+.dev-feature-panel input {
+  width: 20px;
+  height: 20px;
+  accent-color: var(--selection-bar);
+}
+.dev-feature-panel p {
+  margin: 0;
+  font-size: 12px;
+  line-height: 1.6;
+}
 body {
   background: var(--surface-canvas);
 }

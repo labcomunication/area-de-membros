@@ -327,6 +327,44 @@ try {
       );
   }
   if (offlineReview && offlineHtml) {
+    const editionLinks: Record<string, string[]> = { dev: [], usuario: [] };
+    for (const [device, width, height] of [
+      ["desktop", 1440, 1000],
+      ["mobile", 390, 844],
+    ] as const) {
+      for (const edition of ["dev", "usuario"] as const) {
+        const page = await browser.newPage({
+          viewport: { width, height },
+          reducedMotion: "reduce",
+        });
+        await page.route("**/*", (route) => route.abort());
+        await page.setContent(
+          await readFile(`docs/preview/wireframe.${edition}.html`, "utf8"),
+        );
+        if (edition === "dev")
+          await page.getByText("Configurações Dev", { exact: true }).click();
+        else {
+          await page.evaluate(() => {
+            location.hash = "screen=ai";
+          });
+          await page.locator(".ai-studio").waitFor();
+        }
+        await page.evaluate(() => document.fonts.ready);
+        await page.screenshot({
+          path: `docs/screenshots/edition-${edition}-${device}.png`,
+          fullPage: edition === "usuario",
+        });
+        editionLinks[edition].push(
+          `[${device}](edition-${edition}-${device}.png)`,
+        );
+        captureCount++;
+        await page.close();
+      }
+    }
+    index.push(
+      `| edição Dev | controles de recursos | ${editionLinks.dev[0]} | ${editionLinks.dev[1]} |`,
+      `| edição usuário | Estúdio sem quadro de ideias | ${editionLinks.usuario[0]} | ${editionLinks.usuario[1]} |`,
+    );
     const page = await browser.newPage({
       viewport: { width: 1024, height: 320 },
       reducedMotion: "reduce",

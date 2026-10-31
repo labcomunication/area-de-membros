@@ -25,7 +25,7 @@ button:focus-visible,
 input:focus-visible,
 select:focus-visible,
 summary:focus-visible {
-  outline-color: #722f46;
+  outline-color: var(--selection-bar);
 }
 #offline-toolbar {
   background: #fff;
@@ -78,7 +78,7 @@ body .sidebar {
 }
 .sidebar nav a[aria-current],
 .drawer nav a[aria-current] {
-  background: #d0d8ef;
+  background: var(--selection-surface);
   color: #2d2d2d;
   box-shadow: inset 3px 0 #722f46;
 }
@@ -357,7 +357,7 @@ body .sidebar {
   .bottom-nav a[aria-current],
   .bottom-nav button[aria-current],
   .bottom-nav button[aria-expanded="true"] {
-    background: #d0d8ef;
+    background: var(--selection-surface);
     box-shadow: inset 3px 0 #722f46;
     color: #2d2d2d;
   }
@@ -403,7 +403,7 @@ body .sidebar {
 
 /* Review iteration: contain editorial media; animate only the image layer. */
 :root {
-  --selection-surface: #d0d8ef;
+  --selection-surface: #eee4e9;
   --selection-bar: #722f46;
   --activity-1: #eee4e9;
   --activity-2: #d4acbc;
@@ -577,7 +577,7 @@ html[data-preview-accent="beige"] {
   border-radius: 50%;
   box-shadow:
     16px 12px 0 #9ea46620,
-    -12px -8px 0 #d0d8ef70;
+    -12px -8px 0 color-mix(in srgb, var(--selection-surface) 44%, transparent);
   color: #68713d;
 }
 .banner-art span {
@@ -855,7 +855,7 @@ html[data-preview-accent="beige"] {
   background: radial-gradient(
     circle at 28% 22%,
     #fff 0%,
-    #d0d8ef 22%,
+    var(--selection-surface) 22%,
     #9ea466 52%,
     #722f46 83%,
     #2d2d2d 100%
