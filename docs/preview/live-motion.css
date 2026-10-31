@@ -1,0 +1,118 @@
+.character-play {
+  position: relative;
+}
+[data-character-stage] {
+  position: relative;
+  transform: none !important;
+}
+.mascot-volume-canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+  pointer-events: none;
+}
+[data-volume="ready"] > .character {
+  visibility: hidden;
+}
+.character-gaze {
+  transform: none !important;
+}
+.nav-live-label {
+  display: inline-block;
+  flex-shrink: 0;
+  width: 0;
+  max-width: none;
+  overflow: hidden;
+  white-space: nowrap;
+  transform-origin: left center;
+  vertical-align: middle;
+}
+[data-nav-active="false"] .nav-soon {
+  display: none;
+}
+.sidebar nav a,
+.drawer nav a {
+  gap: calc(12px * var(--label-progress, 0));
+}
+.sidebar nav a > .nav-icon,
+.drawer nav a > .nav-icon {
+  margin-right: calc(12px * var(--label-progress, 0));
+}
+.compact-nav-track a {
+  flex: 0 0 auto;
+  width: auto;
+  min-width: 44px;
+  padding: 0 12px;
+  display: flex;
+  align-items: center;
+  gap: calc(8px * var(--label-progress, 0));
+}
+.compact-nav-track a .nav-icon {
+  width: 20px;
+  min-width: 20px;
+}
+.compact-nav-track .nav-live-label {
+  font-size: 12px;
+  line-height: 18px;
+}
+html[data-nav-mode="compact"] .desktop-topbar {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+}
+html[data-nav-mode="compact"] .desktop-topbar > .compact-nav {
+  grid-column: 2;
+  margin-left: 0;
+}
+html[data-nav-mode="compact"] .desktop-topbar > div:last-child {
+  grid-column: 3;
+  justify-self: end;
+}
+@media (max-width: 767px) {
+  html[data-nav-mode="compact"] .desktop-topbar {
+    display: none;
+  }
+  .bottom-nav {
+    justify-content: center;
+    gap: 12px;
+  }
+  .bottom-nav a,
+  .bottom-nav button {
+    display: flex;
+    flex: 0 0 auto;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    min-width: 44px;
+    min-height: 56px;
+    gap: calc(8px * var(--label-progress, 0));
+    padding: 12px;
+  }
+  .bottom-nav [data-nav-icon] {
+    display: inline-grid;
+    place-items: center;
+    width: 20px;
+    min-width: 20px;
+    height: 20px;
+    font-size: 20px;
+    line-height: 20px;
+  }
+  .bottom-nav [data-nav-icon] svg {
+    width: 20px;
+    height: 20px;
+  }
+  .bottom-nav .nav-live-label {
+    height: auto;
+    font-size: 12px;
+    line-height: 18px;
+  }
+  .bottom-nav a[aria-current] > span {
+    min-width: 0;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .nav-live-label {
+    transform: none !important;
+  }
+}

@@ -186,7 +186,7 @@ try {
     await page.locator(".offer-card .price").first().textContent(),
     "R$ 29,90",
   );
-  assert.equal(await page.locator(".offer-card button:enabled").count(), 0);
+  assert.equal(await page.locator(".offer-footer button:enabled").count(), 0);
   assert.equal(
     await page
       .locator(".offer-card")

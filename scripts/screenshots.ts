@@ -29,7 +29,7 @@ try {
   // Every principal screen, plus each non-normal state on a representative page.
   const cases = offline
     ? (offlineReview
-        ? ["home", "products", "bonus", "offers", "account", "ai"]
+        ? ["home", "products", "bonus", "offers", "account", "ai", "notes"]
         : ["home"]
       ).map((screen) => ({ screen, state: "normal" }))
     : [
@@ -44,7 +44,10 @@ try {
     const darkLinks = [];
     const avatarLinks = [];
     const happyLinks = [];
-    const angryLinks = [];
+    const nervousLinks = [];
+    const compactLinks = [],
+      scrollLinks = [],
+      editorLinks = [];
     for (const [device, width, height] of [
       ["desktop", 1440, 1000],
       ["mobile", 390, 844],
@@ -77,6 +80,11 @@ try {
           );
       }
       await page.locator("h1").waitFor();
+      if (offlineReview && item.screen === "ai") {
+        await page.waitForFunction(
+          () => window.previewCharacters.volumeSnapshot()?.renderedFrames > 0,
+        );
+      }
       await page.evaluate(() => document.fonts.ready);
       // Captures must not include Next's devtools button.
       await page.addStyleTag({
@@ -100,9 +108,7 @@ try {
       links.push(`[${device}](${file})`);
       if (offlineReview && item.screen === "account") {
         await page.locator('[data-action="avatar-picker"]').click();
-        await page
-          .getByRole("button", { name: "Lavanda", exact: true })
-          .click();
+        await page.getByRole("button", { name: "Maria", exact: true }).click();
         await page.evaluate(() => {
           (document.activeElement as HTMLElement)?.blur();
           window.scrollTo({ top: 0, behavior: "instant" });
@@ -138,6 +144,9 @@ try {
           exact: true,
         });
         await player.click();
+        await page.waitForFunction(
+          () => window.previewCharacters.volumeSnapshot().state === "happy",
+        );
         await page.evaluate(() => {
           (document.activeElement as HTMLElement)?.blur();
           window.scrollTo({ top: 0, behavior: "instant" });
@@ -148,17 +157,81 @@ try {
         });
         captureCount++;
         happyLinks.push(`[${device}](ai-happy-${device}.png)`);
-        for (let i = 0; i < 4; i++) await player.click();
+        await page.waitForFunction(
+          () => window.previewCharacters.volumeSnapshot().state === "idle",
+        );
+        const playerBox = (await player.boundingBox())!;
+        await page.mouse.click(
+          playerBox.x + playerBox.width / 2,
+          playerBox.y + playerBox.height / 2,
+          { clickCount: 3, delay: 10 },
+        );
+        await page.waitForFunction(
+          () => window.previewCharacters.volumeSnapshot().state === "nervous",
+        );
         await page.evaluate(() => {
           (document.activeElement as HTMLElement)?.blur();
           window.scrollTo({ top: 0, behavior: "instant" });
         });
         await page.screenshot({
-          path: `docs/screenshots/ai-angry-${device}.png`,
+          path: `docs/screenshots/ai-nervous-${device}.png`,
           fullPage: true,
         });
         captureCount++;
-        angryLinks.push(`[${device}](ai-angry-${device}.png)`);
+        nervousLinks.push(`[${device}](ai-nervous-${device}.png)`);
+      }
+      if (offlineReview && item.screen === "home") {
+        await page.evaluate(() => {
+          location.hash = "screen=account";
+        });
+        await page.locator(".personalization-card").waitFor();
+        await page.getByRole("button", { name: "Editar", exact: true }).click();
+        await page
+          .getByRole("button", { name: "Ícones no topo", exact: true })
+          .click();
+        await page.evaluate(() => {
+          location.hash = "screen=home";
+        });
+        await page.locator(".home-zone-a").waitFor();
+        await page.evaluate(() => {
+          (document.activeElement as HTMLElement)?.blur();
+          window.scrollTo({ top: 0, behavior: "instant" });
+        });
+        await page.screenshot({
+          path: `docs/screenshots/home-compact-${device}.png`,
+          fullPage: true,
+        });
+        captureCount++;
+        compactLinks.push(`[${device}](home-compact-${device}.png)`);
+        await page.evaluate(() =>
+          window.scrollTo({ top: 900, behavior: "instant" }),
+        );
+        await page.screenshot({
+          path: `docs/screenshots/home-compact-scrolled-${device}.png`,
+        });
+        captureCount++;
+        scrollLinks.push(`[${device}](home-compact-scrolled-${device}.png)`);
+      }
+      if (offlineReview && item.screen === "notes") {
+        await page
+          .getByRole("button", { name: "Nova anotação", exact: true })
+          .click();
+        await page
+          .getByLabel("Título da anotação", { exact: true })
+          .fill("Minha próxima ideia");
+        await page
+          .getByLabel("Texto da anotação", { exact: true })
+          .fill("Separar combinações para testar no fim de semana.");
+        await page.evaluate(() => {
+          (document.activeElement as HTMLElement)?.blur();
+          window.scrollTo({ top: 0, behavior: "instant" });
+        });
+        await page.screenshot({
+          path: `docs/screenshots/notes-editor-${device}.png`,
+          fullPage: true,
+        });
+        captureCount++;
+        editorLinks.push(`[${device}](notes-editor-${device}.png)`);
       }
       if (errors.length) throw Error(errors.join("\n"));
       await page.close();
@@ -176,15 +249,27 @@ try {
       );
     if (happyLinks.length)
       index.push(
-        `| ai | feliz · mudou de cor | ${happyLinks[0]} | ${happyLinks[1]} |`,
+        `| ai | feliz · olhos fechados | ${happyLinks[0]} | ${happyLinks[1]} |`,
       );
-    if (angryLinks.length)
+    if (nervousLinks.length)
       index.push(
-        `| ai | bravo de brincadeira · cliques rápidos | ${angryLinks[0]} | ${angryLinks[1]} |`,
+        `| ai | nervoso · pose estática com movimento reduzido | ${nervousLinks[0]} | ${nervousLinks[1]} |`,
+      );
+    if (compactLinks.length)
+      index.push(
+        `| home | ícones fixos no topo | ${compactLinks[0]} | ${compactLinks[1]} |`,
+      );
+    if (scrollLinks.length)
+      index.push(
+        `| home | ícones no topo · página rolada | ${scrollLinks[0]} | ${scrollLinks[1]} |`,
+      );
+    if (editorLinks.length)
+      index.push(
+        `| notes | editor local de anotação | ${editorLinks[0]} | ${editorLinks[1]} |`,
       );
   }
   if (offlineReview)
-    index.push("", "[Detalhe do mascote com olhos ovais](mascot-eyes.png)");
+    index.push("", "[Detalhe do mascote em volume 3D](mascot-eyes.png)");
   await writeFile(
     offline
       ? "docs/screenshots/README-preview.md"

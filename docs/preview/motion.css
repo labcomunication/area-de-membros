@@ -1,0 +1,171 @@
+/* Shape mascots and their single, bounded expressive interaction. */
+@property --character-fill {
+  syntax: "<color>";
+  inherits: true;
+  initial-value: #171717;
+}
+.character {
+  background: transparent;
+  border-radius: 0;
+  overflow: visible;
+  box-shadow: none;
+  color: #fff;
+  transition: --character-fill 350ms ease-out;
+}
+.character-body {
+  fill: var(--character-fill);
+}
+.character-gaze {
+  transition: none;
+}
+.character-eyes {
+  fill: #fff;
+}
+.character-mouth-neutral {
+  opacity: 0;
+}
+.character-mouth-happy,
+.character-tongue,
+.character-mouth-angry,
+.character-brows {
+  display: block;
+  opacity: 0;
+  transition: opacity 160ms ease-out;
+}
+.character[data-mood="happy"] .character-mouth-neutral,
+.character[data-mood="angry"] .character-mouth-neutral {
+  display: block;
+  opacity: 0;
+}
+.character[data-mood="happy"] :is(.character-mouth-happy, .character-tongue),
+.character[data-mood="angry"] :is(.character-mouth-angry, .character-brows) {
+  display: block;
+  opacity: 1;
+}
+.character-tongue {
+  stroke: #f2b3b9;
+}
+.character-play,
+.character-play:hover {
+  width: min(280px, 100%);
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+  touch-action: none;
+  cursor: grab;
+}
+.character-play[data-dragging] {
+  cursor: grabbing;
+}
+.character-play > [data-character-stage] {
+  transform: translate(var(--drag-x, 0px), var(--drag-y, 0px))
+    scale(var(--stretch-x, 1), var(--stretch-y, 1))
+    rotate(var(--drag-turn, 0deg));
+}
+.main-content.ai-content {
+  background: transparent;
+  padding: 0;
+  box-shadow: none;
+}
+.ai-content .future-notice {
+  background: var(--color-surface);
+}
+.ai-content .ai-studio {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 32px;
+  padding: 48px 32px;
+  border-radius: 16px;
+  background: var(--color-surface);
+}
+.ai-content .character-studio-stage {
+  display: grid;
+  justify-items: center;
+  gap: 24px;
+  padding: 0;
+  width: min(320px, 100%);
+}
+.ai-content .character-state {
+  font-size: 16px;
+  letter-spacing: 0;
+  font-weight: 600;
+  color: var(--color-text);
+}
+.ai-studio-copy {
+  max-width: 640px;
+  text-align: center;
+}
+.ai-studio-copy h1 {
+  margin-top: 0;
+  text-wrap: balance;
+}
+.ai-studio-copy p {
+  max-width: 58ch;
+  margin-left: auto;
+  margin-right: auto;
+}
+.ai-content .ai-steps {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 24px;
+  margin-top: 32px;
+  padding: 0;
+  border: 0;
+}
+.ai-steps article {
+  padding: 24px;
+  border-radius: 16px;
+  background: var(--color-surface);
+}
+.ai-step-symbol {
+  display: inline-grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  color: var(--selection-bar);
+}
+.ai-step-symbol svg {
+  width: 28px;
+  height: 28px;
+}
+.ai-steps h2 {
+  margin-top: 16px;
+}
+html[data-preview-mode="dark"] .main-content.ai-content {
+  background: transparent;
+}
+@media (max-width: 767px) {
+  .ai-content .ai-studio {
+    padding: 32px 16px;
+    gap: 24px;
+  }
+  .character-play,
+  .character-play:hover {
+    width: 230px;
+  }
+  .ai-studio-copy h1 {
+    font-size: 32px;
+  }
+  .ai-content .ai-steps {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 16px;
+  }
+  .ai-steps article {
+    padding: 24px 16px;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .character {
+    transition: --character-fill 150ms ease-out;
+  }
+  .character-play > [data-character-stage] {
+    transform: none;
+  }
+  .character-mouth-happy,
+  .character-tongue,
+  .character-mouth-angry,
+  .character-brows {
+    transition: opacity 100ms ease-out;
+  }
+}

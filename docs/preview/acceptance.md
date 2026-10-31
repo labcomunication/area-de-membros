@@ -1,37 +1,52 @@
-# Aceite — refinamento da prévia HTML
+# Aceite — prévia HTML interativa
 
-Revisão de 30/10/2026, na branch `feat/members-wireframe`. Escopo: documento offline, seu exportador e evidências. Sem alterações em `src/`, autenticação, rotas da aplicação, stack ou integrações. Preços explicitamente fictícios foram acrescentados somente à prévia, após autorização em voz; não são preços aprovados nem habilitam compra.
+Branch `feat/members-wireframe`; revisão de 30/10/2026. Escopo: HTML offline, exportador, controladores e evidências. `src/`, autenticação, entitlement, rotas da aplicação e `docs/design/` permanecem intactos. Three.js e esbuild são as únicas dependências de desenvolvimento acrescentadas para a ilha 3D solicitada.
 
-- [x] Home: saudação → próximo passo → Seus Produtos → Últimas publicações → ofertas → faixa fina de novidades/rodapé.
-- [x] Hero de boas-vindas removido do DOM; coleções/chips e comunidade removidos da Home.
-- [x] Zona A reúne saudação, próximo passo e biblioteca; zonas B/C separadas por 48px.
-- [x] Produto do próximo passo omitido da grade da Home pelo mesmo ID.
-- [x] Cards adquiridos têm um único link/CTA “Ver materiais”; pendência em texto. Cards bloqueados mantêm status sem botão adicional.
-- [x] Bottom nav: Início · Meus Produtos · Mais. Ofertas continuam no sidebar, Mais e zona C.
-- [x] Gradiente lavanda/creme no canvas, com ângulo vertical mobile; superfícies brancas por padrão e alternativa escura na personalização.
-- [x] Cards brancos, radius 16px, padding 24px desktop/16px mobile, sombras suaves e hover sem deslocamento. Inputs continuam com radius 8px.
-- [x] Ritmo de 16px dentro dos componentes, 24px nas grades/listas e 48px entre zonas.
-- [x] Sidebar claro seguindo a nova referência: inset 16px, radius 24px, grupos recolhíveis Aprender/Explorar/Pessoal, ícones vetoriais, ativo branco em cápsula e detalhe de cor no ícone. Itens de 48px e cabeçalhos de grupo acessíveis por teclado. Perfil no rodapé; navegação continua fixa.
-- [x] Menu desktop/mobile fixo na rolagem; drawer branco, ofertas acessíveis e foco devolvido ao fechar com Escape.
-- [x] Um rótulo da área de membros por shell visível; tag duplicada do topbar removida.
-- [x] Imagens editoriais contidas em máscaras arredondadas, títulos e cards estáveis; hover somente na imagem; movimento reduzido respeitado.
-- [x] Badges “Apenas para membros” arredondados; preços de exemplo rotulados; botões de compra inativos.
-- [x] Bônus bloqueado com capa escura e cadeado central, sem conteúdo da capa exposto.
-- [x] Banner ilustrativo compartilhado em Meus Produtos, Bônus e Ofertas, abaixo do topbar. Home mantém sua ordem aprovada.
-- [x] Minha conta com 91 células de atividade ilustrativa, exemplos de conquistas e coroa que pode ser pré-visualizada; sem alegar acesso, venda ou conclusão real.
-- [x] Personalização → Editar abre opções claro/escuro e oliva/vinho/bege. Modo muda a aparência geral; acentos mudam menu e detalhes. Estado em memória preservado na navegação, sem persistência.
-- [x] Estúdio IA acessível pelo sidebar/Mais e seletor, aviso “Em breve”, personagem no lugar da esfera e botão de geração de PDFs inativo.
-- [x] Quinze personagens vetoriais originais no estilo da imagem enviada, selecionáveis em Minha conta. A seleção atualiza os avatares e o personagem da IA durante a prévia.
-- [x] Olhos ovais alongados, inclinados e assimétricos conforme a nova referência; continuam visíveis no sorriso e acompanham o cursor. Captura de detalhe em `docs/screenshots/mascot-eyes.png`.
-- [x] Olhos seguem o ponteiro com movimento limitado e retornam ao centro ao sair da janela. Clique, toque, Enter ou Espaço mudam a cor e mostram sorriso; quatro cliques em 1,2s mostram expressão brava de brincadeira; após 1,8s sem interação, retorna ao normal. Sem penalidade ou serviço externo.
-- [x] Movimento reduzido centraliza os olhos e remove as transições; cor/expressão continuam operáveis. Escolhas têm rótulo, estado selecionado e alvo mínimo de 44px.
-- [x] 20 capturas desktop 1440px/mobile 390px e um detalhe do mascote: Home, produtos, bônus, ofertas, conta, IA, conta escura com personalização/coroa, seletor de personagens e IA feliz/brava. Geradas com `npm run screenshots -- --offline-review`.
-- [x] Design system adiado conforme orientação de LAB; arquivos em `docs/design/` intactos.
-- [x] HTML e ZIP regenerados com `npm run preview:offline`; ZIP contém somente o HTML autossuficiente.
-- [x] Commit local na branch solicitada; sem push/publicação, PR, merge para main ou deploy.
+## Composição e interações locais
 
-Verificação atual em Chromium: as 38 variantes em 1440×1000, 768×700, 390×844 e 320×700, sem overflow horizontal. O teste de hover compara as posições de texto e card antes/depois, com escala apenas na imagem e máscara com overflow contido. Fluxos de personalização, três acentos, troca claro/escuro, coroa, navegação com preferências, drawer/Escape, foco, Estúdio IA, movimento reduzido, bônus bloqueado, preços fictícios e Home → produto → módulo passaram. Zero erros JavaScript e zero requisições de rede. Corrigido também o grid da tela bloqueada em 768px. Script: `npx tsx scripts/verify-offline-preview.ts`. Lint/tipos e integridade do ZIP conferidos antes do commit. Inspeção visual das capturas realizada.
+- [x] Home mantém próximo passo, biblioteca, publicações e ofertas; sem duplicar o produto principal.
+- [x] Imagens editoriais contidas; hover afeta somente a imagem, com texto/card estáveis.
+- [x] Badges arredondados, bônus bloqueado com capa escura e cadeado; preços explicitamente fictícios e compra inativa.
+- [x] Cinco ofertas ilustrativas em carrossel manual; capa ocupa a lateral, rodapés alinhados e descrição realmente expansível. Dois conceitos adicionais não representam ofertas cadastradas.
+- [x] Minha conta mantém atividade/conquistas demonstrativas, quinze personagens, claro/escuro e detalhes oliva/vinho/bege, apenas em memória.
+- [x] Personalização permite ocultar sidebar e usar ícones no topo, com restauração explícita. Menu permanece fixo na rolagem; no mobile compacto substitui a barra inferior.
+- [x] Minhas anotações acima de Minha conta: criar, editar, mover por puxador/seletor, excluir e desfazer. Texto inserido é tratado como texto simples.
+- [x] Botão e menu de contexto guardam referências de produtos/bônus. Referência bloqueada continua bloqueada; nenhum arquivo é entregue ou acesso concedido.
+- [x] Ajuda de IA e conexão futura permanecem inertes, sem campo de chave, persistência ou chamadas externas.
 
-A prévia contém interações locais de apresentação, com dados fictícios e formulários, filtros, pagamentos, login, geração de PDFs e download de materiais inativos. As capturas antigas e vídeos da galeria React representam a versão anterior da aplicação; esta revisão é exclusiva do HTML. Integração futura exige implementar componentes na aplicação e conectar serviços/dados reais; não é habilitada por esta demonstração.
+## Mascote 3D
 
-Verificação adicional de personagens/menu: `npx tsx scripts/verify-preview-characters.ts`. Grupos por teclado, conservação de grupos recolhidos ao navegar, abertura do grupo da página atual, 15 escolhas em quatro larguras, sincronização perfil/IA, ponteiro/retorno ao centro, cor/sorriso, cliques rápidos/recuperação, teclado, toque e movimento reduzido passaram sem erros JavaScript ou requisições de rede. A finalização do design system depende da aprovação posterior do wireframe.
+- [x] Uma ilha Three.js no palco existente; nenhum segundo mascote. Seis famílias de geometria arredondada derivadas das quinze silhuetas atuais, cores preservadas e olhos brancos sem alteração de marca.
+- [x] Volume real com material fosco e iluminação neutra/quente; nenhum azul/índigo usado como luz principal. O azul da variante Theo pertence ao personagem selecionado.
+- [x] Ponteiro projetado em plano frontal; olhos usam lookAt e amortecimento de aproximadamente 0,15, presos ao volume.
+- [x] Hover/foco expande por mola, sem alterar o layout em volta.
+- [x] Clique único, após debounce de 90ms: happy por 300ms, olhos fechados e squash suave, seguido de idle.
+- [x] Três cliques em 500ms: nervous com tremor e pulso leve por 1s, com renovação limitada e prioridade sobre happy.
+- [x] Arraste limitado com retorno suave; arrastar não dispara reação de clique.
+- [x] Movimento reduzido desativa olhar, tremor e expansão; expressão discreta continua disponível.
+- [x] Recursos GPU, listeners e timers descartados ao sair da tela; animação pausada fora da vista. Sem WebGL, há fallback estático explicitamente identificado.
+
+## Menu animado
+
+- [x] Ícones sempre visíveis; somente o nome ativo entra/sai por largura/escala, com mola compartilhada e opacidade secundária.
+- [x] Mesmo shell DOM preservado entre telas para a saída do nome anterior; estado da navegação independente do mascote.
+- [x] Desktop lateral, mobile inferior/Mais e modo compacto superior cobertos; menu compacto centralizado no desktop.
+- [x] aria-current, nomes acessíveis, teclado, alvos de pelo menos 44px e troca instantânea com movimento reduzido.
+- [x] Medição considera mudança para negrito no item ativo, evitando texto cortado após mudar a largura da janela.
+
+## Evidência
+
+Verificações Chromium passaram sem erros JavaScript ou requisições externas:
+
+- `verify-offline-preview.ts`: 39 variantes em 1440, 768, 390 e 320px; imagem/texto estáveis, navegação, temas e ações inertes.
+- `verify-preview-workspace.ts`: ofertas/carrossel, menu fixo e restauração, notas CRUD/arraste/desfazer, texto seguro e referências bloqueadas; arraste real do volume e retorno.
+- `verify-review-regressions.ts`: descrições visualmente abertas, rodapés alinhados no mobile e ausência de overflow no modo compacto.
+- `verify-mascot-volume.ts`: WebGL real, seis famílias com corpo/olhos renderizados, olhar, escala, happy/nervous, recuperação, movimento reduzido e descarte.
+- `verify-preview-characters.ts`: quinze opções em quatro larguras, seleção perfil/IA, teclado, toque e drawer.
+- `verify-nav-labels.ts`: shell persistente, entrada/saída com largura, grupos, barra mobile/Mais, teclado e contenção.
+
+Build de produção, lint sem avisos, tipos e sete testes unitários passaram. HTML/ZIP autossuficientes regenerados; ZIP contém apenas `wireframe.html`. Capturas atualizadas no [índice](../screenshots/README-preview.md), incluindo desktop/mobile, modo compacto rolado, editor de notas e poses do mascote. As poses nas capturas usam movimento reduzido; o comportamento em movimento é verificado separadamente.
+
+Uma revisão independente parcial identificou três falhas reais, corrigidas e cobertas por regressões. Ela foi interrompida por limite da ferramenta antes do parecer final; não há alegação de aprovação independente completa. [Registro](../reviews/2026-10-30-workspace-review.md).
+
+Entrega em commit local na branch solicitada. Sem push, PR, publish, merge para main ou deploy. Design system permanece aguardando aprovação do wireframe. Login, compras, download, filtros de conteúdo e IA seguem inativos; anotações funcionam apenas nesta prévia e são descartadas ao recarregar.

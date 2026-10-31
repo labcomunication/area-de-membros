@@ -6,6 +6,7 @@ const appearance = {
   accent: "wine",
   crown: false,
   avatar: "pistache",
+  navMode: "sidebar",
 };
 
 function keyOf(url) {
@@ -38,6 +39,7 @@ function setBarHeight() {
 function applyAppearance() {
   document.documentElement.dataset.previewMode = appearance.mode;
   document.documentElement.dataset.previewAccent = appearance.accent;
+  window.previewWorkspace.applyNavigation();
   window.previewCharacters.paintProfileAvatars();
   view.querySelectorAll("button[data-mode]").forEach((button) => {
     button.setAttribute(
@@ -78,13 +80,20 @@ function closeMenu() {
   const trigger = view.querySelector('button[aria-label="Mais opções"]');
   trigger?.setAttribute("aria-expanded", "false");
   trigger?.focus();
+  window.previewNav.sync();
 }
 
 function render() {
+  closeMenu();
+  const savedShell = window.previewNav.captureShell();
+  window.previewCharacters.disposeVolume();
+  window.previewNotes.closeTransient();
   const requested = keyOf("/wireframes?" + location.hash.slice(1));
   const key = snapshots[requested] ? requested : "screen=home";
   view.innerHTML = snapshots[key];
   view.dataset.previewKey = key;
+  window.previewNav.restoreShell(savedShell);
+  window.previewNav.sync();
   window.previewCharacters.restoreNavigationGroups();
   view.querySelectorAll('a[href^="/wireframes"]').forEach((link) => {
     link.setAttribute("href", "#" + keyOf(link.getAttribute("href")));
@@ -94,6 +103,8 @@ function render() {
     ? key
     : "";
   applyAppearance();
+  window.previewWorkspace.mount();
+  window.previewNav.sync();
   setBarHeight();
   window.scrollTo({ top: 0, behavior: "instant" });
 }
@@ -132,7 +143,7 @@ document.addEventListener("click", (event) => {
   if (button?.dataset.avatarChoice) {
     appearance.avatar = button.dataset.avatarChoice;
     characterState.step = 0;
-    characterState.mood = "curious";
+    characterState.mood = "idle";
     characterState.clicks = [];
     clearTimeout(characterState.resetTimer);
     applyAppearance();
@@ -144,7 +155,7 @@ document.addEventListener("click", (event) => {
     return;
   }
   if (button?.dataset.action === "play-character")
-    return window.previewCharacters.playCharacter();
+    return window.previewCharacters.playCharacter(event);
   if (button?.dataset.action === "appearance") {
     const options = document.getElementById("appearance-options");
     options.hidden = !options.hidden;
@@ -187,6 +198,7 @@ document.addEventListener("click", (event) => {
     }
     view.append(drawer);
     button.setAttribute("aria-expanded", "true");
+    window.previewNav.sync();
     close.focus();
     return;
   }

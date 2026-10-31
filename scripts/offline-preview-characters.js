@@ -1,120 +1,49 @@
 /* Original vector characters for the wireframe; no assets or services loaded. */
 const characterStyles = [
-  {
-    id: "pistache",
-    name: "Pistache",
-    colors: ["#ffe6b2", "#b4dcb2", "#ef8c76"],
-    hair: 0,
-  },
-  {
-    id: "pescego",
-    name: "Pêssego",
-    colors: ["#fff0e9", "#ffc8be", "#ed9182"],
-    hair: 1,
-  },
-  {
-    id: "lavanda",
-    name: "Lavanda",
-    colors: ["#d4e8ff", "#b4a0ed", "#83d6c3"],
-    hair: 2,
-  },
-  {
-    id: "brisa",
-    name: "Brisa",
-    colors: ["#e7fcff", "#8fdaed", "#72b5ec"],
-    hair: 3,
-  },
-  {
-    id: "amora",
-    name: "Amora",
-    colors: ["#e2deff", "#b2a3ef", "#7bd6e0"],
-    hair: 4,
-  },
-  {
-    id: "coral",
-    name: "Coral",
-    colors: ["#f5dde5", "#ed8f79", "#a1c3e0"],
-    hair: 2,
-  },
-  {
-    id: "iris",
-    name: "Íris",
-    colors: ["#dce9ff", "#9f9bea", "#86d3e0"],
-    hair: 4,
-  },
-  {
-    id: "kiwi",
-    name: "Kiwi",
-    colors: ["#e1edb9", "#a9d79d", "#71ceb5"],
-    hair: 0,
-  },
-  {
-    id: "laguna",
-    name: "Laguna",
-    colors: ["#d1effd", "#9acadd", "#64c8d0"],
-    hair: 3,
-  },
-  {
-    id: "menta",
-    name: "Menta",
-    colors: ["#d6f7ee", "#88d5cb", "#69c4a7"],
-    hair: 1,
-  },
-  {
-    id: "sol",
-    name: "Sol",
-    colors: ["#fff5c7", "#f4ce70", "#c5e2c7"],
-    hair: 2,
-  },
-  {
-    id: "aurora",
-    name: "Aurora",
-    colors: ["#f9edb5", "#e9d685", "#bda8e5"],
-    hair: 1,
-  },
-  {
-    id: "mel",
-    name: "Mel",
-    colors: ["#fff4ce", "#f4cc82", "#f2af88"],
-    hair: 0,
-  },
-  {
-    id: "rosa",
-    name: "Rosa",
-    colors: ["#ffe3ef", "#f6b5db", "#de8ecb"],
-    hair: 3,
-  },
-  {
-    id: "orquidea",
-    name: "Orquídea",
-    colors: ["#f6d8fa", "#dfa9ef", "#c693df"],
-    hair: 4,
-  },
+  { id: "pistache", name: "Adam", color: "#171717", shape: "orb" },
+  { id: "pescego", name: "Cherry", color: "#f97508", shape: "flower" },
+  { id: "lavanda", name: "Maria", color: "#838383", shape: "drop" },
+  { id: "brisa", name: "Theo", color: "#2585ed", shape: "triangle" },
+  { id: "amora", name: "Luna", color: "#00b974", shape: "oval" },
+  { id: "coral", name: "Cora", color: "#91653b", shape: "clover" },
+  { id: "iris", name: "Nina", color: "#855c99", shape: "flower" },
+  { id: "kiwi", name: "Bento", color: "#7d8b49", shape: "drop" },
+  { id: "laguna", name: "Noa", color: "#467c95", shape: "oval" },
+  { id: "menta", name: "Maya", color: "#3a987f", shape: "clover" },
+  { id: "sol", name: "Sol", color: "#c58a28", shape: "orb" },
+  { id: "aurora", name: "Aurora", color: "#a16477", shape: "triangle" },
+  { id: "mel", name: "Mel", color: "#a57343", shape: "drop" },
+  { id: "rosa", name: "Rosa", color: "#ba6389", shape: "flower" },
+  { id: "orquidea", name: "Flora", color: "#6c6594", shape: "clover" },
 ];
-const hairPaths = [
-  "M18 9c3 11 10 11 13 0 0 13 12 15 16 0",
-  "M29 3c9 13 20 18 31 6M37 5c8 6 17 8 25 3",
-  "M36 0c5 10 12 17 22 20L51 4c6 10 12 16 18 17",
-  "M16 15c7 3 14-1 17-10 0 12 9 16 14 4",
-  "M31 6c-2 14 12 14 13 1 0 16 13 16 14 1 0 12 10 11 11 0",
-];
+const characterShapes = {
+  orb: "M50 5a45 45 0 1 1 0 90a45 45 0 0 1 0-90Z",
+  drop: "M50 5C61-1 69 20 82 36C108 73 83 96 50 96C19 96 0 73 10 45C17 28 35 11 50 5Z",
+  triangle: "M39 14Q50-4 61 14L94 75Q105 94 83 94H17Q-5 94 6 75Z",
+  flower:
+    "M50 12C66 0 86 11 83 29C102 32 104 52 89 64C99 81 81 99 64 89C52 104 30 98 28 81C10 88 0 66 13 52C0 35 18 16 34 22C37 16 43 13 50 12Z",
+  oval: "M36 16H64C106 16 106 84 64 84H36C-6 84-6 16 36 16Z",
+  clover:
+    "M50 5C70 0 84 12 80 30C100 35 102 56 87 67C92 85 75 100 57 90C42 104 22 94 23 77C3 74 0 54 15 41C7 22 28 9 42 17Z",
+};
 const characterState = {
   step: 0,
-  mood: "curious",
+  mood: "idle",
   clicks: [],
   resetTimer: null,
+  suppressClickUntil: 0,
 };
 const navigationState = {};
-const motionPreference = window.matchMedia("(prefers-reduced-motion: reduce)");
-let gazeFrame = null;
-let gazePoint = null;
+let activeVolume = null,
+  volumeHost = null,
+  volumeAppearance = "";
 
-function characterMarkup(id, paletteId = id, mood = "curious") {
+function characterMarkup(id, paletteId = id, mood = "idle") {
   const character =
     characterStyles.find((style) => style.id === id) || characterStyles[0];
   const palette =
     characterStyles.find((style) => style.id === paletteId) || character;
-  return `<span class="character" data-character="${character.id}" data-mood="${mood}" data-palette="${palette.id}" aria-hidden="true" style="--character-a:${palette.colors[0]};--character-b:${palette.colors[1]};--character-c:${palette.colors[2]}"><svg viewBox="0 0 100 100" fill="none"><path class="character-hair" d="${hairPaths[character.hair]}"/><g class="character-gaze"><g class="character-eyes"><ellipse cx="42" cy="48" rx="2.9" ry="5.8" transform="rotate(-20 42 48)"/><ellipse cx="55" cy="45.5" rx="2.9" ry="6.4" transform="rotate(-20 55 45.5)"/></g><path class="character-brows" d="m36 36 10 4m5-3 9-4"/></g><path class="character-mouth-neutral" d="M44 60q5 6 11 0"/><path class="character-mouth-happy" d="M42 58q7 16 15 0Z"/><path class="character-tongue" d="M47 65q4-5 7 0"/><path class="character-mouth-angry" d="M43 64q6-7 13 0"/></svg></span>`;
+  return `<span class="character" data-character="${character.id}" data-shape="${character.shape}" data-mood="${mood}" data-palette="${palette.id}" aria-hidden="true" style="--character-fill:${palette.color}"><svg viewBox="0 0 100 100" fill="none"><path class="character-body" d="${characterShapes[character.shape]}"/><g class="character-gaze"><g class="character-eyes"><ellipse cx="41" cy="44" rx="4.4" ry="8.6" transform="rotate(-15 41 44)"/><ellipse cx="59" cy="42" rx="4.4" ry="9" transform="rotate(-15 59 42)"/></g><path class="character-brows" d="m33 28 13 5m7-3 12-4"/></g><path class="character-mouth-neutral" d="M44 63q6 4 12 0"/><path class="character-mouth-happy" d="M41 61q9 17 18 0Z"/><path class="character-tongue" d="M47 69q4-5 8 0"/><path class="character-mouth-angry" d="M43 65q7-7 14 0"/></svg></span>`;
 }
 
 function paintProfileAvatars() {
@@ -159,47 +88,82 @@ function paintProfileAvatars() {
 function paintCharacterStage() {
   const host = view.querySelector("[data-character-stage]");
   if (!host) return;
-  const index = characterStyles.findIndex(
-    (style) => style.id === appearance.avatar,
-  );
-  const palette =
-    characterStyles[(index + characterState.step) % characterStyles.length];
-  host.innerHTML = characterMarkup(
-    appearance.avatar,
-    palette.id,
-    characterState.mood,
-  );
-  const labels = {
-    curious: "Curioso",
-    happy: "Feliz",
-    angry: "Bravo de brincadeira",
-  };
-  view.querySelector("[data-character-state]").textContent =
-    labels[characterState.mood];
-  const messages = {
-    curious: "Uma companhia para suas ideias.",
-    happy: "Gostei! Uma nova cor para suas ideias.",
-    angry: "Ei, devagar! Uma pausa e já volto ao normal.",
-  };
-  view.querySelector("[data-character-status]").textContent =
-    messages[characterState.mood];
+  const character =
+    characterStyles.find((style) => style.id === appearance.avatar) ||
+    characterStyles[0];
+  let face = host.querySelector(".character");
+  if (!face || face.dataset.character !== character.id) {
+    const canvas = host.querySelector("canvas");
+    host.innerHTML = characterMarkup(character.id, character.id, "idle");
+    if (canvas) host.append(canvas);
+    face = host.querySelector(".character");
+  }
+  view.querySelector("[data-character-state]").textContent = character.name;
+  if (volumeHost !== host) {
+    disposeVolume();
+    volumeHost = host;
+    activeVolume = window.createMascotVolume({
+      host,
+      button: host.closest(".character-play"),
+      path: characterShapes[character.shape],
+      kind: character.shape,
+      color: character.color,
+      onState(state) {
+        characterState.mood = state;
+        const fallback = host.querySelector(".character");
+        if (fallback) fallback.dataset.mood = state;
+        const states = {
+          idle: "pronto",
+          happy: "sorrindo",
+          nervous: "agitado por um instante",
+        };
+        view
+          .querySelector("[data-character-status]")
+          ?.replaceChildren(
+            document.createTextNode(
+              character.name + ": " + states[state] + ".",
+            ),
+          );
+      },
+    });
+    volumeAppearance = character.id;
+    if (!activeVolume)
+      view.querySelector("[data-character-status]").textContent =
+        "Animação 3D indisponível neste navegador. Personagem estático preservado.";
+  } else if (activeVolume && volumeAppearance !== character.id) {
+    activeVolume.setAppearance(
+      characterShapes[character.shape],
+      character.shape,
+      character.color,
+    );
+    volumeAppearance = character.id;
+  }
 }
-
-function playCharacter() {
-  const now = performance.now();
-  characterState.clicks = characterState.clicks.filter(
-    (time) => now - time < 1200,
+function playCharacter(event) {
+  activeVolume?.click(event);
+}
+function disposeVolume() {
+  activeVolume?.dispose();
+  activeVolume = null;
+  volumeHost = null;
+  volumeAppearance = "";
+}
+function volumeSnapshot() {
+  return (
+    activeVolume?.snapshot() || {
+      renderer: "unmounted",
+      state: "idle",
+      scale: 1,
+      squint: 1,
+      depth: 0,
+      gaze: [0, 0, 0],
+      eyeQuaternion: [0, 0, 0, 1],
+      bodyAngle: [0, 0, 0],
+      renderedFrames: 0,
+      motionActive: false,
+      position: [0, 0, 0],
+    }
   );
-  characterState.clicks.push(now);
-  characterState.step = (characterState.step + 1) % characterStyles.length;
-  characterState.mood = characterState.clicks.length >= 4 ? "angry" : "happy";
-  clearTimeout(characterState.resetTimer);
-  paintCharacterStage();
-  characterState.resetTimer = setTimeout(() => {
-    characterState.mood = "curious";
-    characterState.clicks = [];
-    paintCharacterStage();
-  }, 1800);
 }
 
 function closeAvatarPicker() {
@@ -230,52 +194,11 @@ document.addEventListener(
   true,
 );
 
-function resetCharacterEyes() {
-  gazePoint = null;
-  if (gazeFrame !== null) cancelAnimationFrame(gazeFrame);
-  gazeFrame = null;
-  view.querySelectorAll(".character").forEach((character) => {
-    character.style.removeProperty("--look-x");
-    character.style.removeProperty("--look-y");
-  });
-}
-document.addEventListener(
-  "pointermove",
-  (event) => {
-    if (motionPreference.matches || event.pointerType === "touch") return;
-    gazePoint = { x: event.clientX, y: event.clientY };
-    if (gazeFrame !== null) return;
-    gazeFrame = requestAnimationFrame(() => {
-      gazeFrame = null;
-      if (!gazePoint) return;
-      view.querySelectorAll(".character").forEach((character) => {
-        const bounds = character.getBoundingClientRect();
-        if (!bounds.width || bounds.bottom < 0 || bounds.top > innerHeight)
-          return;
-        const divisor = Math.max(160, bounds.width * 1.2);
-        const x = Math.max(
-          -1,
-          Math.min(1, (gazePoint.x - bounds.x - bounds.width / 2) / divisor),
-        );
-        const y = Math.max(
-          -1,
-          Math.min(1, (gazePoint.y - bounds.y - bounds.height / 2) / divisor),
-        );
-        character.style.setProperty("--look-x", (x * 3).toFixed(2) + "px");
-        character.style.setProperty("--look-y", (y * 2.2).toFixed(2) + "px");
-      });
-    });
-  },
-  { passive: true },
-);
-document.addEventListener("pointerout", (event) => {
-  if (!event.relatedTarget) resetCharacterEyes();
-});
-window.addEventListener("blur", resetCharacterEyes);
-motionPreference.addEventListener("change", resetCharacterEyes);
 window.previewCharacters = {
   paintProfileAvatars,
   playCharacter,
   closeAvatarPicker,
   restoreNavigationGroups,
+  disposeVolume,
+  volumeSnapshot,
 };

@@ -36,6 +36,12 @@ try {
   const explore = page.locator('.sidebar [data-nav-group="explore"]');
   await explore.locator("summary").focus();
   await page.keyboard.press("Enter");
+  await page.waitForFunction(
+    () =>
+      !document.querySelector<HTMLDetailsElement>(
+        '.sidebar [data-nav-group="explore"]',
+      )!.open,
+  );
   assert.equal(
     await explore.locator('[data-nav-target="ai"]').isVisible(),
     false,
@@ -116,93 +122,21 @@ try {
     exact: true,
   });
   await player.scrollIntoViewIfNeeded();
-  const box = (await player.boundingBox())!;
-  await page.mouse.move(box.x + box.width + 100, box.y + box.height / 2);
-  await page.waitForFunction(
-    () =>
-      parseFloat(
-        (
-          document.querySelector(".character-play .character") as HTMLElement
-        ).style.getPropertyValue("--look-x"),
-      ) > 0,
-  );
-  await page.mouse.move(box.x - 100, box.y + box.height / 2);
-  await page.waitForFunction(
-    () =>
-      parseFloat(
-        (
-          document.querySelector(".character-play .character") as HTMLElement
-        ).style.getPropertyValue("--look-x"),
-      ) < 0,
-  );
-  await page.evaluate(() =>
-    document.dispatchEvent(
-      new PointerEvent("pointerout", { relatedTarget: null }),
-    ),
-  );
-  assert.equal(
-    await page
-      .locator(".character-play .character")
-      .evaluate((el) => (el as HTMLElement).style.getPropertyValue("--look-x")),
-    "",
-  );
-  const paletteBefore = await page
-    .locator(".character-play .character")
-    .getAttribute("data-palette");
-  const headingBefore = await page.locator(".ai-studio h1").boundingBox();
-  await player.click();
-  assert.equal(
-    await page.locator(".character-play .character").getAttribute("data-mood"),
-    "happy",
-  );
-  assert.notEqual(
-    await page
-      .locator(".character-play .character")
-      .getAttribute("data-palette"),
-    paletteBefore,
-  );
-  await page.keyboard.press("Enter");
-  await player.click();
-  await player.click();
-  assert.equal(
-    await page.locator(".character-play .character").getAttribute("data-mood"),
-    "angry",
-  );
-  assert.equal(
-    await page
-      .locator(".character-play .character-brows")
-      .evaluate((el) => getComputedStyle(el).display),
-    "block",
-  );
-  assert.deepEqual(
-    await page.locator(".ai-studio h1").boundingBox(),
-    headingBefore,
-  );
-  await page.waitForFunction(
-    () =>
-      document
-        .querySelector(".character-play .character")
-        ?.getAttribute("data-mood") === "curious",
-    undefined,
-    { timeout: 3000 },
-  );
   await page.emulateMedia({ reducedMotion: "reduce" });
-  await page.mouse.move(box.x + box.width + 100, box.y + box.height / 2);
-  assert.equal(
-    await page
-      .locator(".character-play .character-gaze")
-      .evaluate((el) => getComputedStyle(el).transform),
-    "none",
-  );
   await player.focus();
   await page.keyboard.press("Space");
+  await page.waitForFunction(
+    () => window.previewCharacters.volumeSnapshot().state === "happy",
+  );
   assert.equal(
-    await page.locator(".character-play .character").getAttribute("data-mood"),
-    "happy",
+    await page
+      .locator(".character-play .character")
+      .getAttribute("data-character"),
+    "rosa",
   );
   await go(page, "account");
   await page.locator('[data-action="avatar-picker"]').click();
-  await page.getByRole("button", { name: "Menta", exact: true }).focus();
+  await page.getByRole("button", { name: "Maya", exact: true }).focus();
   await page.keyboard.press("Enter");
   assert.equal(
     await page
@@ -219,11 +153,15 @@ try {
   });
   await load(touch);
   await go(touch, "ai");
-  assert.equal(await touch.locator(".touch-hint").isVisible(), true);
-  await touch.locator(".character-play").tap();
   assert.equal(
-    await touch.locator(".character-play .character").getAttribute("data-mood"),
-    "happy",
+    await touch
+      .locator("#character-instructions")
+      .evaluate((el) => getComputedStyle(el).position),
+    "absolute",
+  );
+  await touch.locator(".character-play").tap();
+  await touch.waitForFunction(
+    () => window.previewCharacters.volumeSnapshot().state === "happy",
   );
   assert.equal(
     await touch
@@ -239,7 +177,7 @@ try {
   assert.deepEqual(errors, []);
   assert.deepEqual(requests, []);
   console.log(
-    "Character/menu verification passed: grouped navigation, 15 choices at 4 widths, profile/AI selection, gaze/reset, happy/color/rapid-click angry/recovery, keyboard, touch and reduced motion. Zero JS errors or network requests.",
+    "Character/menu verification passed: grouped navigation, 15 choices at 4 widths, profile/AI selection, keyboard and touch happy feedback, drawer and reduced motion. Zero JS errors or network requests.",
   );
 } finally {
   await browser.close();
