@@ -1,0 +1,46 @@
+/* Shared by Dev and user editions; page surfaces follow the available workspace. */
+body .main-content {
+  min-width: 0;
+  max-width: none;
+}
+.workspace {
+  min-width: 0;
+}
+.ai-flow-studio {
+  max-width: none;
+}
+.ai-content > .ai-studio-copy > p {
+  max-width: 72ch;
+  margin-inline: auto;
+}
+@media (min-width: 768px) {
+  body .main-content .product-grid,
+  body .main-content .product-grid.carousel:has(> :nth-child(3):last-child) {
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 220px), 1fr));
+    max-width: none;
+  }
+}
+@media (min-width: 1600px) {
+  .featured-story > .story-media,
+  .editorial-card > .story-media {
+    width: 100%;
+    max-height: 420px;
+  }
+  .offers-grid.offer-track {
+    grid-auto-columns: clamp(420px, calc((100% - 48px) / 3), 560px);
+  }
+  .offers-grid.recommendation-track {
+    grid-auto-columns: clamp(300px, calc((100% - 96px) / 5), 380px);
+  }
+  .ai-flow-studio .flow-viewport {
+    background-image: radial-gradient(#cbd0cb 0.9px, transparent 0.9px);
+    background-size: 20px 20px;
+  }
+  .ai-flow-studio .flow-canvas {
+    margin-inline: auto;
+    background-image: none;
+  }
+  html[data-preview-mode="dark"] .ai-flow-studio .flow-viewport {
+    background-image: radial-gradient(#49534b 0.9px, transparent 0.9px);
+  }
+}

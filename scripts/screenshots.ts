@@ -385,6 +385,13 @@ try {
     index.push(
       "",
       "[Detalhe do mascote fosco com olhar esférico](mascot-eyes.png)",
+      "",
+      "Capturas ultrawide, geradas por npx tsx scripts/verify-preview-responsive.ts:",
+      "",
+      "| Edição | Bônus · 2196px | Início · 3440px |",
+      "|---|---|---|",
+      "| Dev | [2196px](responsive-dev-ultrawide.png) | [3440px](responsive-dev-3440.png) |",
+      "| Usuário | [2196px](responsive-usuario-ultrawide.png) | [3440px](responsive-usuario-3440.png) |",
     );
   await writeFile(
     offline

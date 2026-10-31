@@ -27,3 +27,12 @@ Essa verificação técnica não representa aprovação do design final ou do de
 - [x] O antigo preenchimento azul do tema vinho agora usa um tom de vinho. Destaques/seleções acompanham oliva, vinho e bege, em claro/escuro.
 
 Passaram verify-preview-audiences.ts, verify-offline-preview.ts, verify-notes-review.ts, verify-preview-flow.ts e verify-studio-refinement.ts, além de lint/tipos. O novo verificador exercita também a ligação entre abas em uma origem HTTP local simulada, a reversão da chave e o download real, reaberto em páginas independentes a partir dos bytes salvos. O Chromium gerenciado bloqueia navegação file://; não foi alegado teste dessa navegação. Os três ZIPs foram comparados byte a byte com os HTMLs. São agora 42 capturas, incluindo as duas edições no desktop/mobile. [Guia das edições](editions.md).
+
+## Responsividade geral e ultrawide
+
+- [x] Removido o limite de 1184px do conteúdo nas duas edições, com as margens de desktop/mobile preservadas.
+- [x] Grade da biblioteca ajusta colunas ao espaço disponível; carrosséis mantêm dimensões legíveis em monitores largos. Imagens editoriais têm altura limitada para evitar crescimento excessivo.
+- [x] Quadro de ideias ocupa o painel disponível; sua área de trabalho permanece centralizada em ultrawide, com pontilhado em toda a área e rolagem interna em telas menores.
+- [x] Todas as 39 variantes, nas edições Dev/usuário, verificadas em 320, 390, 768, 1024, 1440, 2196, 2560 e 3440px, sem rolagem horizontal da página, erros JS ou requisições externas. O teste também exige que os painéis preencham a área de trabalho, preservando margens laterais.
+
+Passaram verify-preview-responsive, verify-preview-workspace, verify-nav-labels, verify-preview-flow e verify-preview-audiences, além de lint/tipos. A regressão de largura foi reproduzida antes da correção. Foram regeneradas 42 capturas desktop/mobile e mais quatro de ultrawide; a inspeção comparou Bônus com o print enviado e a Home em 3440px. Escopo continua restrito à prévia HTML; src/ e docs/design/ não foram alterados.
