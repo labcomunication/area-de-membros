@@ -1,5 +1,11 @@
 /* Navigation and offers are local presentation controls, never application state. */
+function updateShellScrollState() {
+  document.documentElement.dataset.previewScrolled = String(
+    window.scrollY > 12,
+  );
+}
 function measureWorkspace() {
+  updateShellScrollState();
   const mobileHeader = view.querySelector(".mobile-header");
   document.documentElement.style.setProperty(
     "--mobile-header-height",
@@ -73,6 +79,7 @@ document.addEventListener(
   true,
 );
 window.addEventListener("resize", measureWorkspace);
+window.addEventListener("scroll", updateShellScrollState, { passive: true });
 window.previewWorkspace = {
   mount: mountWorkspace,
   applyNavigation: applyWorkspaceNavigation,

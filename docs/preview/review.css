@@ -1,0 +1,254 @@
+/* User-reviewed prototype adjustments; deliberately separate from design docs. */
+body .sidebar {
+  width: 264px;
+}
+.sidebar nav {
+  overflow-x: hidden;
+  overflow-y: auto;
+  scrollbar-width: none;
+  padding-inline: 0;
+}
+.sidebar nav::-webkit-scrollbar {
+  display: none;
+}
+.sidebar nav a,
+.drawer nav a {
+  gap: 10px;
+}
+.sidebar nav a > .nav-icon,
+.drawer nav a > .nav-icon {
+  margin-right: 0;
+}
+.sidebar nav a > .nav-live-label,
+.drawer nav a > .nav-live-label {
+  width: auto !important;
+  min-width: 0;
+  flex: 1 1 auto;
+  white-space: normal;
+  overflow: visible;
+  opacity: 1 !important;
+  transform: none !important;
+  font-size: 14px;
+  line-height: 1.4;
+  text-align: left;
+}
+.sidebar [data-nav-active="false"] .nav-soon,
+.drawer [data-nav-active="false"] .nav-soon {
+  display: inline-flex;
+}
+.sidebar .nav-soon,
+.drawer .nav-soon {
+  margin-left: 0;
+  flex-shrink: 0;
+}
+.workspace {
+  margin-left: 296px;
+}
+.desktop-topbar > div:last-child {
+  margin-left: auto;
+}
+html[data-preview-scrolled="true"]
+  :is(.desktop-topbar, .mobile-header, .mobile-compact-nav) {
+  background: rgb(255 255 255 / 0.78);
+  backdrop-filter: blur(16px) saturate(1.1);
+  -webkit-backdrop-filter: blur(16px) saturate(1.1);
+}
+html[data-preview-mode="dark"][data-preview-scrolled="true"]
+  :is(.desktop-topbar, .mobile-header, .mobile-compact-nav) {
+  background: rgb(31 35 31 / 0.82);
+}
+.story-item,
+.story-item:hover,
+.story-item:focus-visible {
+  background: transparent;
+  background-image: none;
+  box-shadow: none;
+  border: 0;
+  border-radius: 0;
+}
+.story-item::before,
+.story-item::after {
+  content: none;
+}
+.story-item .story-media {
+  border-radius: 12px;
+}
+.tabs button,
+.tabs button:hover,
+.tabs button[aria-selected="true"],
+.tabs button:disabled,
+html[data-preview-mode] .tabs button:disabled {
+  background: transparent !important;
+  background-image: none;
+  box-shadow: none;
+  border-radius: 0;
+  border-bottom-color: transparent !important;
+  color: var(--color-muted) !important;
+}
+html[data-preview-mode] .tabs button[aria-selected="true"] {
+  border-bottom-color: var(--selection-bar) !important;
+  color: var(--color-text) !important;
+}
+.offer-cover-frame {
+  align-self: stretch;
+  display: flex;
+  align-items: center;
+  padding: 12px;
+  background: #f2f2ed;
+  min-width: 0;
+}
+.offer-track .offer-cover-frame > .asset-placeholder.cover {
+  width: 100%;
+  height: auto;
+  min-height: 0;
+  aspect-ratio: 3 / 4;
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  padding: 8px;
+  overflow: hidden;
+  overflow-wrap: anywhere;
+  font-size: 9px;
+}
+.offer-cover-frame img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+.offer-track {
+  scrollbar-width: none;
+}
+.offer-track::-webkit-scrollbar {
+  display: none;
+}
+html[data-preview-mode="dark"] .offer-cover-frame {
+  background: #292c28;
+}
+#appearance-options fieldset {
+  display: grid;
+  gap: 12px;
+}
+#appearance-options fieldset > .microcopy {
+  margin-top: 4px;
+  line-height: 1.6;
+}
+#appearance-options .appearance-choices {
+  row-gap: 12px;
+}
+button[data-action="appearance"][aria-expanded="true"] {
+  background: var(--selection-bar);
+  color: #fff;
+  border-color: transparent;
+}
+html[data-preview-accent="beige"]
+  button[data-action="appearance"][aria-expanded="true"],
+html[data-preview-mode="dark"]
+  button[data-action="appearance"][aria-expanded="true"] {
+  color: #20251f;
+}
+.reward-choices {
+  margin-top: 24px;
+  padding: 0;
+  border: 0;
+}
+.reward-choices legend {
+  font-size: 14px;
+  font-weight: 600;
+  margin-bottom: 12px;
+}
+.reward-options {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+.reward-options button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: 48px;
+  padding: 10px 18px;
+  border: 1px solid var(--color-border);
+  border-radius: 12px;
+  color: var(--color-text);
+  background: var(--color-surface);
+  font: inherit;
+  font-size: 14px;
+}
+.reward-options button[aria-pressed="true"] {
+  background: var(--selection-surface);
+  border-color: var(--selection-bar);
+}
+.reward-options svg {
+  width: 22px;
+  height: 22px;
+  display: block;
+}
+.rewards-section .crown-preview {
+  justify-content: flex-start;
+  margin-top: 16px;
+}
+.ai-content > .ai-studio-copy {
+  max-width: none;
+  margin: 32px auto;
+  padding: 0 16px;
+}
+.ai-content > .ai-studio-copy h1 {
+  font-size: clamp(24px, 3vw, 40px);
+  line-height: 1.25;
+  text-wrap: initial;
+}
+.ai-content > .ai-studio-copy p {
+  margin-top: 16px;
+}
+@media (min-width: 768px) {
+  .ai-content > .ai-studio-copy h1 {
+    white-space: nowrap;
+  }
+}
+@media (max-width: 767px) {
+  .workspace {
+    margin-left: 0;
+  }
+  .ai-content > .ai-studio-copy {
+    margin: 24px auto;
+    padding: 0 12px;
+  }
+  .ai-content > .ai-studio-copy h1 {
+    font-size: 30px;
+    text-wrap: balance;
+  }
+  .reward-options {
+    gap: 8px;
+  }
+  .reward-options button {
+    flex: 1 1 85px;
+    padding-inline: 10px;
+  }
+  .offer-cover-frame {
+    padding: 8px;
+  }
+}
+/* In very short windows, one scroll container keeps full targets reachable. */
+@media (max-height: 620px) and (min-width: 768px) {
+  body .sidebar {
+    overflow-y: auto;
+    overflow-x: hidden;
+    scrollbar-width: none;
+  }
+  .sidebar::-webkit-scrollbar {
+    display: none;
+  }
+  .sidebar nav {
+    flex: 0 0 auto;
+    overflow: visible;
+    min-height: auto;
+  }
+  .sidebar-bottom {
+    margin-top: 16px;
+  }
+}
+.ai-content > .ai-studio-copy h1 {
+  font-family: Georgia, serif;
+  font-weight: 400;
+  letter-spacing: -0.035em;
+}

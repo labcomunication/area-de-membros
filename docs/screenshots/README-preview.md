@@ -17,6 +17,10 @@ Capturas de docs/preview/wireframe.html; dados fictícios e integrações inativ
 | ai | feliz · olhos fechados | [desktop](ai-happy-desktop.png) | [mobile](ai-happy-mobile.png) |
 | ai | nervoso · pose estática com movimento reduzido | [desktop](ai-nervous-desktop.png) | [mobile](ai-nervous-mobile.png) |
 | notes | normal | [desktop](notes-refined-desktop.png) | [mobile](notes-refined-mobile.png) |
+| notes | menu de movimentação | [desktop](notes-menu-desktop.png) | [mobile](notes-menu-mobile.png) |
+| notes | referências de e-books | [desktop](notes-ebooks-desktop.png) | [mobile](notes-ebooks-mobile.png) |
 | notes | editor local de anotação | [desktop](notes-editor-desktop.png) | [mobile](notes-editor-mobile.png) |
 
-[Detalhe do mascote em volume 3D](mascot-eyes.png)
+[Menu em janela baixa, com rolagem preservada](home-short-window.png)
+
+[Detalhe do mascote fosco com olhar esférico](mascot-eyes.png)

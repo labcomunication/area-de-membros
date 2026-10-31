@@ -39,8 +39,9 @@ try {
   await page.route("**/*", (r) => r.abort());
   await page.setContent(await readFile("docs/preview/wireframe.html", "utf8"));
   await page.locator(".home-zone-a").waitFor();
-  const home = '.sidebar [data-nav-target="home"]',
-    products = '.sidebar [data-nav-target="products"]';
+  await page.locator('[data-action="compact-navigation"]').click();
+  const home = '.compact-nav [data-nav-target="home"]',
+    products = '.compact-nav [data-nav-target="products"]';
   await settled(home, 1);
   const old = await page.locator(home).elementHandle();
   assert.ok(old);
@@ -81,9 +82,23 @@ try {
     await page.locator(home + " .nav-live-label").getAttribute("aria-hidden"),
     "true",
   );
+  await page
+    .getByRole("button", { name: "Mostrar menu lateral", exact: true })
+    .click();
+  const sidebarProducts = '.sidebar [data-nav-target="products"]';
+  assert.equal(
+    await page
+      .locator('.sidebar [data-nav-active="false"] .nav-live-label')
+      .evaluateAll((es) =>
+        es.every(
+          (e) => e.clientWidth > 0 && Number(getComputedStyle(e).opacity) === 1,
+        ),
+      ),
+    true,
+  );
   const group = page.locator('.sidebar [data-nav-group="learn"]');
   await group.locator("summary").click();
-  await settled(products, 0);
+  await settled(sidebarProducts, 0);
   await page.waitForFunction(
     () =>
       !document.querySelector<HTMLDetailsElement>(
@@ -91,7 +106,7 @@ try {
       )!.open,
   );
   await group.locator("summary").click();
-  await settled(products, 1);
+  await settled(sidebarProducts, 1);
   await page.setViewportSize({ width: 390, height: 844 });
   await go(page, "home");
   const bottomHome = '.bottom-nav a[href="#screen=home"]',

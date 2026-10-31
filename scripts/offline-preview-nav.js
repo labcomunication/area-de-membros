@@ -29,8 +29,11 @@ function currentNavId() {
   return screen;
 }
 function paintNavLabel(state) {
+  const fullLabel = Boolean(state.control.closest(".sidebar, .drawer"));
   const progress = Math.max(0, Math.min(1.025, state.value));
-  state.label.style.width = (state.width * progress).toFixed(3) + "px";
+  state.label.style.width = fullLabel
+    ? "auto"
+    : (state.width * progress).toFixed(3) + "px";
   state.label.style.transform = `perspective(240px) scale(${0.92 + Math.min(1.02, progress) * 0.08}) rotateX(${(1 - Math.min(1, progress)) * 10}deg)`;
   state.label.style.opacity = String(Math.min(1, progress));
   state.control.style.setProperty(
@@ -170,8 +173,9 @@ function syncNavLabels() {
     const group = control.closest("details");
     const closed =
       group?.open === false || groupMotions.get(group)?.target === 0;
-    state.target = selected && !closed ? 1 : 0;
-    if (motionPreference.matches) {
+    const fullLabel = Boolean(control.closest(".sidebar, .drawer"));
+    state.target = !closed && (fullLabel || selected) ? 1 : 0;
+    if (fullLabel || motionPreference.matches) {
       state.value = state.target;
       state.velocity = 0;
       paintNavLabel(state);
@@ -217,7 +221,7 @@ document.addEventListener(
     content.style.height = Math.max(0, height * state.value) + "px";
     for (const control of group.querySelectorAll("a")) {
       const label = normalizeNav(control);
-      label.target = opening && control.dataset.navActive === "true" ? 1 : 0;
+      label.target = opening ? 1 : 0;
     }
     queueNavFrame();
   },

@@ -136,6 +136,13 @@ export function refinePreviewWorkspace({
     for (const [cardIndex, card] of [
       ...grid.querySelectorAll<HTMLElement>(".offer-card"),
     ].entries()) {
+      const cover = card.querySelector(".asset-placeholder.cover");
+      if (cover) {
+        const frame = document.createElement("div");
+        frame.className = "offer-cover-frame";
+        cover.replaceWith(frame);
+        frame.append(cover);
+      }
       const body = card.children[1] as HTMLElement;
       body.className = "offer-body";
       const description = body.querySelector<HTMLElement>(
@@ -179,12 +186,29 @@ export function refinePreviewWorkspace({
     root.querySelector(".ai-studio-copy .eyebrow")?.remove();
     const stage = root.querySelector(".character-studio-stage")!;
     stage.innerHTML =
-      '<span class="character-state" data-character-state>Adam</span><button type="button" class="character-play" data-action="play-character" aria-label="Brincar com personagem" aria-describedby="character-instructions"><span data-character-stage></span></button><span id="character-instructions" class="sr-only">Arraste suavemente, clique ou toque no personagem. Enter e Espaço também mudam sua cor e expressão.</span><span class="character-status sr-only" role="status" data-character-status></span>';
+      '<span class="character-state" data-character-state>Adam</span><button type="button" class="character-play" data-action="play-character" aria-label="Brincar com personagem" aria-describedby="character-instructions"><span data-character-stage></span></button><span id="character-instructions" class="sr-only">Arraste suavemente, clique ou toque no personagem. Enter e Espaço também mudam sua expressão.</span><span class="character-status sr-only" role="status" data-character-status></span>';
     root.querySelectorAll(".ai-steps article").forEach((step, i) => {
       const symbol = step.querySelector("span")!;
       symbol.className = "ai-step-symbol";
       symbol.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${['<path d="M12 3v3m0 12v3M3 12h3m12 0h3M5.6 5.6l2 2m8.8 8.8 2 2M5.6 18.4l2-2m8.8-8.8 2-2"/><circle cx="12" cy="12" r="4"/>', '<rect x="3" y="3" width="18" height="18" rx="3"/><path d="M8 8h8M8 12h8M8 16h4"/>', '<path d="M5 3h9l5 5v13H5V3Z"/><path d="M14 3v6h5M8 14h8M8 18h5"/>'][i]}</svg>`;
     });
+  }
+  root.querySelector(".desktop-topbar > span")?.remove();
+  if (screen === "ai") {
+    const studio = root.querySelector(".ai-studio")!;
+    const copy = studio.querySelector(".ai-studio-copy")!;
+    copy.querySelector("h1")!.textContent = "Da sua ideia ao seu próximo PDF.";
+    studio.after(copy);
+  }
+  const rewards = root.querySelector(".rewards-section");
+  if (rewards) {
+    rewards.querySelector(".crown-preview > p")?.remove();
+    rewards.querySelector(":scope > .demo-note")?.remove();
+    const choices = document.createElement("fieldset");
+    choices.className = "reward-choices";
+    choices.innerHTML =
+      '<legend>Escolha um prêmio para o perfil</legend><div class="reward-options"><button type="button" data-reward-choice="crown" aria-pressed="true"><span data-reward-icon="crown" aria-hidden="true"></span>Coroa</button><button type="button" data-reward-choice="medal" aria-pressed="false"><span data-reward-icon="medal" aria-hidden="true"></span>Medalha</button><button type="button" data-reward-choice="star" aria-pressed="false"><span data-reward-icon="star" aria-hidden="true"></span>Estrela</button></div>';
+    rewards.querySelector(".crown-preview")!.before(choices);
   }
   return root.outerHTML;
 }

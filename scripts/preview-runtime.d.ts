@@ -6,6 +6,15 @@ interface MascotVolumeSnapshot {
   depth: number;
   gaze: number[];
   eyeQuaternion: number[];
+  eyePositions?: number[][];
+  bodyMaterial?: string;
+  bodyColor?: string;
+  dotfield?: {
+    active: boolean;
+    peak: number;
+    renderedFrames: number;
+    pointCount: number;
+  } | null;
   bodyAngle: number[];
   position: number[];
   renderedFrames: number;

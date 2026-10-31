@@ -2,6 +2,7 @@ import * as THREE from "three";
 import { SVGLoader } from "three/addons/loaders/SVGLoader.js";
 import { mergeVertices } from "three/addons/utils/BufferGeometryUtils.js";
 import { springStep, springConfig, dampFactor } from "./preview-motion.js";
+import { createMascotDotfield } from "./mascot-dotfield.js";
 
 window.previewMotion = { springStep, springConfig, dampFactor };
 
@@ -91,7 +92,7 @@ window.createMascotVolume = function createMascotVolume({
   }
   renderer.setPixelRatio(Math.min(devicePixelRatio || 1, 1.5));
   renderer.outputColorSpace = THREE.SRGBColorSpace;
-  renderer.toneMapping = THREE.ACESFilmicToneMapping;
+  renderer.toneMapping = THREE.NoToneMapping;
   renderer.toneMappingExposure = 1;
   renderer.domElement.className = "mascot-volume-canvas";
   renderer.domElement.setAttribute("aria-hidden", "true");
@@ -103,18 +104,9 @@ window.createMascotVolume = function createMascotVolume({
   camera.lookAt(0, 0, 0);
   const group = new THREE.Group();
   scene.add(group);
-  scene.add(new THREE.AmbientLight(0xffffff, 1.3));
-  const key = new THREE.DirectionalLight(0xfff6ec, 2.6);
-  key.position.set(-3, 4, 5);
-  scene.add(key);
-  const rim = new THREE.DirectionalLight(0xffffff, 2.0);
-  rim.position.set(4, 1, -3);
-  scene.add(rim);
-  const material = new THREE.MeshStandardMaterial({
-    color,
-    roughness: 0.68,
-    metalness: 0.01,
-  });
+  // The existing wrapped geometry preserves every silhouette, but its body
+  // deliberately has no lighting: the spatial cue belongs to the eyes alone.
+  const material = new THREE.MeshBasicMaterial({ color, toneMapped: false });
   const body = new THREE.Mesh(new THREE.SphereGeometry(1, 48, 32), material);
   group.add(body);
   const eyeMaterial = new THREE.MeshBasicMaterial({
@@ -131,6 +123,11 @@ window.createMascotVolume = function createMascotVolume({
     group.add(root);
     return mesh;
   });
+  const eyeAnchors = [new THREE.Vector3(), new THREE.Vector3()];
+  const facePose = new THREE.Euler(0, 0, 0, "YXZ");
+  const spherePoint = new THREE.Vector3();
+  const faceNormal = new THREE.Vector3();
+  const forward = new THREE.Vector3(0, 0, 1);
   let depth = 1;
   function updateAppearance(nextPath, nextKind, nextColor) {
     const wrapped = wrappedGeometry(nextPath, nextKind);
@@ -144,18 +141,19 @@ window.createMascotVolume = function createMascotVolume({
     ].forEach(([x, y], i) => {
       const px = (x - wrapped.center.x) * wrapped.scale,
         py = (wrapped.center.y - y) * wrapped.scale;
-      const z = depth * Math.sqrt(Math.max(0.2, 1 - px * px - py * py));
-      eyes[i].position.set(px, py, z + 0.04);
+      eyeAnchors[i].set(
+        px,
+        py,
+        Math.sqrt(Math.max(0.2, 1 - px * px - py * py)),
+      );
     });
     schedule();
   }
   const motionQuery = matchMedia("(prefers-reduced-motion: reduce)");
-  const pointer = new THREE.Vector2(),
-    ray = new THREE.Raycaster(),
-    plane = new THREE.Plane(new THREE.Vector3(0, 0, 1), -2.5);
+  const dotfield = createMascotDotfield(host.closest(".ai-studio"));
+  const pointer = new THREE.Vector2();
   const target = new THREE.Vector3(0, 0, 2.5),
-    gaze = target.clone(),
-    previousQuaternion = new THREE.Quaternion();
+    gaze = target.clone();
   let state = "idle",
     hovered = false,
     focused = false,
@@ -234,16 +232,9 @@ window.createMascotVolume = function createMascotVolume({
       const oldGaze = gaze.clone();
       gaze.lerp(target, dampFactor(dt, 0.15));
       moving ||= oldGaze.distanceTo(gaze) > 0.00005;
-      group.rotation.y = THREE.MathUtils.lerp(
-        group.rotation.y,
-        pointer.x * 0.1,
-        dampFactor(dt, 0.12),
-      );
-      group.rotation.x = THREE.MathUtils.lerp(
-        group.rotation.x,
-        -pointer.y * 0.06,
-        dampFactor(dt, 0.12),
-      );
+      // Keep the colored silhouette still while the face travels over its
+      // virtual sphere. Rotating the body would turn the gaze back into a wobble.
+      group.rotation.x = group.rotation.y = 0;
       const nervous = state === "nervous";
       group.position.set(
         x + (nervous ? Math.sin(time * 0.081) * 0.008 : 0),
@@ -272,17 +263,21 @@ window.createMascotVolume = function createMascotVolume({
       scale * pulse * squash,
       scale,
     );
+    facePose.set(reduced ? 0 : -gaze.y, reduced ? 0 : gaze.x, 0, "YXZ");
     for (let i = 0; i < eyes.length; i++) {
       eyeMeshes[i].scale.y = squint;
-      if (!reduced && state !== "happy") {
-        previousQuaternion.copy(eyes[i].quaternion);
-        eyes[i].lookAt(gaze);
-        const goal = eyes[i].quaternion.clone();
-        eyes[i].quaternion
-          .copy(previousQuaternion)
-          .slerp(goal, dampFactor(dt, 0.15));
-        moving ||= previousQuaternion.angleTo(eyes[i].quaternion) > 0.0001;
-      }
+      // A rigid sphere rotation changes x/y AND depth for each eye root,
+      // compressing their spacing toward the edge rather than sliding a face.
+      spherePoint.copy(eyeAnchors[i]).applyEuler(facePose);
+      eyes[i].position.set(
+        spherePoint.x,
+        spherePoint.y,
+        spherePoint.z * depth + 0.055,
+      );
+      faceNormal
+        .set(spherePoint.x, spherePoint.y, spherePoint.z / depth)
+        .normalize();
+      eyes[i].quaternion.setFromUnitVectors(forward, faceNormal);
     }
     renderer.render(scene, camera);
     renderedFrames++;
@@ -314,8 +309,7 @@ window.createMascotVolume = function createMascotVolume({
         1.5,
       ),
     );
-    ray.setFromCamera(pointer, camera);
-    ray.ray.intersectPlane(plane, target);
+    target.set(pointer.x * 0.34, pointer.y * 0.28, 2.5);
     if (drag && drag.id === event.pointerId) {
       const dx = event.clientX - drag.x,
         dy = event.clientY - drag.y;
@@ -427,6 +421,10 @@ window.createMascotVolume = function createMascotVolume({
       depth: depth * 2,
       gaze: gaze.toArray(),
       eyeQuaternion: eyes[0].quaternion.toArray(),
+      eyePositions: eyes.map((eye) => eye.position.toArray()),
+      bodyMaterial: material.type,
+      bodyColor: "#" + material.color.getHexString(),
+      dotfield: dotfield?.snapshot() || null,
       bodyAngle: group.rotation.toArray().slice(0, 3),
       renderedFrames,
       motionActive:
@@ -439,6 +437,7 @@ window.createMascotVolume = function createMascotVolume({
       clearTimeout(pendingHappy);
       clearTimeout(idleTimer);
       if (frame !== null) cancelAnimationFrame(frame);
+      dotfield?.dispose();
       observer.disconnect();
       intersection.disconnect();
       motionQuery.removeEventListener("change", preference);

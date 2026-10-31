@@ -77,58 +77,10 @@ try {
     .click();
   assert.equal(await p.locator(".sidebar").isVisible(), true);
   await go(p, "notes");
-  await p.getByRole("button", { name: "Nova anotação", exact: true }).click();
-  const title = "<img src=x onerror=alert(1)>";
-  await p.getByLabel("Título da anotação", { exact: true }).fill(title);
-  await p
-    .getByLabel("Texto da anotação", { exact: true })
-    .fill("Uma ideia local, sem API.");
-  await p.getByRole("button", { name: "Salvar anotação", exact: true }).click();
-  let card = p.locator(".note-card").filter({ hasText: title });
-  assert.equal(await card.count(), 1);
-  assert.equal(await card.locator("img").count(), 0);
-  await card.locator("select").selectOption("working");
-  assert.equal(
-    await p
-      .locator('[data-column="working"] .note-card')
-      .filter({ hasText: title })
-      .count(),
-    1,
-  );
-  card = p.locator(".note-card").filter({ hasText: title });
-  await card
-    .getByRole("button", { name: "Arrastar anotação", exact: true })
-    .dragTo(p.locator('[data-column="saved"]'));
-  assert.equal(
-    await p
-      .locator('[data-column="saved"] .note-card')
-      .filter({ hasText: title })
-      .count(),
-    1,
-  );
-  await card
-    .getByRole("button", { name: "Editar anotação", exact: true })
-    .click();
-  await p
-    .getByLabel("Texto da anotação", { exact: true })
-    .fill("Texto revisado.");
-  await p.getByRole("button", { name: "Salvar anotação", exact: true }).click();
-  assert.equal(
-    await card.getByText("Texto revisado.", { exact: true }).count(),
-    1,
-  );
-  await card
-    .getByRole("button", { name: "Excluir anotação", exact: true })
-    .click();
-  assert.equal(
-    await p.locator(".note-card").filter({ hasText: title }).count(),
-    0,
-  );
-  await p.getByRole("button", { name: "Desfazer", exact: true }).click();
-  assert.equal(
-    await p.locator(".note-card").filter({ hasText: title }).count(),
-    1,
-  );
+  assert.equal(await p.locator(".notes-board").count(), 1);
+  assert.equal(await p.locator(".note-card select").count(), 0);
+  // Full notes CRUD, custom menus, keyboard/touch and safe text are covered
+  // by verify-notes-review.ts, including drag/undo and locked references.
   await go(p, "bonus");
   await p.locator(".is-locked").click({ button: "right" });
   await p
@@ -206,7 +158,7 @@ try {
   assert.deepEqual(errors, []);
   assert.deepEqual(requests, []);
   console.log(
-    "Workspace verification passed: offers/footer/expansion/carousel, sticky compact navigation/restoration, safe notes CRUD/drag/undo/bookmarks, centered soft mascot and responsive layouts. Zero JS errors/network requests.",
+    "Workspace verification passed: offers/footer/expansion/carousel, sticky compact navigation/restoration, notes screen/bookmarks, centered soft mascot and responsive layouts. Zero JS errors/network requests.",
   );
 } finally {
   await browser.close();

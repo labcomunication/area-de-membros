@@ -47,7 +47,9 @@ try {
     const nervousLinks = [];
     const compactLinks = [],
       scrollLinks = [],
-      editorLinks = [];
+      editorLinks = [],
+      menuLinks = [],
+      ebookLinks = [];
     for (const [device, width, height] of [
       ["desktop", 1440, 1000],
       ["mobile", 390, 844],
@@ -214,6 +216,29 @@ try {
       }
       if (offlineReview && item.screen === "notes") {
         await page
+          .locator(".note-card")
+          .first()
+          .getByRole("button", { name: /^Mover anotação/ })
+          .click();
+        await page.screenshot({
+          path: `docs/screenshots/notes-menu-${device}.png`,
+        });
+        captureCount++;
+        menuLinks.push(`[${device}](notes-menu-${device}.png)`);
+        await page.keyboard.press("Escape");
+        await page
+          .getByRole("button", { name: "Adicionar ao quadro", exact: true })
+          .click();
+        await page
+          .getByRole("menuitem", { name: "Adicionar e-book", exact: true })
+          .click();
+        await page.screenshot({
+          path: `docs/screenshots/notes-ebooks-${device}.png`,
+        });
+        captureCount++;
+        ebookLinks.push(`[${device}](notes-ebooks-${device}.png)`);
+        await page.keyboard.press("Escape");
+        await page
           .getByRole("button", { name: "Nova anotação", exact: true })
           .click();
         await page
@@ -263,13 +288,41 @@ try {
       index.push(
         `| home | ícones no topo · página rolada | ${scrollLinks[0]} | ${scrollLinks[1]} |`,
       );
+    if (menuLinks.length)
+      index.push(
+        `| notes | menu de movimentação | ${menuLinks[0]} | ${menuLinks[1]} |`,
+      );
+    if (ebookLinks.length)
+      index.push(
+        `| notes | referências de e-books | ${ebookLinks[0]} | ${ebookLinks[1]} |`,
+      );
     if (editorLinks.length)
       index.push(
         `| notes | editor local de anotação | ${editorLinks[0]} | ${editorLinks[1]} |`,
       );
   }
+  if (offlineReview && offlineHtml) {
+    const page = await browser.newPage({
+      viewport: { width: 1024, height: 320 },
+      reducedMotion: "reduce",
+    });
+    await page.route("**/*", (route) => route.abort());
+    await page.setContent(offlineHtml);
+    await page.locator(".home-zone-a").waitFor();
+    await page.locator(".sidebar nav a").last().focus();
+    await page.screenshot({ path: "docs/screenshots/home-short-window.png" });
+    captureCount++;
+    await page.close();
+    index.push(
+      "",
+      "[Menu em janela baixa, com rolagem preservada](home-short-window.png)",
+    );
+  }
   if (offlineReview)
-    index.push("", "[Detalhe do mascote em volume 3D](mascot-eyes.png)");
+    index.push(
+      "",
+      "[Detalhe do mascote fosco com olhar esférico](mascot-eyes.png)",
+    );
   await writeFile(
     offline
       ? "docs/screenshots/README-preview.md"

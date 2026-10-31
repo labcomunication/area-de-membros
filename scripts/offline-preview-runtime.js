@@ -5,6 +5,7 @@ const appearance = {
   mode: "light",
   accent: "wine",
   crown: false,
+  reward: "crown",
   avatar: "pistache",
   navMode: "sidebar",
 };
@@ -53,24 +54,62 @@ function applyAppearance() {
       String(button.dataset.accent === appearance.accent),
     );
   });
+  paintRewards();
+}
+const rewardSymbols = {
+  crown: '<path d="m3 7 5 4 4-7 4 7 5-4-2 12H5L3 7Z"/><path d="M6 22h12"/>',
+  medal:
+    '<path d="m6 3 6 8 6-8M4 3h5l3 4 3-4h5l-6 9"/><circle cx="12" cy="16" r="5"/><path d="m12 13 .8 1.7 1.9.3-1.4 1.3.3 1.9-1.6-.9-1.6.9.3-1.9L9.3 15l1.9-.3Z"/>',
+  star: '<path d="m12 3 2.8 5.7 6.2.9-4.5 4.4 1.1 6.2-5.6-3-5.6 3 1.1-6.2L3 9.6l6.2-.9L12 3Z"/>',
+};
+function rewardIcon(id) {
+  return (
+    '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">' +
+    rewardSymbols[id] +
+    "</svg>"
+  );
+}
+function paintRewards() {
+  view.querySelectorAll("[data-reward-icon]").forEach((el) => {
+    el.innerHTML = rewardIcon(el.dataset.rewardIcon);
+  });
+  view
+    .querySelectorAll("[data-reward-choice]")
+    .forEach((button) =>
+      button.setAttribute(
+        "aria-pressed",
+        String(button.dataset.rewardChoice === appearance.reward),
+      ),
+    );
   view.querySelectorAll(".avatar").forEach((avatar) => {
     avatar.querySelector(".profile-crown")?.remove();
     if (appearance.crown) {
-      const crown = document.createElement("span");
-      crown.className = "profile-crown";
-      crown.setAttribute("aria-hidden", "true");
-      crown.innerHTML =
-        '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="m3 7 5 4 4-7 4 7 5-4-2 12H5L3 7Z"/><path d="M6 22h12"/></svg>';
-      avatar.append(crown);
+      const badge = document.createElement("span");
+      badge.className = "profile-crown profile-reward";
+      badge.dataset.reward = appearance.reward;
+      badge.setAttribute("aria-hidden", "true");
+      badge.innerHTML = rewardIcon(appearance.reward);
+      avatar.append(badge);
     }
   });
-  const crownButton = view.querySelector('[data-action="crown"]');
-  if (crownButton) {
-    crownButton.setAttribute("aria-pressed", String(appearance.crown));
-    crownButton.textContent = appearance.crown
-      ? "Ocultar coroa de exemplo"
-      : "Ver coroa no perfil";
+  const labels = { crown: "coroa", medal: "medalha", star: "estrela" };
+  const button = view.querySelector('[data-action="crown"]');
+  if (button) {
+    button.setAttribute("aria-pressed", String(appearance.crown));
+    button.textContent =
+      (appearance.crown ? "Ocultar " : "Ver ") +
+      labels[appearance.reward] +
+      (appearance.crown ? " do perfil" : " no perfil");
   }
+}
+function setAppearancePanel(open, returnFocus = false) {
+  const options = document.getElementById("appearance-options");
+  if (!options) return;
+  options.hidden = !open;
+  const trigger = view.querySelector('[data-action="appearance"]');
+  trigger.setAttribute("aria-expanded", String(open));
+  trigger.textContent = open ? "Fechar" : "Editar";
+  if (returnFocus) trigger.focus();
 }
 
 function closeMenu() {
@@ -122,10 +161,7 @@ document.addEventListener("keydown", (event) => {
     return window.previewCharacters.closeAvatarPicker();
   const options = document.getElementById("appearance-options");
   if (options && !options.hidden) {
-    options.hidden = true;
-    const trigger = view.querySelector('[data-action="appearance"]');
-    trigger?.setAttribute("aria-expanded", "false");
-    trigger?.focus();
+    setAppearancePanel(false, true);
   } else closeMenu();
 });
 document.addEventListener("click", (event) => {
@@ -158,9 +194,7 @@ document.addEventListener("click", (event) => {
     return window.previewCharacters.playCharacter(event);
   if (button?.dataset.action === "appearance") {
     const options = document.getElementById("appearance-options");
-    options.hidden = !options.hidden;
-    button.setAttribute("aria-expanded", String(!options.hidden));
-    if (!options.hidden) options.querySelector("button")?.focus();
+    setAppearancePanel(options.hidden);
     return;
   }
   if (button?.dataset.mode || button?.dataset.accent) {
@@ -171,6 +205,15 @@ document.addEventListener("click", (event) => {
     applyAppearance();
     document.getElementById("appearance-status").textContent =
       "Preferência aplicada apenas nesta prévia; não é salva na conta.";
+    return;
+  }
+  if (
+    button?.dataset.rewardChoice &&
+    Object.hasOwn(rewardSymbols, button.dataset.rewardChoice)
+  ) {
+    appearance.reward = button.dataset.rewardChoice;
+    appearance.crown = true;
+    paintRewards();
     return;
   }
   if (button?.dataset.action === "crown") {

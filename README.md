@@ -101,6 +101,6 @@ Regenerar documentos: `npm run docs:design` (Python 3 + Chromium). Regenerar dem
 
 ## Abrir sem instalar o projeto
 
-[Baixe a prévia offline](docs/preview/wireframe.zip), extraia e abra wireframe.html no Chrome/Edge. São 39 telas/variantes com dados fictícios, navegação animada, mascote Three.js, opções de aparência e quadro de anotações em memória. Compras, login e IA continuam sem integração. Funciona sem servidor cloud ou rede; não substitui a aplicação React. [Detalhes](docs/preview/README.md).
+[Baixe a prévia offline](docs/preview/wireframe.zip), extraia e abra wireframe.html no Chrome/Edge. São 39 telas/variantes com dados fictícios, navegação animada, mascote fosco com olhar esférico, opções de aparência e quadro de anotações em memória. Compras, login e IA continuam sem integração. Funciona sem servidor cloud ou rede; não substitui a aplicação React. [Detalhes](docs/preview/README.md).
 
-A Home reúne próximo passo, biblioteca, publicações e ofertas. A revisão inclui menu compacto fixo no topo, cinco ofertas ilustrativas com rodapés alinhados e mascote centralizado com olhar 3D, hover, expressão feliz e nervosismo por cliques rápidos. [Capturas desktop/mobile](docs/screenshots/README-preview.md) · [Checklist](docs/preview/acceptance.md).
+A Home reúne próximo passo, biblioteca, publicações e ofertas. A revisão inclui menu compacto fixo no topo, cinco ofertas ilustrativas com rodapés alinhados e mascote centralizado com olhar esférico, pontilhado reativo, hover, expressão feliz e nervosismo por cliques rápidos. A revisão dos prints também ajusta menus de anotações, adornos de perfil, capas e espaçamentos. [Capturas desktop/mobile](docs/screenshots/README-preview.md) · [Checklist](docs/preview/acceptance.md).
