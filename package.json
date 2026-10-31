@@ -1,0 +1,42 @@
+{
+  "name": "area-de-membros",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=24 <25"
+  },
+  "scripts": {
+    "dev": "next dev --hostname 127.0.0.1",
+    "build": "next build",
+    "start": "next start --hostname 127.0.0.1",
+    "lint": "eslint .",
+    "typecheck": "next typegen && tsc --noEmit",
+    "test": "tsx --test tests/*.test.ts",
+    "test:e2e": "playwright test",
+    "screenshots": "tsx scripts/screenshots.ts",
+    "format": "prettier --write src tests scripts *.ts *.mjs",
+    "docs:design": "python3 scripts/build-design-docs.py && tsx scripts/export-design-pdfs.ts",
+    "demo:scroll": "tsx scripts/record-menu-scroll.ts",
+    "preview:offline": "tsx scripts/export-offline-wireframe.ts && python3 -m zipfile -c docs/preview/wireframe.zip docs/preview/wireframe.html"
+  },
+  "dependencies": {
+    "next": "16.4.3",
+    "react": "19.3.1",
+    "react-dom": "19.3.1"
+  },
+  "devDependencies": {
+    "@axe-core/playwright": "4.14.0",
+    "@playwright/test": "1.64.1",
+    "@types/node": "26.6.6",
+    "@types/react": "19.3.0",
+    "@types/react-dom": "19.3.0",
+    "esbuild": "0.28.2",
+    "eslint": "9.39.5",
+    "eslint-config-next": "16.4.3",
+    "prettier": "3.9.10",
+    "three": "0.187.0",
+    "tsx": "4.23.15",
+    "typescript": "6.0.3"
+  }
+}

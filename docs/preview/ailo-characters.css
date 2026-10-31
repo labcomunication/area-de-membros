@@ -1,0 +1,39 @@
+/* Rounded screen family, shared by static profile, graph and WebGL fallback. */
+.character[data-family="rounded-screen"] {
+  background: transparent;
+  box-shadow: none;
+  border-radius: 0;
+  overflow: visible;
+  color: #fff;
+}
+.character[data-family="rounded-screen"] .character-body {
+  fill: var(--character-fill);
+  stroke: none;
+}
+.character[data-family="rounded-screen"] .character-screen {
+  fill: var(--character-screen);
+  stroke: none;
+}
+.character[data-family="rounded-screen"] .character-eyes {
+  fill: #fff;
+}
+.character[data-family="rounded-screen"] .character-happy-eyes {
+  display: none;
+  fill: none;
+  stroke: #fff;
+  stroke-width: 4;
+  stroke-linecap: round;
+}
+.character[data-family="rounded-screen"][data-mood="happy"] .character-eyes {
+  display: none;
+}
+.character[data-family="rounded-screen"][data-mood="happy"]
+  .character-happy-eyes {
+  display: block;
+}
+.character[data-family="rounded-screen"][data-mood="nervous"] .character-brows {
+  display: block;
+  fill: none;
+  stroke: #fff;
+  stroke-width: 2;
+}

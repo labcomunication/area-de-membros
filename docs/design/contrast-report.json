@@ -1,0 +1,95 @@
+{
+  "method": "WCAG sRGB relative luminance; ratios before rounding",
+  "validated": [
+    {
+      "pair": "Grafite / branco",
+      "foreground": "#2D2D2D",
+      "background": "#FFFFFF",
+      "ratio": 13.7721,
+      "minimum": 4.5,
+      "passes": true
+    },
+    {
+      "pair": "Grafite / lavanda",
+      "foreground": "#2D2D2D",
+      "background": "#D0D8EF",
+      "ratio": 9.6737,
+      "minimum": 4.5,
+      "passes": true
+    },
+    {
+      "pair": "Grafite / oliva",
+      "foreground": "#2D2D2D",
+      "background": "#9EA466",
+      "ratio": 5.2176,
+      "minimum": 4.5,
+      "passes": true
+    },
+    {
+      "pair": "Branco / vinho",
+      "foreground": "#FFFFFF",
+      "background": "#722F46",
+      "ratio": 9.5,
+      "minimum": 4.5,
+      "passes": true
+    },
+    {
+      "pair": "Vinho / branco",
+      "foreground": "#722F46",
+      "background": "#FFFFFF",
+      "ratio": 9.5,
+      "minimum": 4.5,
+      "passes": true
+    },
+    {
+      "pair": "Vinho / lavanda",
+      "foreground": "#722F46",
+      "background": "#D0D8EF",
+      "ratio": 6.6729,
+      "minimum": 4.5,
+      "passes": true
+    },
+    {
+      "pair": "Grafite / oliva hover",
+      "foreground": "#2D2D2D",
+      "background": "#939A5B",
+      "ratio": 4.5998,
+      "minimum": 4.5,
+      "passes": true
+    },
+    {
+      "pair": "Branco / vinho hover",
+      "foreground": "#FFFFFF",
+      "background": "#62273B",
+      "ratio": 11.2138,
+      "minimum": 4.5,
+      "passes": true
+    },
+    {
+      "pair": "Branco / vinho active",
+      "foreground": "#FFFFFF",
+      "background": "#512031",
+      "ratio": 13.1183,
+      "minimum": 4.5,
+      "passes": true
+    },
+    {
+      "pair": "Borda funcional / branco",
+      "foreground": "#737781",
+      "background": "#FFFFFF",
+      "ratio": 4.4827,
+      "minimum": 3,
+      "passes": true
+    }
+  ],
+  "notApproved": [
+    {
+      "pair": "Branco / oliva",
+      "ratio": 2.6396
+    },
+    {
+      "pair": "Vinho / oliva (texto normal)",
+      "ratio": 3.5991
+    }
+  ]
+}

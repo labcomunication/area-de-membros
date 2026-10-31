@@ -1,0 +1,18 @@
+# Revisão dos prints — prévia de membros
+
+Autorizada após levantamento em voz em 30/10/2026. Base local c5ea23b, branch feat/members-wireframe. Autorização posterior: ao terminar, atualizar os arquivos na branch de trabalho do GitHub com push normal. Não publicar site, abrir PR, integrar main, reescrever histórico ou fazer deploy. Não alterar src/, autenticação, acesso, preços, APIs ou docs/design/. Preferências e notas continuam em memória.
+
+## Resultado esperado
+
+1. Sidebar um pouco mais larga (264px em vez de 240px), todos os rótulos legíveis mesmo inativos, sem barra horizontal. Ocultar a aparência da barra vertical preservando rolagem por roda, toque e teclado em janelas baixas. Perfil continua no rodapé. A animação de nome ativo permanece só nas navegações compactas. Remover a frase “Aprender faz parte de você.” dos cabeçalhos. Barra superior fixa ganha vidro fosco após rolar, com texto/ícones nítidos.
+2. Ofertas preservam a proporção retrato das capas do catálogo, em vez de esticar a imagem pela altura inteira do card; carrossel continua manual e rodapés alinhados. Remover o bloco/degradê/borda decorativa inferior dos itens de publicações. Abas Conteúdo/Bônus/Materiais sem fundo, com ativo indicado por texto/sublinhado.
+3. Mascotes mantêm quinze formas/cores e olhos claros em cápsula; retirar relevo/luz do corpo. Aparência fosca uniforme com olhar seguindo a curvatura de uma esfera virtual, suave e visível. Manter hover, happy, nervous, arraste e movimento reduzido. Não alterar marca para copiar Kona.
+4. Estúdio IA: nome e mascote no centro; título sem quebra forçada e numa linha em desktop; apoio, botão e microtexto abaixo/fora do box. No mobile, permitir quebra natural legível. Fundo pontilhado cinza discreto no box do mascote; proximidade do ponteiro ilumina pontos com queda radial e rastro que desaparece, sem animação infinita. Reduzir movimento desativa o rastro.
+5. Notas: seletor desenhado com o visual da página (sem select nativo), operável por teclado/toque. Editar/excluir passam para menu de ações no canto, preservando puxador de arraste. Botão direito no quadro/colunas abre ações Adicionar nota/Adicionar e-book/Escrever nota, também disponíveis num botão acessível. E-books serão referências da biblioteca de demonstração, sem upload, arquivo real ou desbloqueio. Conteúdo livre sempre texto simples; exclusão tem desfazer; manter marcador e referências bloqueadas.
+6. Personalização: botão Editar vira Fechar com preenchimento no acento selecionado enquanto painel aberto; Escape fecha e restaura rótulo/foco. Aumentar espaço entre escolhas e ajuda. Retirar os dois textos de apoio da coroa apontados. Oferecer três adornos demonstrativos (coroa, medalha, estrela), escolher um e visualizar/ocultar no perfil; escolha preservada entre telas sem conceder prêmios reais.
+
+## Abordagem e limites
+
+Refinar exportador/controladores existentes; sem reescrever app ou criar segundo mascote. Reutilizar Three.js com material de corpo sem luz e transformar o grupo dos olhos sobre esfera virtual. Essa escolha mantém a infraestrutura de interação já verificada; SVG puro exigiria substituir o motor e não traz benefício para esta revisão. Fundo de pontos é uma ilha canvas limitada ao palco, com RAF somente enquanto há transição/rastro e pausa fora da vista.
+
+Modo principal Operate; mascote é o único momento expressivo. Menus usam feedback curto e acessível, sem efeitos de entrada da página. Vidro fosco é pedido explícito, restrito ao cabeçalho rolado. Testar variantes clara/escura, quatro larguras, janelas baixas, ponteiro, teclado, toque, movimento reduzido, troca de página e ausência de rede. Capturas desktop/mobile em uma rodada conjunta e no máximo uma confirmação após correções.

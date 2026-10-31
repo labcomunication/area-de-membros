@@ -1,0 +1,353 @@
+/* Selected Apple/overlay/editor references; not the final design-system docs. */
+:root {
+  --font-body: "Noto Sans", system-ui, sans-serif;
+  --font-display: "Noto Sans", system-ui, sans-serif;
+  --surface-canvas: #f5f5f7;
+  --surface-quiet: #f4f4f6;
+  --continuous-radius: 24px;
+  --continuous-corner: superellipse(1.6);
+}
+.dev-preview-settings {
+  position: relative;
+  margin-left: auto;
+}
+.dev-preview-settings > summary {
+  min-height: 44px;
+  display: flex;
+  align-items: center;
+  padding: 8px 14px;
+  border-radius: 12px;
+  background: var(--selection-surface);
+  color: var(--color-text);
+  cursor: pointer;
+  font-size: 12px;
+  font-weight: 600;
+}
+.dev-feature-panel {
+  position: absolute;
+  right: 0;
+  top: calc(100% + 12px);
+  z-index: 1200;
+  display: grid;
+  gap: 16px;
+  width: min(360px, calc(100vw - 32px));
+  padding: 24px;
+  border-radius: 24px;
+  corner-shape: var(--continuous-corner);
+  background: var(--color-surface);
+  color: var(--color-text);
+  box-shadow: 0 16px 48px #20252030;
+}
+.dev-feature-panel h2 {
+  margin: 0;
+  font-size: 18px;
+}
+.dev-feature-panel > label {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-height: 44px;
+}
+.dev-feature-panel input {
+  width: 20px;
+  height: 20px;
+  accent-color: var(--selection-bar);
+}
+.dev-feature-panel p {
+  margin: 0;
+  font-size: 12px;
+  line-height: 1.6;
+}
+body {
+  background: var(--surface-canvas);
+}
+body :is(h1, h2, h3, h4) {
+  font-family: var(--font-display) !important;
+}
+body :is(input, textarea, select, button) {
+  font-family: var(--font-body);
+}
+body
+  :is(
+    .main-content,
+    .product-card,
+    .offer-card,
+    .account-panel,
+    .activity-panel,
+    .personalization-card,
+    .avatar-picker-panel,
+    .reward-card,
+    .rewards-section,
+    .support-card,
+    .state-panel,
+    .access-card,
+    .future-notice,
+    .preview-banner,
+    .editorial-card,
+    .note-card,
+    .notes-heading,
+    .note-editor,
+    .notes-helper,
+    .board-column,
+    .desktop-topbar,
+    .mobile-header,
+    .sidebar,
+    .ai-studio,
+    .ai-flow-studio,
+    .notes-popover,
+    .notes-resource-picker,
+    .resource-context-menu,
+    .preview-toast,
+    dialog
+  ) {
+  border: 0;
+  border-radius: var(--continuous-radius);
+}
+:is(
+  .product-card,
+  .offer-card,
+  .account-panel,
+  .activity-panel,
+  .personalization-card,
+  .avatar-picker-panel,
+  .reward-card,
+  .board-column,
+  .rewards-section,
+  .state-panel,
+  .access-card,
+  .future-notice,
+  .preview-banner,
+  .editorial-card,
+  .note-card,
+  .notes-heading,
+  .notes-helper,
+  .ai-studio,
+  .ai-flow-studio,
+  dialog
+) {
+  corner-shape: var(--continuous-corner);
+}
+:is(
+  .button,
+  .icon-button,
+  .theme-choice,
+  .accent-choice,
+  .reward-options button,
+  .notes-popover,
+  .note-tools button,
+  .note-editor input,
+  .note-editor textarea,
+  .flow-node
+) {
+  corner-shape: var(--continuous-corner);
+}
+.sidebar,
+.desktop-topbar {
+  corner-shape: var(--continuous-corner);
+}
+body .sidebar {
+  background: #eeeef0;
+  box-shadow: none;
+}
+.account-panel,
+.activity-panel,
+.avatar-picker-panel,
+.reward-card {
+  background: var(--surface-quiet);
+}
+.personalization-card,
+.rewards-section {
+  background: var(--color-surface);
+}
+.future-notice {
+  background: var(--surface-quiet);
+}
+.product-card {
+  box-shadow: none;
+  background: var(--surface-quiet);
+}
+:is(
+  .account-panel,
+  .activity-panel,
+  .product-card,
+  .note-card,
+  .offer-card,
+  .preview-banner
+) {
+  box-shadow: none;
+}
+:is(input, textarea):not([type="file"]) {
+  background: var(--surface-quiet);
+}
+.ai-content > .ai-studio-copy h1 {
+  font-weight: 600;
+  letter-spacing: -0.03em;
+}
+.ai-flow-studio {
+  box-sizing: border-box;
+  margin-top: 24px;
+  padding: 28px;
+  min-width: 0;
+  background: var(--color-surface);
+}
+.ai-content > .ai-studio-copy {
+  margin-top: 32px;
+}
+/* Only the explicitly selected recommendation section gets the new format. */
+.offers-grid.recommendation-track {
+  grid-auto-columns: minmax(300px, calc((100% - 48px) / 3));
+  gap: 24px;
+}
+.offer-track > .recommendation-card {
+  display: block;
+  position: relative;
+  height: 600px;
+  min-height: 600px;
+  padding: 0;
+  overflow: hidden;
+  isolation: isolate;
+  background: #e3e5dd;
+}
+.recommendation-card .recommendation-media {
+  position: absolute;
+  inset: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+  padding: 0;
+  background: #e3e5dd;
+  z-index: -1;
+}
+.offer-track .recommendation-media > .asset-placeholder.cover {
+  width: 100%;
+  height: 100%;
+  aspect-ratio: auto;
+  border: 0;
+  border-radius: 0;
+  padding: 48px 20px 360px;
+  overflow: hidden;
+  font-size: 12px;
+}
+.recommendation-media > .asset-placeholder::before {
+  inset: 24px;
+}
+.recommendation-card .recommendation-sheet {
+  position: absolute;
+  left: 12px;
+  right: 12px;
+  bottom: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 20px;
+  max-height: calc(100% - 48px);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  background: var(--color-surface);
+  border: 0;
+  border-radius: 24px;
+  corner-shape: var(--continuous-corner);
+  box-shadow: 0 8px 24px -16px #20251f35;
+}
+.recommendation-sheet > h3 {
+  min-height: 0;
+  font-size: 18px;
+  line-height: 1.35;
+}
+.recommendation-sheet
+  .offer-description:not([data-expanded="true"])
+  > p:not(.price):not(.microcopy) {
+  -webkit-line-clamp: 2;
+}
+.recommendation-sheet .offer-description > p {
+  font-size: 14px;
+  line-height: 1.5;
+}
+.recommendation-sheet .offer-description-toggle {
+  min-height: 44px;
+}
+.recommendation-sheet .offer-footer {
+  margin-top: 8px;
+  gap: 8px;
+}
+.recommendation-sheet .offer-footer .microcopy {
+  font-size: 10px;
+  line-height: 1.5;
+}
+.recommendation-sheet .offer-footer .price {
+  font-size: 26px;
+}
+.recommendation-sheet .offer-badge {
+  font-size: 9px;
+}
+.recommendation-card:nth-child(2n) .recommendation-media {
+  background: #e6ddd8;
+}
+.recommendation-card:nth-child(3n) .recommendation-media {
+  background: #dfe3eb;
+}
+html[data-preview-mode="dark"] {
+  --surface-canvas: #171917;
+  --surface-quiet: #292c29;
+}
+html[data-preview-mode="dark"] body {
+  background: var(--surface-canvas);
+}
+html[data-preview-mode="dark"]
+  :is(.account-panel, .activity-panel, .product-card) {
+  background: var(--surface-quiet);
+}
+html[data-preview-mode="dark"] .sidebar {
+  background: #222522;
+}
+html[data-preview-mode="dark"] .recommendation-card .recommendation-media {
+  background: #343a31;
+}
+@media (max-width: 1023px) {
+  .ai-content > .ai-studio-copy h1 {
+    white-space: normal;
+    text-wrap: balance;
+  }
+}
+@media (max-width: 767px) {
+  .offers-grid.recommendation-track {
+    grid-auto-columns: 100%;
+    gap: 16px;
+  }
+  .offer-track > .recommendation-card {
+    height: 600px;
+    min-height: 600px;
+  }
+  .recommendation-card .recommendation-sheet {
+    padding: 18px;
+  }
+  .ai-flow-studio {
+    border-radius: 20px;
+    padding: 20px;
+  }
+}
+body
+  :is(
+    button,
+    input,
+    textarea,
+    select,
+    .avatar-choice,
+    .notes-popover,
+    .notes-resource-option,
+    .flow-button
+  ) {
+  corner-shape: var(--continuous-corner);
+}
+:is(
+  .cover-link,
+  .asset-placeholder,
+  .story-media,
+  .reward-card,
+  .sidebar nav a,
+  .drawer nav a,
+  .compact-nav-track a,
+  .notes-resource-picker
+) {
+  corner-shape: var(--continuous-corner);
+}

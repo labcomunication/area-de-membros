@@ -1,0 +1,474 @@
+.ai-flow-studio {
+  width: 100%;
+  max-width: 1200px;
+  min-width: 0;
+  margin: 32px auto 40px;
+  color: #292b2b;
+  --flow-surface: #fff;
+  --flow-soft: #f3f4f3;
+  --flow-ink: #292b2b;
+  --flow-muted: #686d6b;
+  --flow-line: #a6afaa;
+  --flow-focus: #424d47;
+}
+.ai-flow-studio *,
+.ai-flow-studio *::before,
+.ai-flow-studio *::after {
+  box-sizing: border-box;
+}
+.ai-flow-studio [data-flow-root] {
+  min-width: 0;
+}
+.ai-flow-studio button,
+.ai-flow-studio textarea,
+.ai-flow-studio select {
+  font: inherit;
+}
+.ai-flow-studio .flow-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
+  margin-bottom: 20px;
+}
+.ai-flow-studio .flow-heading h2 {
+  margin: 5px 0 6px;
+  font-size: clamp(21px, 3vw, 28px);
+  line-height: 1.2;
+  font-weight: 650;
+  letter-spacing: -0.7px;
+}
+.ai-flow-studio .flow-heading p {
+  margin: 0;
+  color: var(--flow-muted);
+  font-size: 13px;
+}
+.ai-flow-studio .flow-heading .flow-eyebrow {
+  font-size: 10px;
+  font-weight: 650;
+  letter-spacing: 1.7px;
+}
+.ai-flow-studio .flow-local-label {
+  flex-shrink: 0;
+  font-size: 11px;
+  color: var(--flow-muted);
+  background: var(--flow-surface);
+  padding: 8px 12px;
+  border-radius: 20px;
+}
+.ai-flow-studio .flow-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 12px;
+}
+.ai-flow-studio .flow-toolbar > span {
+  font-size: 11px;
+  color: var(--flow-muted);
+}
+.ai-flow-studio .flow-button {
+  min-height: 42px;
+  border: 0;
+  border-radius: 14px;
+  padding: 10px 15px;
+  background: var(--flow-soft);
+  color: var(--flow-ink);
+  cursor: pointer;
+  font-size: 12px;
+  font-weight: 600;
+  line-height: 1.4;
+}
+.ai-flow-studio .flow-primary {
+  background: #303632;
+  color: white;
+}
+.ai-flow-studio .flow-button:hover:not(:disabled) {
+  filter: brightness(0.95);
+}
+.ai-flow-studio .flow-help {
+  font-size: 11px;
+  color: var(--flow-muted);
+  margin: 0 0 12px;
+  line-height: 1.6;
+}
+.ai-flow-studio .flow-file-input {
+  display: none;
+}
+.ai-flow-studio .flow-viewport {
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  height: 460px;
+  overflow: auto;
+  overscroll-behavior: contain;
+  border-radius: 28px;
+  background: #f4f6f4;
+  scrollbar-width: thin;
+  scrollbar-color: #aeb5af transparent;
+  touch-action: pan-x pan-y;
+}
+.ai-flow-studio .flow-canvas {
+  width: 1120px;
+  height: 760px;
+  position: relative;
+  background-image: radial-gradient(#cbd0cb 0.9px, transparent 0.9px);
+  background-size: 20px 20px;
+}
+.ai-flow-studio .flow-edges {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  overflow: visible;
+}
+.ai-flow-studio .flow-edges path {
+  fill: none;
+  stroke: var(--flow-line);
+  stroke-width: 2;
+}
+.ai-flow-studio .flow-edges .flow-edge-preview {
+  stroke-dasharray: 6 5;
+  stroke: var(--flow-focus);
+}
+.ai-flow-studio .flow-node {
+  position: absolute;
+  width: 246px;
+  min-height: 194px;
+  margin: 0;
+  padding: 15px 18px 17px;
+  border: 0;
+  border-radius: 25px;
+  background: var(--flow-surface);
+  box-shadow: 0 4px 16px #26352b08;
+  text-align: left;
+  color: var(--flow-ink);
+}
+.ai-flow-studio .flow-node[data-kind="assistant"] {
+  width: 262px;
+  min-height: 220px;
+  text-align: center;
+}
+.ai-flow-studio .flow-node[data-kind="pdf"] {
+  width: 246px;
+  min-height: 220px;
+  text-align: center;
+}
+.ai-flow-studio .flow-node-head {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  margin: -7px -10px 11px;
+}
+.ai-flow-studio .flow-move {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  flex: 1;
+  min-width: 0;
+  min-height: 42px;
+  padding: 6px 9px;
+  text-align: left;
+  background: transparent;
+  color: var(--flow-muted);
+  border: 0;
+  border-radius: 12px;
+  cursor: grab;
+  touch-action: none;
+  font-size: 11px;
+}
+.ai-flow-studio .flow-move:active {
+  cursor: grabbing;
+}
+.ai-flow-studio .flow-grip {
+  font-size: 20px;
+  color: #9a9f9b;
+  line-height: 1;
+}
+.ai-flow-studio .flow-delete {
+  display: grid;
+  place-items: center;
+  width: 42px;
+  min-width: 42px;
+  height: 42px;
+  font-size: 21px;
+  background: transparent;
+  color: var(--flow-muted);
+  border: 0;
+  border-radius: 12px;
+  cursor: pointer;
+}
+.ai-flow-studio .flow-delete:hover {
+  background: var(--flow-soft);
+}
+.ai-flow-studio .flow-person-avatar {
+  width: 36px;
+  height: 36px;
+  display: block;
+  margin-bottom: 6px;
+  overflow: hidden;
+}
+.ai-flow-studio .flow-assistant-avatar {
+  display: block;
+  width: 67px;
+  height: 67px;
+  margin: 0 auto 10px;
+}
+.ai-flow-studio .flow-assistant-avatar .character {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+.ai-flow-studio .flow-idea-text {
+  display: block;
+  width: 100%;
+  min-height: 67px;
+  max-height: 150px;
+  resize: vertical;
+  padding: 7px 9px;
+  margin: 0 0 7px;
+  border: 0;
+  border-radius: 10px;
+  background: var(--flow-soft);
+  color: var(--flow-ink);
+  font-size: 15px;
+  line-height: 1.5;
+  overflow-wrap: anywhere;
+}
+.ai-flow-studio .flow-node-caption {
+  display: block;
+  font-size: 9px;
+  color: var(--flow-muted);
+}
+.ai-flow-studio .flow-node-title {
+  display: block;
+  font-size: 13px;
+  font-weight: 650;
+}
+.ai-flow-studio .flow-node-copy {
+  color: var(--flow-muted);
+  font-size: 11px;
+  line-height: 1.6;
+  margin: 8px 0 0;
+}
+.ai-flow-studio .flow-pdf-icon {
+  display: grid;
+  place-items: center;
+  width: 45px;
+  height: 56px;
+  margin: 0 auto 12px;
+  background: var(--flow-soft);
+  border-radius: 9px;
+  color: var(--flow-muted);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 1px;
+}
+.ai-flow-studio .flow-generate {
+  width: 100%;
+  margin-top: 13px;
+  font-size: 10px;
+  color: var(--flow-muted);
+  cursor: not-allowed;
+}
+.ai-flow-studio .flow-reference {
+  display: block;
+  width: 100%;
+  height: 105px;
+  object-fit: contain;
+  background: var(--flow-soft);
+  border-radius: 12px;
+}
+.ai-flow-studio .flow-file-name {
+  font-size: 11px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin: 8px 0;
+}
+.ai-flow-studio .flow-port {
+  position: absolute;
+  top: 50%;
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: transparent;
+  transform: translateY(-50%);
+  cursor: crosshair;
+  touch-action: none;
+}
+.ai-flow-studio .flow-port::after {
+  content: "";
+  position: absolute;
+  width: 12px;
+  height: 12px;
+  top: 16px;
+  left: 16px;
+  background: var(--flow-surface);
+  border: 2px solid var(--flow-line);
+  border-radius: 50%;
+}
+.ai-flow-studio .flow-port-out {
+  right: -22px;
+}
+.ai-flow-studio .flow-port-in {
+  left: -22px;
+}
+.ai-flow-studio .flow-port[aria-pressed="true"]::after,
+.ai-flow-studio .flow-port:hover::after {
+  background: var(--flow-focus);
+  border-color: var(--flow-focus);
+}
+.ai-flow-studio .flow-connections {
+  margin-top: 12px;
+  padding: 0 4px;
+}
+.ai-flow-studio .flow-connections summary {
+  cursor: pointer;
+  padding: 12px 0;
+  color: var(--flow-ink);
+  font-weight: 600;
+  font-size: 12px;
+  border-radius: 8px;
+}
+.ai-flow-studio .flow-connect-form {
+  display: flex;
+  align-items: end;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin: 8px 0 16px;
+}
+.ai-flow-studio .flow-connect-form label {
+  display: grid;
+  gap: 7px;
+  flex: 1;
+  min-width: 150px;
+  font-size: 11px;
+  color: var(--flow-muted);
+}
+.ai-flow-studio .flow-connect-form select {
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  height: 42px;
+  border: 0;
+  border-radius: 12px;
+  background: var(--flow-surface);
+  color: var(--flow-ink);
+  padding: 8px;
+  font-size: 12px;
+}
+.ai-flow-studio .flow-connect-form > span {
+  padding-bottom: 12px;
+  color: var(--flow-muted);
+}
+.ai-flow-studio .flow-edge-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  gap: 8px;
+}
+.ai-flow-studio .flow-edge-list li {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  justify-content: space-between;
+  font-size: 11px;
+  background: var(--flow-surface);
+  padding: 8px 10px;
+  border-radius: 12px;
+}
+.ai-flow-studio .flow-edge-list li > span {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+.ai-flow-studio .flow-edge-list .flow-button {
+  flex-shrink: 0;
+  font-size: 10px;
+}
+.ai-flow-studio .flow-status {
+  min-height: 32px;
+  margin: 12px 4px 0;
+  color: var(--flow-muted);
+  font-size: 10px;
+  line-height: 1.6;
+}
+.ai-flow-studio
+  :is(button, select, textarea, summary, [tabindex]):focus-visible {
+  outline: 2px solid var(--flow-focus);
+  outline-offset: 3px;
+}
+[data-preview-mode="dark"] .ai-flow-studio {
+  color: #e7ebe7;
+  --flow-surface: #292e2b;
+  --flow-soft: #353b37;
+  --flow-ink: #e7ebe7;
+  --flow-muted: #bbc3bc;
+  --flow-line: #8c9b90;
+  --flow-focus: #d8e3da;
+}
+[data-preview-mode="dark"] .ai-flow-studio .flow-viewport {
+  background: #202623;
+}
+[data-preview-mode="dark"] .ai-flow-studio .flow-canvas {
+  background-image: radial-gradient(#49534b 0.9px, transparent 0.9px);
+}
+[data-preview-mode="dark"] .ai-flow-studio .flow-primary {
+  background: #d8e3da;
+  color: #202623;
+}
+@supports (corner-shape: squircle) {
+  .ai-flow-studio
+    :is(.flow-node, .flow-viewport, .flow-button, .flow-idea-text, select) {
+    corner-shape: squircle;
+  }
+}
+@media (max-width: 600px) {
+  .ai-flow-studio {
+    margin-top: 24px;
+  }
+  .ai-flow-studio .flow-heading {
+    align-items: flex-start;
+    gap: 10px;
+  }
+  .ai-flow-studio .flow-local-label {
+    font-size: 9px;
+    padding: 7px 9px;
+  }
+  .ai-flow-studio .flow-heading h2 {
+    font-size: 21px;
+  }
+  .ai-flow-studio .flow-heading p {
+    font-size: 11px;
+  }
+  .ai-flow-studio .flow-heading .flow-eyebrow {
+    font-size: 9px;
+  }
+  .ai-flow-studio .flow-toolbar {
+    gap: 8px;
+  }
+  .ai-flow-studio .flow-toolbar > span {
+    width: 100%;
+    font-size: 10px;
+  }
+  .ai-flow-studio .flow-button {
+    font-size: 11px;
+    padding: 10px 12px;
+  }
+  .ai-flow-studio .flow-viewport {
+    height: 430px;
+    border-radius: 22px;
+  }
+  .ai-flow-studio .flow-connect-form {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .ai-flow-studio .flow-connect-form > span {
+    display: none;
+  }
+  .ai-flow-studio .flow-connect-form label {
+    min-width: 0;
+  }
+}
