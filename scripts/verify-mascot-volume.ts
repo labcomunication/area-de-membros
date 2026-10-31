@@ -34,8 +34,8 @@ try {
   const snapshot = () =>
     p.evaluate(() => window.previewCharacters.volumeSnapshot());
   const initial = await snapshot();
-  // Read the rendered canvas: a lit material produces many opaque body colors,
-  // while the intended matte silhouette has one color apart from antialiasing.
+  // The body and inset screen each use one unlit color; only their antialiased
+  // boundary may add intermediate colors.
   const bodyPixels = async () =>
     p.locator(".mascot-volume-canvas").evaluate((node) => {
       const source = node as HTMLCanvasElement;
@@ -65,7 +65,11 @@ try {
       return {
         solid,
         white,
-        uniform: Math.max(0, ...colors.values()) / solid,
+        uniform:
+          [...colors.values()]
+            .sort((a, b) => b - a)
+            .slice(0, 2)
+            .reduce((sum, count) => sum + count, 0) / solid,
         eyeCenter: [eyeX / white / canvas.width, eyeY / white / canvas.height],
       };
     });
@@ -112,7 +116,7 @@ try {
     trailDecays = Math.abs(faded - baseline) < baseline * 0.01;
   }
   const reviewChecks = {
-    uniformBodyPixels: firstPixels.uniform > 0.98,
+    uniformBodyAndScreenPixels: firstPixels.uniform > 0.98,
     anchoredBodyPose:
       leftPose.bodyAngle.slice(0, 2).every((angle) => angle === 0) &&
       rightPose.bodyAngle.slice(0, 2).every((angle) => angle === 0),
@@ -270,7 +274,7 @@ try {
     assert.equal((await snapshot()).renderer, "three-webgl");
     assert.ok(
       (await bodyPixels()).uniform > 0.98,
-      `${name} body remains flat and uniform`,
+      `${name} body and inset screen remain flat and uniform`,
     );
     const pixels = await p
       .locator(".mascot-volume-canvas")
@@ -307,7 +311,7 @@ try {
   assert.deepEqual(errors, []);
   assert.deepEqual(requests, []);
   console.log(
-    "Mascot verification passed: six flat body silhouettes, spherical eye-root and rendered gaze movement, finite radial dot trail, hover spring, happy/nervous timing, bounded drag, reduced motion and disposal. Zero JS errors/network requests.",
+    "Mascot verification passed: rounded body/screen family across retained colors, spherical eye-root and rendered gaze movement, finite radial dot trail, hover spring, happy/nervous timing, bounded drag, reduced motion and disposal. Zero JS errors/network requests.",
   );
 } finally {
   await b.close();

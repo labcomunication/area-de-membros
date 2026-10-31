@@ -6,6 +6,10 @@ interface MascotVolumeSnapshot {
   depth: number;
   gaze: number[];
   eyeQuaternion: number[];
+  family?: string;
+  faceColor?: string;
+  faceMaterial?: string;
+  eyeGeometry?: string;
   eyePositions?: number[][];
   bodyMaterial?: string;
   bodyColor?: string;

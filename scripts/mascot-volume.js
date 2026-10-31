@@ -76,6 +76,9 @@ window.createMascotVolume = function createMascotVolume({
   path,
   kind,
   color,
+  screenPath,
+  eyePath,
+  faceColor,
   onState,
 }) {
   let renderer;
@@ -104,40 +107,89 @@ window.createMascotVolume = function createMascotVolume({
   camera.lookAt(0, 0, 0);
   const group = new THREE.Group();
   scene.add(group);
-  // The existing wrapped geometry preserves every silhouette, but its body
-  // deliberately has no lighting: the spatial cue belongs to the eyes alone.
+  // Flat materials keep the body and inset screen graphic; sphere projection
+  // supplies depth only when the face follows the pointer.
   const material = new THREE.MeshBasicMaterial({ color, toneMapped: false });
   const body = new THREE.Mesh(new THREE.SphereGeometry(1, 48, 32), material);
   group.add(body);
   const eyeMaterial = new THREE.MeshBasicMaterial({
     color: 0xffffff,
     toneMapped: false,
+    side: THREE.DoubleSide,
+    depthTest: false,
   });
-  const eyeGeometry = new THREE.CapsuleGeometry(0.066, 0.16, 6, 12);
+  function flatShape(pathData) {
+    const svg = new SVGLoader().parse(
+      `<svg xmlns="http://www.w3.org/2000/svg"><path d="${pathData}"/></svg>`,
+    );
+    return new THREE.ShapeGeometry(SVGLoader.createShapes(svg.paths[0])[0], 32);
+  }
+  const eyeGeometry = flatShape(eyePath);
+  eyeGeometry.scale(0.02, -0.02, 1);
+  const happyShape = new THREE.Shape();
+  happyShape.moveTo(-0.17, -0.01);
+  happyShape.quadraticCurveTo(0, 0.17, 0.17, -0.01);
+  happyShape.lineTo(0.125, -0.055);
+  happyShape.quadraticCurveTo(0, 0.07, -0.125, -0.055);
+  happyShape.closePath();
+  const happyGeometry = new THREE.ShapeGeometry(happyShape, 24);
   const eyes = [new THREE.Object3D(), new THREE.Object3D()];
+  const happyMeshes = [];
   const eyeMeshes = eyes.map((root) => {
     const mesh = new THREE.Mesh(eyeGeometry, eyeMaterial);
-    mesh.rotation.z = (15 * Math.PI) / 180;
-    mesh.scale.z = 0.36;
-    root.add(mesh);
+    const happy = new THREE.Mesh(happyGeometry, eyeMaterial);
+    mesh.renderOrder = happy.renderOrder = 2;
+    happy.position.z = 0.001;
+    root.add(mesh, happy);
+    happyMeshes.push(happy);
     group.add(root);
     return mesh;
   });
+  const screenMaterial = new THREE.MeshBasicMaterial({
+    color: faceColor,
+    toneMapped: false,
+    side: THREE.DoubleSide,
+    // The inset screen is a graphic surface over the unlit body. Its boundary
+    // travels on the virtual sphere without lighting or body relief.
+    depthTest: false,
+  });
+  const screen = new THREE.Mesh(new THREE.BufferGeometry(), screenMaterial);
+  screen.renderOrder = 1;
+  group.add(screen);
+  let screenSphere = new Float32Array();
   const eyeAnchors = [new THREE.Vector3(), new THREE.Vector3()];
   const facePose = new THREE.Euler(0, 0, 0, "YXZ");
   const spherePoint = new THREE.Vector3();
   const faceNormal = new THREE.Vector3();
   const forward = new THREE.Vector3(0, 0, 1);
   let depth = 1;
-  function updateAppearance(nextPath, nextKind, nextColor) {
+  function updateAppearance(
+    nextPath,
+    nextKind,
+    nextColor,
+    nextFaceColor = faceColor,
+  ) {
     const wrapped = wrappedGeometry(nextPath, nextKind);
     body.geometry.dispose();
     body.geometry = wrapped.geometry;
     depth = wrapped.depth;
     material.color.set(nextColor);
+    screenMaterial.color.set(nextFaceColor);
+    screen.geometry.dispose();
+    screen.geometry = flatShape(screenPath);
+    const positions = screen.geometry.getAttribute("position");
+    screenSphere = new Float32Array(positions.count * 3);
+    for (let i = 0; i < positions.count; i++) {
+      const px = (positions.getX(i) - wrapped.center.x) * wrapped.scale;
+      const py = (wrapped.center.y - positions.getY(i)) * wrapped.scale;
+      screenSphere.set(
+        [px, py, Math.sqrt(Math.max(0.05, 1 - px * px - py * py))],
+        i * 3,
+      );
+    }
     [
-      [41, 44],
-      [59, 42],
+      [36, 49],
+      [64, 49],
     ].forEach(([x, y], i) => {
       const px = (x - wrapped.center.x) * wrapped.scale,
         py = (wrapped.center.y - y) * wrapped.scale;
@@ -264,8 +316,21 @@ window.createMascotVolume = function createMascotVolume({
       scale,
     );
     facePose.set(reduced ? 0 : -gaze.y, reduced ? 0 : gaze.x, 0, "YXZ");
+    const screenPositions = screen.geometry.getAttribute("position");
+    for (let i = 0; i < screenPositions.count; i++) {
+      spherePoint.fromArray(screenSphere, i * 3).applyEuler(facePose);
+      screenPositions.setXYZ(
+        i,
+        spherePoint.x,
+        spherePoint.y,
+        spherePoint.z * depth + 0.018,
+      );
+    }
+    screenPositions.needsUpdate = true;
     for (let i = 0; i < eyes.length; i++) {
       eyeMeshes[i].scale.y = squint;
+      happyMeshes[i].visible = squint < 0.8;
+      happyMeshes[i].scale.setScalar(1 - squint);
       // A rigid sphere rotation changes x/y AND depth for each eye root,
       // compressing their spacing toward the edge rather than sliding a face.
       spherePoint.copy(eyeAnchors[i]).applyEuler(facePose);
@@ -422,6 +487,10 @@ window.createMascotVolume = function createMascotVolume({
       gaze: gaze.toArray(),
       eyeQuaternion: eyes[0].quaternion.toArray(),
       eyePositions: eyes.map((eye) => eye.position.toArray()),
+      family: "rounded-screen",
+      faceMaterial: screenMaterial.type,
+      faceColor: "#" + screenMaterial.color.getHexString(),
+      eyeGeometry: "curved-circle",
       bodyMaterial: material.type,
       bodyColor: "#" + material.color.getHexString(),
       dotfield: dotfield?.snapshot() || null,
@@ -456,6 +525,9 @@ window.createMascotVolume = function createMascotVolume({
         button.removeEventListener(type, handler);
       body.geometry.dispose();
       material.dispose();
+      screen.geometry.dispose();
+      screenMaterial.dispose();
+      happyGeometry.dispose();
       eyeGeometry.dispose();
       eyeMaterial.dispose();
       renderer.dispose();

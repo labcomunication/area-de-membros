@@ -1,31 +1,43 @@
-/* Original vector characters for the wireframe; no assets or services loaded. */
+/* Procedural vector family for the offline prototype; no remote assets. */
 const characterStyles = [
-  { id: "pistache", name: "Adam", color: "#171717", shape: "orb" },
-  { id: "pescego", name: "Cherry", color: "#f97508", shape: "flower" },
-  { id: "lavanda", name: "Maria", color: "#838383", shape: "drop" },
-  { id: "brisa", name: "Theo", color: "#2585ed", shape: "triangle" },
-  { id: "amora", name: "Luna", color: "#00b974", shape: "oval" },
-  { id: "coral", name: "Cora", color: "#91653b", shape: "clover" },
-  { id: "iris", name: "Nina", color: "#855c99", shape: "flower" },
-  { id: "kiwi", name: "Bento", color: "#7d8b49", shape: "drop" },
-  { id: "laguna", name: "Noa", color: "#467c95", shape: "oval" },
-  { id: "menta", name: "Maya", color: "#3a987f", shape: "clover" },
-  { id: "sol", name: "Sol", color: "#c58a28", shape: "orb" },
-  { id: "aurora", name: "Aurora", color: "#a16477", shape: "triangle" },
-  { id: "mel", name: "Mel", color: "#a57343", shape: "drop" },
-  { id: "rosa", name: "Rosa", color: "#ba6389", shape: "flower" },
-  { id: "orquidea", name: "Flora", color: "#6c6594", shape: "clover" },
+  { id: "pistache", name: "Adam", color: "#171717", shape: "rounded-screen" },
+  { id: "pescego", name: "Cherry", color: "#f97508", shape: "rounded-screen" },
+  { id: "lavanda", name: "Maria", color: "#838383", shape: "rounded-screen" },
+  { id: "brisa", name: "Theo", color: "#2585ed", shape: "rounded-screen" },
+  { id: "amora", name: "Luna", color: "#00b974", shape: "rounded-screen" },
+  { id: "coral", name: "Cora", color: "#91653b", shape: "rounded-screen" },
+  { id: "iris", name: "Nina", color: "#855c99", shape: "rounded-screen" },
+  { id: "kiwi", name: "Bento", color: "#7d8b49", shape: "rounded-screen" },
+  { id: "laguna", name: "Noa", color: "#467c95", shape: "rounded-screen" },
+  { id: "menta", name: "Maya", color: "#3a987f", shape: "rounded-screen" },
+  { id: "sol", name: "Sol", color: "#c58a28", shape: "rounded-screen" },
+  { id: "aurora", name: "Aurora", color: "#a16477", shape: "rounded-screen" },
+  { id: "mel", name: "Mel", color: "#a57343", shape: "rounded-screen" },
+  { id: "rosa", name: "Rosa", color: "#ba6389", shape: "rounded-screen" },
+  { id: "orquidea", name: "Flora", color: "#6c6594", shape: "rounded-screen" },
 ];
 const characterShapes = {
-  orb: "M50 5a45 45 0 1 1 0 90a45 45 0 0 1 0-90Z",
-  drop: "M50 5C61-1 69 20 82 36C108 73 83 96 50 96C19 96 0 73 10 45C17 28 35 11 50 5Z",
-  triangle: "M39 14Q50-4 61 14L94 75Q105 94 83 94H17Q-5 94 6 75Z",
-  flower:
-    "M50 12C66 0 86 11 83 29C102 32 104 52 89 64C99 81 81 99 64 89C52 104 30 98 28 81C10 88 0 66 13 52C0 35 18 16 34 22C37 16 43 13 50 12Z",
-  oval: "M36 16H64C106 16 106 84 64 84H36C-6 84-6 16 36 16Z",
-  clover:
-    "M50 5C70 0 84 12 80 30C100 35 102 56 87 67C92 85 75 100 57 90C42 104 22 94 23 77C3 74 0 54 15 41C7 22 28 9 42 17Z",
+  "rounded-screen":
+    "M50 5C73 5 87 23 93 47C99 72 96 88 77 93C63 98 37 98 23 93C4 88 1 72 7 47C13 23 27 5 50 5Z",
 };
+const characterScreen =
+  "M50 17C69 17 79 28 82 46C87 66 82 79 70 83C58 87 42 87 30 83C18 79 13 66 18 46C21 28 31 17 50 17Z";
+const characterEye = "M-6 6.8A9 9 0 1 1 6 6.8Q0 6.1-6 6.8Z";
+function characterFaceColor(color) {
+  if (color === "#171717") return "#383838";
+  return (
+    "#" +
+    color
+      .slice(1)
+      .match(/../g)
+      .map((value) =>
+        Math.round(parseInt(value, 16) * 0.47)
+          .toString(16)
+          .padStart(2, "0"),
+      )
+      .join("")
+  );
+}
 const characterState = {
   step: 0,
   mood: "idle",
@@ -43,7 +55,8 @@ function characterMarkup(id, paletteId = id, mood = "idle") {
     characterStyles.find((style) => style.id === id) || characterStyles[0];
   const palette =
     characterStyles.find((style) => style.id === paletteId) || character;
-  return `<span class="character" data-character="${character.id}" data-shape="${character.shape}" data-mood="${mood}" data-palette="${palette.id}" aria-hidden="true" style="--character-fill:${palette.color}"><svg viewBox="0 0 100 100" fill="none"><path class="character-body" d="${characterShapes[character.shape]}"/><g class="character-gaze"><g class="character-eyes"><ellipse cx="41" cy="44" rx="4.4" ry="8.6" transform="rotate(-15 41 44)"/><ellipse cx="59" cy="42" rx="4.4" ry="9" transform="rotate(-15 59 42)"/></g><path class="character-brows" d="m33 28 13 5m7-3 12-4"/></g><path class="character-mouth-neutral" d="M44 63q6 4 12 0"/><path class="character-mouth-happy" d="M41 61q9 17 18 0Z"/><path class="character-tongue" d="M47 69q4-5 8 0"/><path class="character-mouth-angry" d="M43 65q7-7 14 0"/></svg></span>`;
+  const safeMood = ["idle", "happy", "nervous"].includes(mood) ? mood : "idle";
+  return `<span class="character" data-character="${character.id}" data-family="rounded-screen" data-shape="${character.shape}" data-mood="${safeMood}" data-palette="${palette.id}" aria-hidden="true" style="--character-fill:${palette.color};--character-screen:${characterFaceColor(palette.color)}"><svg viewBox="0 0 100 100" fill="none"><path class="character-body" d="${characterShapes[character.shape]}"/><path class="character-screen" d="${characterScreen}"/><g class="character-gaze"><g class="character-eyes"><path d="${characterEye}" transform="translate(36 49)"/><path d="${characterEye}" transform="translate(64 49)"/></g><g class="character-happy-eyes"><path d="M28 49Q36 40 44 49M56 49Q64 40 72 49"/></g><path class="character-brows" d="M27 35Q36 31 44 35M56 35Q64 31 73 35"/></g></svg></span>`;
 }
 
 function paintProfileAvatars() {
@@ -108,6 +121,9 @@ function paintCharacterStage() {
       path: characterShapes[character.shape],
       kind: character.shape,
       color: character.color,
+      screenPath: characterScreen,
+      eyePath: characterEye,
+      faceColor: characterFaceColor(character.color),
       onState(state) {
         characterState.mood = state;
         const fallback = host.querySelector(".character");
@@ -135,6 +151,7 @@ function paintCharacterStage() {
       characterShapes[character.shape],
       character.shape,
       character.color,
+      characterFaceColor(character.color),
     );
     volumeAppearance = character.id;
   }
@@ -196,6 +213,9 @@ document.addEventListener(
 
 window.previewCharacters = {
   paintProfileAvatars,
+  getAvatarMarkup(id = appearance.avatar) {
+    return characterMarkup(id);
+  },
   playCharacter,
   closeAvatarPicker,
   restoreNavigationGroups,

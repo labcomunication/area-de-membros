@@ -9,6 +9,7 @@ Capturas de docs/preview/wireframe.html; dados fictícios e integrações inativ
 | home | ícones no topo · página rolada | [desktop](home-compact-scrolled-desktop.png) | [mobile](home-compact-scrolled-mobile.png) |
 | products | normal | [desktop](products-refined-desktop.png) | [mobile](products-refined-mobile.png) |
 | bonus | normal | [desktop](bonus-refined-desktop.png) | [mobile](bonus-refined-mobile.png) |
+| bonus | recomendações com painel sobreposto | [desktop](recommendations-desktop.png) | [mobile](recommendations-mobile.png) |
 | offers | normal | [desktop](offers-refined-desktop.png) | [mobile](offers-refined-mobile.png) |
 | account | normal | [desktop](account-refined-desktop.png) | [mobile](account-refined-mobile.png) |
 | account | escuro · opções abertas · coroa de exemplo | [desktop](account-dark-desktop.png) | [mobile](account-dark-mobile.png) |
@@ -16,6 +17,7 @@ Capturas de docs/preview/wireframe.html; dados fictícios e integrações inativ
 | ai | normal | [desktop](ai-refined-desktop.png) | [mobile](ai-refined-mobile.png) |
 | ai | feliz · olhos fechados | [desktop](ai-happy-desktop.png) | [mobile](ai-happy-mobile.png) |
 | ai | nervoso · pose estática com movimento reduzido | [desktop](ai-nervous-desktop.png) | [mobile](ai-nervous-mobile.png) |
+| ai | quadro de ideias conectadas | [desktop](idea-flow-desktop.png) | [mobile](idea-flow-mobile.png) |
 | notes | normal | [desktop](notes-refined-desktop.png) | [mobile](notes-refined-mobile.png) |
 | notes | menu de movimentação | [desktop](notes-menu-desktop.png) | [mobile](notes-menu-mobile.png) |
 | notes | referências de e-books | [desktop](notes-ebooks-desktop.png) | [mobile](notes-ebooks-mobile.png) |

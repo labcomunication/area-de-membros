@@ -264,3 +264,6 @@ window.previewNav = {
     return activeNavId;
   },
 };
+
+// Font swap can change label metrics even when navigation did not change.
+document.fonts?.ready.then(syncNavLabels);

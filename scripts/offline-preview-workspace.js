@@ -33,6 +33,7 @@ function applyWorkspaceNavigation() {
 }
 function mountWorkspace() {
   window.previewNotes.mount();
+  window.previewFlow?.mount();
   measureWorkspace();
   requestAnimationFrame(measureWorkspace);
 }

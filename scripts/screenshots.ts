@@ -49,7 +49,9 @@ try {
       scrollLinks = [],
       editorLinks = [],
       menuLinks = [],
-      ebookLinks = [];
+      ebookLinks = [],
+      flowLinks = [],
+      recommendationLinks = [];
     for (const [device, width, height] of [
       ["desktop", 1440, 1000],
       ["mobile", 390, 844],
@@ -140,7 +142,23 @@ try {
         captureCount++;
         darkLinks.push(`[${device}](account-dark-${device}.png)`);
       }
+      if (offlineReview && item.screen === "bonus") {
+        await page.locator(".recommendation-carousel").screenshot({
+          path: `docs/screenshots/recommendations-${device}.png`,
+          style:
+            ".gallery-toolbar,.mobile-header,.desktop-topbar,.compact-nav,.mobile-compact-nav,.bottom-nav{visibility:hidden!important}",
+        });
+        captureCount++;
+        recommendationLinks.push(`[${device}](recommendations-${device}.png)`);
+      }
       if (offlineReview && item.screen === "ai") {
+        await page.locator(".ai-flow-studio").screenshot({
+          path: `docs/screenshots/idea-flow-${device}.png`,
+          style:
+            ".gallery-toolbar,.mobile-header,.desktop-topbar,.compact-nav,.mobile-compact-nav,.bottom-nav{visibility:hidden!important}",
+        });
+        captureCount++;
+        flowLinks.push(`[${device}](idea-flow-${device}.png)`);
         const player = page.getByRole("button", {
           name: "Brincar com personagem",
           exact: true,
@@ -253,7 +271,6 @@ try {
         });
         await page.screenshot({
           path: `docs/screenshots/notes-editor-${device}.png`,
-          fullPage: true,
         });
         captureCount++;
         editorLinks.push(`[${device}](notes-editor-${device}.png)`);
@@ -287,6 +304,14 @@ try {
     if (scrollLinks.length)
       index.push(
         `| home | ícones no topo · página rolada | ${scrollLinks[0]} | ${scrollLinks[1]} |`,
+      );
+    if (flowLinks.length)
+      index.push(
+        `| ai | quadro de ideias conectadas | ${flowLinks[0]} | ${flowLinks[1]} |`,
+      );
+    if (recommendationLinks.length)
+      index.push(
+        `| bonus | recomendações com painel sobreposto | ${recommendationLinks[0]} | ${recommendationLinks[1]} |`,
       );
     if (menuLinks.length)
       index.push(

@@ -9,6 +9,7 @@ const notesState = {
   editing: null,
   editorColumn: "ideas",
   editorOrigin: null,
+  editor: null,
   deleted: null,
   menu: null,
   picker: null,
@@ -203,6 +204,19 @@ function openNoteEditor(
 ) {
   const form = view.querySelector("[data-note-editor]");
   if (!form) return;
+  closeNotesMenu();
+  closeNotesPicker();
+  // Keep the existing, labelled form and its delegated actions. Only its
+  // temporary container changes; closing returns it to the notes screen.
+  if (notesState.editor) closeNoteEditor(false);
+  const dialog = document.createElement("dialog");
+  dialog.className = "notes-composer";
+  const heading = form.querySelector("h2");
+  heading.id = "notes-composer-title";
+  dialog.setAttribute("aria-labelledby", heading.id);
+  dialog.setAttribute("aria-modal", "true");
+  form.replaceWith(dialog);
+  dialog.append(form);
   notesState.editing = id;
   notesState.editorColumn = Object.hasOwn(noteColumns, column)
     ? column
@@ -212,15 +226,51 @@ function openNoteEditor(
   form.elements.title.value = note?.title || "";
   form.elements.body.value = note?.text || "";
   form.hidden = false;
-  (write ? form.elements.body : form.elements.title).focus();
+  notesState.editor = { element: dialog, form };
+  dialog.addEventListener("cancel", (event) => {
+    event.preventDefault();
+    event.stopPropagation();
+    if (notesState.editor?.element === dialog) closeNoteEditor();
+  });
+  dialog.addEventListener("close", () => {
+    if (notesState.editor?.element === dialog) closeNoteEditor();
+  });
+  let backdropPointer = false;
+  function outside(event) {
+    const bounds = dialog.getBoundingClientRect();
+    return (
+      event.target === dialog &&
+      (event.clientX < bounds.left ||
+        event.clientX > bounds.right ||
+        event.clientY < bounds.top ||
+        event.clientY > bounds.bottom)
+    );
+  }
+  dialog.addEventListener("pointerdown", (event) => {
+    backdropPointer = outside(event);
+  });
+  dialog.addEventListener("click", (event) => {
+    if (backdropPointer && outside(event)) closeNoteEditor();
+    backdropPointer = false;
+  });
+  dialog.showModal();
+  (write ? form.elements.body : form.elements.title).focus({
+    preventScroll: true,
+  });
 }
-function closeNoteEditor() {
-  const form = view.querySelector("[data-note-editor]");
-  if (!form || form.hidden) return false;
+function closeNoteEditor(restoreFocus = true) {
+  const editor = notesState.editor;
+  if (!editor) return false;
+  const { element: dialog, form } = editor;
+  const origin = notesState.editorOrigin;
+  // Clear state before native close fires so every dismissal runs once.
+  notesState.editor = null;
   form.hidden = true;
   notesState.editing = null;
-  restoreNotesFocus(notesState.editorOrigin);
   notesState.editorOrigin = null;
+  if (dialog.open) dialog.close();
+  dialog.replaceWith(form);
+  if (restoreFocus) restoreNotesFocus(origin);
   return true;
 }
 function resourceFromCard(card) {
@@ -312,7 +362,15 @@ function openNotesMenu({
       x: parent.scrollLeft,
       y: parent.scrollTop,
     });
-  notesState.menu = { element, origin, scrollParents, x: scrollX, y: scrollY };
+  notesState.menu = {
+    element,
+    origin,
+    scrollParents,
+    x: scrollX,
+    y: scrollY,
+    width: innerWidth,
+    height: innerHeight,
+  };
   trigger?.setAttribute("aria-expanded", "true");
   trigger?.setAttribute("aria-controls", element.id);
   document.body.append(element);
@@ -449,7 +507,9 @@ function openNotesPicker(column, origin) {
 }
 function closeNotesTransient(restoreFocus = false) {
   const menuClosed = closeNotesMenu(restoreFocus);
-  return closeNotesPicker(restoreFocus) || menuClosed;
+  const pickerClosed = closeNotesPicker(restoreFocus);
+  const editorClosed = closeNoteEditor(restoreFocus);
+  return editorClosed || pickerClosed || menuClosed;
 }
 document.addEventListener("submit", (event) => {
   const form = event.target;
@@ -474,9 +534,7 @@ document.addEventListener("submit", (event) => {
     };
     notesState.notes.push(note);
   }
-  form.hidden = true;
-  notesState.editing = null;
-  notesState.editorOrigin = null;
+  closeNoteEditor(false);
   drawNotes();
   restoreNotesFocus({ noteId: note.id, action: "note-actions" });
   notesToast("Anotação salva apenas nesta prévia.");
@@ -631,17 +689,17 @@ document.addEventListener("contextmenu", (event) => {
 document.addEventListener(
   "keydown",
   (event) => {
-    if (
-      event.key === "Escape" &&
-      (closeNotesTransient(true) || closeNoteEditor())
-    ) {
+    if (event.key === "Escape" && closeNotesTransient(true)) {
       event.preventDefault();
       event.stopImmediatePropagation();
       return;
     }
-    if (event.key === "Tab" && notesState.picker) {
+    const modal = notesState.editor?.element || notesState.picker?.element;
+    if (event.key === "Tab" && modal) {
       const controls = [
-        ...notesState.picker.element.querySelectorAll("button:not([disabled])"),
+        ...modal.querySelectorAll(
+          "input:not([disabled]), textarea:not([disabled]), button:not([disabled])",
+        ),
       ];
       const first = controls[0],
         last = controls.at(-1);
@@ -788,5 +846,11 @@ window.addEventListener(
   },
   { passive: true, capture: true },
 );
-window.addEventListener("resize", () => closeNotesMenu());
+window.addEventListener("resize", () => {
+  const menu = notesState.menu;
+  // A resize event may still be queued when a fresh menu opens, just as a
+  // scroll event can be. Dismiss only if its viewport has changed since open.
+  if (menu && (menu.width !== innerWidth || menu.height !== innerHeight))
+    closeNotesMenu();
+});
 window.previewNotes = { mount: drawNotes, closeTransient: closeNotesTransient };

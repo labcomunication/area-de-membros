@@ -55,6 +55,7 @@ function applyAppearance() {
     );
   });
   paintRewards();
+  window.previewFlow?.refreshAvatars();
 }
 const rewardSymbols = {
   crown: '<path d="m3 7 5 4 4-7 4 7 5-4-2 12H5L3 7Z"/><path d="M6 22h12"/>',
@@ -126,6 +127,7 @@ function render() {
   closeMenu();
   const savedShell = window.previewNav.captureShell();
   window.previewCharacters.disposeVolume();
+  window.previewFlow?.dispose();
   window.previewNotes.closeTransient();
   const requested = keyOf("/wireframes?" + location.hash.slice(1));
   const key = snapshots[requested] ? requested : "screen=home";

@@ -91,11 +91,11 @@ try {
   await page.getByRole("button", { name: "Editar", exact: true }).click();
   assert.equal(await page.locator("#appearance-options").isVisible(), true);
   const bodyLight = await page.evaluate(
-    () => getComputedStyle(document.body).backgroundImage,
+    () => getComputedStyle(document.body).backgroundColor,
   );
   await page.getByRole("button", { name: "Escuro", exact: true }).click();
   assert.notEqual(
-    await page.evaluate(() => getComputedStyle(document.body).backgroundImage),
+    await page.evaluate(() => getComputedStyle(document.body).backgroundColor),
     bodyLight,
   );
   await page
@@ -139,7 +139,7 @@ try {
   await page.getByRole("button", { name: "Claro", exact: true }).click();
   await page.getByRole("button", { name: "Oliva", exact: true }).click();
   assert.equal(
-    await page.evaluate(() => getComputedStyle(document.body).backgroundImage),
+    await page.evaluate(() => getComputedStyle(document.body).backgroundColor),
     bodyLight,
   );
   assert.equal(
